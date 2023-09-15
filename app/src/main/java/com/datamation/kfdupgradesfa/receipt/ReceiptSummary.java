@@ -202,7 +202,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-        
+
         return view;
     }
 
@@ -362,9 +362,9 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
                 ReceiptHeader.b = true;
                 //mithsu/
 
-                TimeZone tz = TimeZone.getTimeZone("UTC +5:30");
+                //TimeZone tz = TimeZone.getTimeZone("UTC +5:30");
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-                df.setTimeZone(tz);
+                //df.setTimeZone(tz);
                 EndTime  = df.format(new Date());
 
                 ReceiptHed recHed = new ReceiptHed();
@@ -565,99 +565,99 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
         alertDialogBuilder.setMessage("Do you want to save the receipt ?");
         alertDialogBuilder.setIcon(android.R.drawable.ic_dialog_alert);
 
-            alertDialogBuilder.setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
-                public void onClick(final DialogInterface dialog, int id) {
+            public void onClick(final DialogInterface dialog, int id) {
 
 
-                    //mithsu//
-                    ReceiptHeader.b = true;
-                    //mithsu//
+                //mithsu//
+                ReceiptHeader.b = true;
+                //mithsu//
 
-                    TimeZone tz = TimeZone.getTimeZone("UTC +5:30");
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-                    df.setTimeZone(tz);
-                    EndTime  = df.format(new Date());
+                //TimeZone tz = TimeZone.getTimeZone("UTC +5:30");
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+                //df.setTimeZone(tz);
+                EndTime  = df.format(new Date());
 
-                    ReceiptHed recHed = new ReceiptHed();
-                    recHed.setFPRECHED_LATITUDE(gps.getLatitude() + "");
-                    recHed.setFPRECHED_LONGITUDE(gps.getLongitude() + "");
+                ReceiptHed recHed = new ReceiptHed();
+                recHed.setFPRECHED_LATITUDE(gps.getLatitude() + "");
+                recHed.setFPRECHED_LONGITUDE(gps.getLongitude() + "");
 //                recHed.setFPRECHED_START_TIME(localSP.getString("Rec_Start_Time", ""));
-                    recHed.setFPRECHED_START_TIME(new ReceiptController(context).getActiveRecHed().getFPRECHED_START_TIME());
-                    recHed.setFPRECHED_END_TIME(EndTime);
-                    recHed.setFPRECHED_ADDRESS("None");
-                    recHed.setFPRECHED_COSTCODE(mSharedPref.getGlobalVal("PrekeyCost"));
-                    recHed.setFPRECHED_STATUS("NOT SYNCED");
+                recHed.setFPRECHED_START_TIME(new ReceiptController(context).getActiveRecHed().getFPRECHED_START_TIME());
+                recHed.setFPRECHED_END_TIME(EndTime);
+                recHed.setFPRECHED_ADDRESS("None");
+                recHed.setFPRECHED_COSTCODE(mSharedPref.getGlobalVal("PrekeyCost"));
+                recHed.setFPRECHED_STATUS("NOT SYNCED");
 
-                    new ReceiptController(getActivity()).UpdateRecHed(recHed, RefNo);
-                    final ReceiptActivity activity = (ReceiptActivity) getActivity();
+                new ReceiptController(getActivity()).UpdateRecHed(recHed, RefNo);
+                final ReceiptActivity activity = (ReceiptActivity) getActivity();
 
-                    ArrayList<ReceiptDet> RecList = new ArrayList<>();
+                ArrayList<ReceiptDet> RecList = new ArrayList<>();
 
-                    for (FddbNote fddb : fddbnoteList) {
+                for (FddbNote fddb : fddbnoteList) {
 
-                        ReceiptDet recDet = new ReceiptDet();
-                        recDet.setFPRECDET_REFNO(RefNo);
-                        recDet.setFPRECDET_BAMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                        recDet.setFPRECDET_AMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                        //    recDet.setFPRECDET_BAMT(fddb.getFDDBNOTE_ENTER_AMT());
-                        //  recDet.setFPRECDET_AMT(fddb.getFDDBNOTE_ENTER_AMT());
-                        recDet.setFPRECDET_ALOAMT(fddb.getFDDBNOTE_ENTER_AMT());
-                        recDet.setFPRECDET_SALEREFNO(fddb.getFDDBNOTE_REFNO());
-                        recDet.setFPRECDET_REPCODE(new SalRepController(getActivity()).getCurrentRepCode());
-                        recDet.setFPRECDET_DCURCODE("LKR");
-                        recDet.setFPRECDET_DCURRATE("1.0");
-                        recDet.setFPRECDET_DTXNDATE(fddb.getFDDBNOTE_TXN_DATE());
-                        recDet.setFPRECDET_DTXNTYPE(fddb.getFDDBNOTE_TXN_TYPE());
-                        recDet.setFPRECDET_TXNDATE(currentDate());
-                        recDet.setFPRECDET_TXNTYPE("21");
-                        recDet.setFPRECDET_REFNO1(fddb.getFDDBNOTE_REFNO());
-                        recDet.setFPRECDET_MANUREF("");
-                        recDet.setFPRECDET_OCURRATE("1.00");
-                        recDet.setFPRECDET_OVPAYAMT("0.00");
-                        recDet.setFPRECDET_OVPAYBAL("0.00");
-                        //   recDet.setFPRECDET_OVPAYAMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                        //   recDet.setFPRECDET_OVPAYBAL(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                        recDet.setFPRECDET_RECORDID("");
-                        recDet.setFPRECDET_TIMESTAMP("");
-                        recDet.setFPRECDET_ISDELETE("0");
-                        recDet.setFPRECDET_REMARK(fddb.getFDDBNOTE_ENT_REMARK());
-                        recDet.setFPRECDET_DEBCODE(SharedPref.getInstance(getActivity()).getSelectedDebCode());
-                        RecList.add(recDet);
-                    }
+                    ReceiptDet recDet = new ReceiptDet();
+                    recDet.setFPRECDET_REFNO(RefNo);
+                    recDet.setFPRECDET_BAMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
+                    recDet.setFPRECDET_AMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
+                    //    recDet.setFPRECDET_BAMT(fddb.getFDDBNOTE_ENTER_AMT());
+                    //  recDet.setFPRECDET_AMT(fddb.getFDDBNOTE_ENTER_AMT());
+                    recDet.setFPRECDET_ALOAMT(fddb.getFDDBNOTE_ENTER_AMT());
+                    recDet.setFPRECDET_SALEREFNO(fddb.getFDDBNOTE_REFNO());
+                    recDet.setFPRECDET_REPCODE(new SalRepController(getActivity()).getCurrentRepCode());
+                    recDet.setFPRECDET_DCURCODE("LKR");
+                    recDet.setFPRECDET_DCURRATE("1.0");
+                    recDet.setFPRECDET_DTXNDATE(fddb.getFDDBNOTE_TXN_DATE());
+                    recDet.setFPRECDET_DTXNTYPE(fddb.getFDDBNOTE_TXN_TYPE());
+                    recDet.setFPRECDET_TXNDATE(currentDate());
+                    recDet.setFPRECDET_TXNTYPE("21");
+                    recDet.setFPRECDET_REFNO1(fddb.getFDDBNOTE_REFNO());
+                    recDet.setFPRECDET_MANUREF("");
+                    recDet.setFPRECDET_OCURRATE("1.00");
+                    recDet.setFPRECDET_OVPAYAMT("0.00");
+                    recDet.setFPRECDET_OVPAYBAL("0.00");
+                    //   recDet.setFPRECDET_OVPAYAMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
+                    //   recDet.setFPRECDET_OVPAYBAL(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
+                    recDet.setFPRECDET_RECORDID("");
+                    recDet.setFPRECDET_TIMESTAMP("");
+                    recDet.setFPRECDET_ISDELETE("0");
+                    recDet.setFPRECDET_REMARK(fddb.getFDDBNOTE_ENT_REMARK());
+                    recDet.setFPRECDET_DEBCODE(SharedPref.getInstance(getActivity()).getSelectedDebCode());
+                    RecList.add(recDet);
+                }
 
-                    new ReceiptDetController(getActivity()).createOrUpdateRecDetS(RecList);
-                    new OutstandingController(getActivity()).UpdateFddbNoteBalance(fddbnoteList);
-                    new ReceiptController(getActivity()).InactiveStatusUpdate(RefNo);
-                    new ReferenceNum(getActivity()).NumValueUpdate(getResources().getString(R.string.RecNumVal));
+                new ReceiptDetController(getActivity()).createOrUpdateRecDetS(RecList);
+                new OutstandingController(getActivity()).UpdateFddbNoteBalance(fddbnoteList);
+                new ReceiptController(getActivity()).InactiveStatusUpdate(RefNo);
+                new ReferenceNum(getActivity()).NumValueUpdate(getResources().getString(R.string.RecNumVal));
 
-                    activity.selectedDebtor = null;
-                    activity.selectedRecHed = null;
-                    activity.ReceivedAmt = 0.00;
-
-
-                    /*-*-*-*-*-*-*-*-*-*-*-Check if deadline passed-*-*-*-*-*-*-*-*-*-*-*/
-
-                    Toast.makeText(getActivity(), "Receipt saved successfully..!", Toast.LENGTH_SHORT).show();
+                activity.selectedDebtor = null;
+                activity.selectedRecHed = null;
+                activity.ReceivedAmt = 0.00;
 
 
-                    Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed());
+                /*-*-*-*-*-*-*-*-*-*-*-Check if deadline passed-*-*-*-*-*-*-*-*-*-*-*/
+
+                Toast.makeText(getActivity(), "Receipt saved successfully..!", Toast.LENGTH_SHORT).show();
+
+
+                Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed());
 
 //                    dialog.dismiss();
-                    ClearSharedPref();/* Clear shared preference */
+                ClearSharedPref();/* Clear shared preference */
 
 
 
-                }
+            }
 
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-                }
-            });
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
 
-            AlertDialog alertD = alertDialogBuilder.create();
-            alertD.show();
+        AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
 
 
     }

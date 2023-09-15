@@ -151,9 +151,9 @@ public class ReceiptHeader extends Fragment {
         fb = (FloatingActionButton) view.findViewById(R.id.fab1);
         fbExit = (CircleButton) view.findViewById(R.id.fab_exit);
 
-        TimeZone tz = TimeZone.getTimeZone("UTC +5:30");
+        //TimeZone tz = TimeZone.getTimeZone("UTC +5:30");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-        df.setTimeZone(tz);
+        //df.setTimeZone(tz);
         startTime  = df.format(new Date());
 
         mSharedPref.setReceiptHedClicked("0");

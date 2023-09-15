@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/row_layout"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:weightSum="21.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+    <com.datamation.kfdupgradesfa.utils.CustomFont
+        android:id="@+id/row_receipt_no"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Receipt No"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/blueColor"
+        android:textSize="@dimen/customer_listview_text_size2"
+        android:layout_weight="10.0"
+        app:layout_constraintEnd_toStartOf="@+id/row_receipt_date"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.datamation.kfdupgradesfa.utils.CustomFont
+        android:id="@+id/row_receipt_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Receipt Date"
+        android:gravity="right"
+        android:textColor="@color/half_black"
+        android:textSize="@dimen/customer_listview_text_size2"
+        android:layout_weight="10.0"
+        app:layout_constraintEnd_toStartOf="@+id/row_invoice_no"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/row_receipt_no"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.datamation.kfdupgradesfa.utils.CustomFont
+        android:id="@+id/row_invoice_no"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="right"
+        android:layout_toLeftOf="@+id/row_invoice_date"
+        android:text="Invoice No"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/blueColor"
+        android:textSize="@dimen/customer_listview_text_size2"
+        android:layout_weight="2.5"
+        app:layout_constraintEnd_toStartOf="@+id/row_invoice_date"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/row_receipt_date"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.datamation.kfdupgradesfa.utils.CustomFont
+        android:id="@+id/row_invoice_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="Date"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/blueColor"
+        android:textSize="@dimen/customer_listview_text_size2"
+        android:layout_weight="2.5"
+        app:layout_constraintEnd_toStartOf="@+id/row_payment_type"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/row_invoice_no"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.datamation.kfdupgradesfa.utils.CustomFont
+        android:id="@+id/row_payment_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Pay Type"
+        android:layout_weight="2.5"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/blueColor"
+        android:textSize="@dimen/customer_listview_text_size2"
+        app:layout_constraintEnd_toStartOf="@+id/row_paid_amt"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/row_invoice_date"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.datamation.kfdupgradesfa.utils.CustomFont
+        android:id="@+id/row_paid_amt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="Paid Amount"
+        android:paddingRight="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/blueColor"
+        android:textSize="@dimen/customer_listview_text_size2"
+        android:layout_weight="2.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/row_payment_type"
+        app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

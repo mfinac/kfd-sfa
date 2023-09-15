@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:padding="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Date"
+            android:textAllCaps="true"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/targetAmt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="target Amount"
+            android:textAllCaps="true" />
+
+        <TextView
+            android:id="@+id/amt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:layout_gravity="center"
+            android:text="Amount"
+            android:textAllCaps="true" />
+
+    </LinearLayout>
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+</RelativeLayout>

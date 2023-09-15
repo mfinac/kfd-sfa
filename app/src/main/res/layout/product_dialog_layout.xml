@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/search_labels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:weightSum="2.5">
+
+        <TextView
+            android:id="@+id/suplr_lbl"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:background="@color/theme_color"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:text="SEARCH SUPPLIER"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/item_lbl"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:background="@color/theme_color"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:text="SEARCH ITEM"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/action"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0.5"
+            android:background="@color/theme_color"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:text="NEXT"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_labels"
+        android:layout_marginTop="10dp"
+        android:weightSum="3">
+
+        <!--        <androidx.appcompat.widget.SearchView-->
+        <!--            android:id="@+id/search_supplier"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="35dp"-->
+        <!--            android:layout_margin="2dp"-->
+        <!--            android:layout_marginLeft="2dp"-->
+        <!--            android:layout_weight="1.25"-->
+        <!--            android:background="@drawable/custom_textbox"-->
+        <!--            android:gravity="center"-->
+        <!--            android:paddingLeft="16dp"-->
+        <!--            app:defaultQueryHint="Search supplier"-->
+        <!--            app:queryHint="Type supplier keyword here..." />-->
+
+        <AutoCompleteTextView
+            android:id="@+id/search_supplier"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_margin="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_textbox"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:selectAllOnFocus="true"
+            app:defaultQueryHint="Search supplier"
+            app:queryHint="Type supplier keyword here..." />
+
+        <!--        <androidx.appcompat.widget.SearchView-->
+        <!--            android:id="@+id/item_search"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="35dp"-->
+        <!--            android:layout_margin="2dp"-->
+        <!--            android:layout_weight="1.25"-->
+        <!--            android:background="@drawable/custom_textbox"-->
+        <!--            android:gravity="center"-->
+        <!--            android:paddingLeft="16dp"-->
+        <!--            app:defaultQueryHint="Search item"-->
+        <!--            app:queryHint="Type item keyword here..." />-->
+
+        <AutoCompleteTextView
+            android:id="@+id/item_search"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_margin="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_textbox"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:selectAllOnFocus="true"
+            app:defaultQueryHint="Search supplier"
+            app:queryHint="Type supplier keyword here..." />
+
+        <ImageView
+            android:id="@+id/img_remove"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/remove"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/item_search"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="3dp"
+            android:layout_weight="0.5"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            app:srcCompat="@drawable/ic_next" />
+
+    </LinearLayout>
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:id="@+id/search_header"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginBottom="10dp"-->
+    <!--        android:layout_below="@+id/search_labels">-->
+
+    <!--        <androidx.appcompat.widget.SearchView-->
+    <!--            android:id="@+id/et_search"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_margin="5dp"-->
+    <!--            android:layout_marginTop="16dp"-->
+    <!--            android:background="@drawable/custom_textbox"-->
+    <!--            app:iconifiedByDefault="true"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/item_search"-->
+    <!--            app:layout_constraintHorizontal_bias="0.5"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--           app:defaultQueryHint="Search supplier"-->
+    <!--            app:queryHint="Type supplier keyword here..." />-->
+    <!--        <androidx.appcompat.widget.SearchView-->
+    <!--            android:id="@+id/item_search"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_margin="5dp"-->
+    <!--            android:layout_marginTop="16dp"-->
+    <!--            android:background="@drawable/custom_textbox"-->
+    <!--            app:iconifiedByDefault="true"-->
+    <!--            app:defaultQueryHint="Search item"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/fab"-->
+    <!--            app:layout_constraintHorizontal_bias="0.5"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/et_search"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:queryHint="Type item keyword here..." />-->
+    <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--            android:id="@+id/fab"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_alignParentTop="true"-->
+    <!--            android:layout_alignParentRight="true"-->
+    <!--            android:layout_gravity="top|right"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:layout_marginTop="16dp"-->
+    <!--            android:clickable="true"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintHorizontal_bias="0.5"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/item_search"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:srcCompat="@drawable/ic_next" />-->
+
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="5dp"-->
+    <!--android:layout_marginRight="5dp"-->
+    <!--android:layout_marginTop="5dp"-->
+    <!--android:orientation="horizontal">-->
+
+
+    <!--<com.datamation.swdsfa.utils.CustomizeFont-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="1dp"-->
+    <!--android:layout_marginRight="1dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@drawable/custom_label"-->
+    <!--android:gravity="center_horizontal"-->
+    <!--android:text="PRODUCT"-->
+    <!--android:textColor="@color/unselected"-->
+    <!--android:textSize="16sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<com.datamation.swdsfa.utils.CustomizeFont-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginRight="1dp"-->
+    <!--android:layout_weight="0.2"-->
+    <!--android:background="@drawable/custom_label"-->
+    <!--android:gravity="center_horizontal"-->
+    <!--android:text="PRICE"-->
+    <!--android:textColor="@color/unselected"-->
+    <!--android:textSize="16sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<com.datamation.swdsfa.utils.CustomizeFont-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="0.2"-->
+    <!--android:background="@drawable/custom_label"-->
+    <!--android:gravity="center_horizontal"-->
+    <!--android:text="QOH"-->
+    <!--android:textColor="@color/unselected"-->
+    <!--android:textSize="16sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<com.datamation.swdsfa.utils.CustomizeFont-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="1dp"-->
+    <!--android:layout_marginRight="1dp"-->
+    <!--android:layout_weight="1.2"-->
+    <!--android:background="@drawable/custom_label"-->
+    <!--android:gravity="center_horizontal"-->
+    <!--android:text="QUANTITY"-->
+    <!--android:textColor="@color/unselected"-->
+    <!--android:textSize="16sp"-->
+    <!--android:textStyle="bold" />-->
+    <!--</LinearLayout>-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/const_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_header">
+
+
+        <LinearLayout
+            android:id="@+id/lnProductStripe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="#2f6699"
+            android:bottomLeftRadius="10dp"
+            android:bottomRightRadius="10dp"
+            android:orientation="horizontal"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="10dp"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="0dp"
+
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/et_search"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:longClickable="true"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <com.datamation.kfdupgradesfa.utils.CustomFont
+                        android:id="@+id/row_itemcode"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="1dip"
+                        android:layout_marginRight="1dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="PRODUCT"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/unselected"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <com.datamation.kfdupgradesfa.utils.CustomFont
+                        android:id="@+id/row_pack"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="1dip"
+                        android:layout_marginRight="1dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="PACK"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/unselected"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <com.datamation.kfdupgradesfa.utils.CustomFont
+                        android:id="@+id/row_qoh"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="1dip"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="QOH"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/unselected"
+                        android:textSize="16sp" />
+
+                    <com.datamation.kfdupgradesfa.utils.CustomFont
+                        android:id="@+id/row_price"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="1dip"
+                        android:layout_marginRight="1dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="PRICE"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/unselected"
+                        android:textSize="16sp" />
+
+
+                    <com.datamation.kfdupgradesfa.utils.CustomFont
+                        android:id="@+id/row_qty"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="1dip"
+                        android:layout_marginRight="1dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="QUANTITY"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/unselected"
+                        android:textSize="16sp" />
+
+                </TableRow>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/const_body">
+
+        <!--mithsu-->
+        <!--        <ListView-->
+        <!--            android:id="@+id/lv_product_list"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="5dp"-->
+        <!--            android:divider="@color/list_view_diveder"-->
+        <!--            android:dividerHeight="1dp"></ListView>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lv_product_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:divider="@color/list_view_diveder"
+            android:dividerHeight="1dp"></androidx.recyclerview.widget.RecyclerView>
+        <!--mithsu-->
+
+    </LinearLayout>
+
+
+</RelativeLayout>

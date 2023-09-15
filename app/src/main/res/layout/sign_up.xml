@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/rounded_bg"
+    android:orientation="vertical">
+
+
+    <com.datamation.kfdupgradesfa.utils.CustomFont
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="15dp"
+        android:textColor="#000"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:text="SIGN UP" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#dcdcdc"></View>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:weightSum="2">
+
+        <com.datamation.kfdupgradesfa.utils.CustomFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Customer ID" />
+
+
+        <com.datamation.kfdupgradesfa.utils.CustomFont
+            android:id="@+id/cID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="" />
+
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:weightSum="2">
+
+        <com.datamation.kfdupgradesfa.utils.CustomFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Existing Password" />
+
+
+        <com.datamation.kfdupgradesfa.utils.CustomText
+            android:id="@+id/ePW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+           android:editable="false"
+            android:text="" />
+
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:weightSum="2">
+
+        <com.datamation.kfdupgradesfa.utils.CustomFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="New Password" />
+
+
+        <com.datamation.kfdupgradesfa.utils.CustomText
+            android:id="@+id/nPW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textPassword"
+            android:text="" />
+
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:weightSum="2">
+
+        <com.datamation.kfdupgradesfa.utils.CustomFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Confirm Password"/>
+
+        <com.datamation.kfdupgradesfa.utils.CustomText
+            android:id="@+id/cPW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textPassword"
+            android:text="" />
+
+
+    </TableRow>
+
+
+    <com.datamation.kfdupgradesfa.utils.CustomBtn
+        android:layout_width="match_parent"
+        android:id="@+id/close"
+        android:background="@drawable/bottom_button_bg"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:textColor="#fff"
+        android:text="CONFIRM" />
+
+
+</LinearLayout>

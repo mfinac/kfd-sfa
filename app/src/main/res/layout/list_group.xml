@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:id="@+id/fragment_order_details_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1.5"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/refno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:maxLines="3"
+                android:text="RefNo"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="25dp"/>
+
+            <TextView
+                android:id="@+id/debcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Debtor"
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"/>
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/debcode"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="Date"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/reason"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/debcode"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="Reason"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/date"
+            android:layout_weight="1.5"
+            android:gravity="center_horizontal"
+            android:text="TotalAmt"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="50dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/total"
+            android:layout_weight="1"
+            android:background="@drawable/bg_negative"
+            android:gravity="center"
+            android:text="IsSynced"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/cnfrmstatus"
+            android:layout_width="60dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/status"
+            android:layout_weight="1"
+            android:background="@drawable/bg_negative"
+            android:gravity="center"
+            android:text="IsConfirmed"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+<!--        <ImageView-->
+<!--            android:id="@+id/type"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:layout_marginRight="18dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:layout_weight="0.5"-->
+<!--            android:background="@drawable/trash_bin_icon"-->
+<!--            android:gravity="center_horizontal"-->
+<!--            android:textSize="14sp" />-->
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="18dp"
+            android:layout_weight="0.5"
+            android:text="DELETE"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/print"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="0.5"
+            android:background="@drawable/ic_pencil"
+            android:gravity="center_horizontal"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/showOrder"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="0.5dp"
+            android:layout_toRightOf="@+id/status"
+            android:layout_weight="0.5"
+            android:background="@drawable/ic_receipt"
+            android:gravity="center_horizontal"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</LinearLayout>

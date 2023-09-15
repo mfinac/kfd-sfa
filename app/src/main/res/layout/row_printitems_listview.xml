@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="20dip"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/printindexVan"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="1"
+            android:textColor="#040d19"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/printvariantcode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5"
+            android:gravity="left"
+            android:text="variantcode"
+            android:textColor="#040d19"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/printarticleno"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="articleno"
+            android:textColor="#040d19"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/unitprice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="unitprice"
+            android:textColor="#040d19"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/printdisper"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Disper"
+            android:textColor="#040d19"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/printdescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3.5"
+            android:gravity="left"
+            android:text="description"
+            android:textColor="#040d19"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/printqty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="qty"
+            android:textColor="#040d19"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/printdiscamt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="DiscAmt"
+            android:textColor="#040d19"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/printlineamount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Line Amount"
+            android:textColor="#040d19"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/printsize"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Size Qty"
+            android:textColor="#040d19"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

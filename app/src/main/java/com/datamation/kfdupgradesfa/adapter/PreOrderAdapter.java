@@ -145,11 +145,10 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                 product.setFPRODUCT_QTY(preOrders.lblQty.getText().toString());
 
                 qty = Integer.parseInt(preOrders.lblQty.getText().toString());
-                new PreProductController(context).insertOrUpdatePreProducts(product);
+                new PreProductController(context).insertOrUpdatePreProductsNew(product);
 
                 //    }
-                ArrayList<OrderDetail> toSaveOrderDetails = new OrderDetailController(context)
-                        .mUpdatePrsSales(product, ref);
+                ArrayList<OrderDetail> toSaveOrderDetails = new OrderDetailController(context).mUpdatePrsSalesNew(product, ref);
                 if (new OrderDetailController(context).createOrUpdateOrdDet(toSaveOrderDetails) > 0) {
                     Log.d("ORDER_DETAILS", "Order det saved successfully...");
                 } else {
@@ -180,8 +179,8 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                     preOrders.lblQty.setText(qty + "");
 
                     product.setFPRODUCT_QTY(preOrders.lblQty.getText().toString());
-                    new PreProductController(context).insertOrUpdatePreProducts(product);
-                    ArrayList<OrderDetail> toSaveOrderDetails = new OrderDetailController(context).mUpdatePrsSales(product, ref);
+                    new PreProductController(context).insertOrUpdatePreProductsNew(product);
+                    ArrayList<OrderDetail> toSaveOrderDetails = new OrderDetailController(context).mUpdatePrsSalesNew(product, ref);
 
                     if (new OrderDetailController(context).createOrUpdateOrdDet(toSaveOrderDetails) > 0) {
                         Log.d("ORDER_DETAILS", "Order det saved successfully...");

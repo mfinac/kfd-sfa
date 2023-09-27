@@ -384,7 +384,7 @@ public class ActivityHome extends AppCompatActivity {
                     int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
                     rGps.setBATTERY_LVL(batLevel);
 
-                    new RepGPSLocationController(context).AddGPSLocation(rGps);
+                 //   new RepGPSLocationController(context).AddGPSLocation(rGps);
 
                 }
             };

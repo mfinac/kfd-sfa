@@ -683,7 +683,7 @@ public class OrderDetailController {
 
             ContentValues values = new ContentValues();
 
-            values.put(ValueHolder.IS_ACTIVE, "0");
+            values.put(ValueHolder.IS_ACTIVE, "1");
 
             int cn = cursor.getCount();
 
@@ -1328,5 +1328,56 @@ public class OrderDetailController {
 
         return list;
     }
+
+
+    public ArrayList<OrderDetail> mUpdatePrsSalesNew(Product tempOrder, String refno) {
+
+        ArrayList<OrderDetail> SOList = new ArrayList<OrderDetail>();
+
+        String UnitPrice = "";
+        double amt = 0.0;
+        int totPieces = 0;
+        OrderDetail ordDet = new OrderDetail();
+        totPieces = Integer.parseInt(tempOrder.getFPRODUCT_QTY());
+        amt = totPieces * Double.parseDouble(tempOrder.getFPRODUCT_PRICE());
+        ordDet.setFORDDET_AMT(String.format("%.2f", amt));
+        ordDet.setFORDDET_BAL_QTY(tempOrder.getFPRODUCT_QTY() + "");
+        ordDet.setFORDDET_B_AMT(String.format("%.2f", amt));
+        ordDet.setFORDDET_B_DIS_AMT(String.format("%.2f", (Double.parseDouble(tempOrder.getFPRODUCT_PRICE()) * ((double) totPieces)) * Double.parseDouble("0.00") / 100));
+        ordDet.setFORDDET_BP_DIS_AMT(String.format("%.2f", (Double.parseDouble(tempOrder.getFPRODUCT_PRICE()) * ((double) totPieces)) * Double.parseDouble("0.00") / 100));
+        ordDet.setFORDDET_B_SELL_PRICE(tempOrder.getFPRODUCT_PRICE());
+        ordDet.setFORDDET_BT_TAX_AMT("0");
+        ordDet.setFORDDET_BT_SELL_PRICE(tempOrder.getFPRODUCT_PRICE());
+        ordDet.setFORDDET_DIS_AMT(String.format("%.2f", (Double.parseDouble(tempOrder.getFPRODUCT_PRICE()) * ((double) totPieces)) * Double.parseDouble("0.00") / 100));
+        ordDet.setFORDDET_DIS_PER("0.00");
+        ordDet.setFORDDET_FREE_QTY("0");
+        ordDet.setFORDDET_ITEM_CODE(tempOrder.getFPRODUCT_ITEMCODE());
+        ordDet.setFORDDET_P_DIS_AMT(String.format("%.2f", (Double.parseDouble(tempOrder.getFPRODUCT_PRICE()) * ((double) totPieces)) * Double.parseDouble("0.00") / 100));
+        ordDet.setFORDDET_PRIL_CODE(new ItemPriceController(context).getPrilCodeByItemCode(tempOrder.getFPRODUCT_ITEMCODE()));
+        ordDet.setFORDDET_QTY(tempOrder.getFPRODUCT_QTY() + "");
+        ordDet.setFORDDET_DIS_VAL_AMT("0.00");
+        ordDet.setFORDDET_PICE_QTY(tempOrder.getFPRODUCT_QTY() + "");
+        ordDet.setFORDDET_REA_CODE("");
+        ordDet.setFORDDET_TYPE("SA");
+        ordDet.setFORDDET_RECORD_ID("");
+        ordDet.setFORDDET_REFNO(refno);
+        long time = System.currentTimeMillis();
+        ordDet.setOrderId(time);
+        ordDet.setFORDDET_SELL_PRICE(tempOrder.getFPRODUCT_PRICE());
+        ordDet.setFORDDET_SEQNO(1 + "");
+        ordDet.setFORDDET_TAX_AMT("0.00");
+        ordDet.setFORDDET_TAX_COM_CODE(new ItemController(context).getItemTaxComCode(tempOrder.getFPRODUCT_ITEMCODE()));
+        ordDet.setFORDDET_TIMESTAMP_COLUMN("");
+        ordDet.setFORDDET_T_SELL_PRICE(tempOrder.getFPRODUCT_PRICE());
+        ordDet.setFORDDET_TXN_DATE(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date()));
+        ordDet.setFORDDET_TXN_TYPE("21");
+        ordDet.setFORDDET_IS_ACTIVE("1");
+        ordDet.setFORDDET_ITEMNAME(new ItemController(context).getItemNameByCode(tempOrder.getFPRODUCT_ITEMCODE()));
+        ordDet.setFORDDET_PACKSIZE(new ItemController(context).getPackSizeByCode(tempOrder.getFPRODUCT_ITEMCODE()));
+
+        SOList.add(ordDet);
+        return SOList;
+    }
+
 
 }

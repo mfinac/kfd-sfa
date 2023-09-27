@@ -80,7 +80,7 @@ public class OrderDetailFragment extends Fragment {
     public SharedPref mSharedPref;
     int totPieces = 0;
     int seqno = 0;
-    SweetAlertDialog pDialog;
+    SweetAlertDialog sweetAlertDialog;
     OrderResponseListener preSalesResponseListener;
     ArrayList<Product> productList = null, allItemList = null;
     int clickCount = 0;
@@ -100,6 +100,7 @@ public class OrderDetailFragment extends Fragment {
     ImageView remove;
 
 
+
     //PreSalesResponseListener preSalesResponseListener;
     public OrderDetailFragment() {
         // Required empty public constructor
@@ -109,13 +110,9 @@ public class OrderDetailFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.product_dialog_layout, container, false);
-        //view = inflater.inflate(R.layout.sales_management_pre_sales_details_new, container, false);
         seqno = 0;
         totPieces = 0;
         mSharedPref = SharedPref.getInstance(getActivity());
-//        mSharedPref = new SharedPref(getActivity());
-        //mithsu//
-//        lvProducts = (ListView) view.findViewById(R.id.lv_product_list);
         lvProducts = view.findViewById(R.id.lv_product_list);
         //mithsu//
 
@@ -128,7 +125,6 @@ public class OrderDetailFragment extends Fragment {
         lvProducts.setLongClickable(true);
         remove = (ImageView) view.findViewById(R.id.img_remove);
         mainActivity = (OrderActivity) getActivity();
-//        RefNo = mainActivity.selectedPreHed.getORDER_REFNO();
         tmpsoHed = new Order();
 
         allItemList = new ArrayList<Product>();
@@ -183,20 +179,9 @@ public class OrderDetailFragment extends Fragment {
                     String str = editable.toString();
                     String[] arrOfStr = str.split("-", 2);
 
-//                    if (new OrderDetailController(getActivity()).tableHasRecords(refNo)) {
-//                        productList = new OrderDetailController(getActivity()).getAlreadyOrderedItems("", strLoccode, refNo, "TxnType ='21'", mSharedPref.getGlobalVal("KeyCost"));
-////
-//                    } else {
-//                        productList = new ItemController(getActivity()).getAllItemFor("TxnType ='21'", refNo, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
-//                        allItemList.clear();
-//                        allItemList = productList;
-////                   new PreProductController(getActivity()).insertOrUpdatePreProducts(productList);
-//                    }
-
                     productList = new ItemController(getActivity()).getAllItemsBySupplier(arrOfStr[0].trim(), refNo, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
                     lvProducts.setAdapter(new PreOrderAdapter(getActivity(), productList, refNo));
-                    lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(),
-                            LinearLayoutManager.VERTICAL, false));
+                    lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
 
                     //&^&^& MMS-2022/02/02 %$%$//
@@ -272,69 +257,15 @@ public class OrderDetailFragment extends Fragment {
             }
         });
 
-//        itemSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
-//                if (query.equals("")) {
-//                    productList.clear();
-//                    productList = new ItemController(getActivity()).getAllItemFor("TxnType ='21'", refNo, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
-//
-//                    lvProducts.setAdapter(new PreOrderAdapter(getActivity(), productList, refNo));
-//                    //mithsu//
-//                    lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(),
-//                            LinearLayoutManager.VERTICAL, false));
-//                    //mithsu//
-//                } else {
-//                    productList.clear();
-//                    productList = new ItemController(getActivity()).searchAllItems(query, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
-//                    lvProducts.setAdapter(new PreOrderAdapter(getActivity(), productList, refNo));
-//                    //mithsu//
-//                    lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(),
-//                            LinearLayoutManager.VERTICAL, false));
-//                    //mithsu//
-//
-//                }
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//
-//                debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
-////                if (new ProductController(getActivity()).tableHasRecords()) {
-////                    productList = new ProductController(getActivity()).getAllItems("","",debCode);
-////                }else{
-//
-//                strLoccode = mSharedPref.getGlobalVal("KeyLoc");
-//                //String debCode = new OrdHedDS(getActivity()).getRefnoByDebcode(referenceNum.getCurrentRefNo(getResources().getString(R.string.NumVal)));
-//                productList.clear();
-//                productList = new ItemController(getActivity()).searchAllItems(newText, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
-//                lvProducts.setAdapter(new PreOrderAdapter(getActivity(), productList, refNo));
-//                //mithsu//
-//                lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(),
-//                        LinearLayoutManager.VERTICAL, false));
-//                //mithsu//
-//
-//                //              new ProductController(getActivity()).insertOrUpdateProducts(productList);
-//                //          }
-//                return true;
-//            }
-//        });
-
-
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSharedPref.setDiscountClicked("1");
-
                 new OrderDetailController(getActivity()).DeleteZeroValueData(refNo);
                 new CalculateFree(mSharedPref.getSelectedDebCode()).execute();
+                preSalesResponseListener.moveNextToFragment(1);
             }
         });
-
-
 
         return view;
     }
@@ -346,21 +277,26 @@ public class OrderDetailFragment extends Fragment {
 
             strLoccode = mSharedPref.getGlobalVal("KeyLoc");
 
-            new LoardingProductFromDB().execute();
-
+          // new LoardingProductFromDB().execute();
 
         } else {
             preSalesResponseListener.moveBackToFragment(0);
             Toast.makeText(getActivity(), "Cannot proceed,Please click arrow button to save header details...", Toast.LENGTH_LONG).show();
 
-
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(rd);
+        Log.d("order_detail", "clicked_count" + clickCount);
+
     }
 
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(rd);
-
         Log.d("order_detail", "clicked_count" + clickCount);
 
     }
@@ -378,42 +314,52 @@ public class OrderDetailFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 //            mRefreshDataDet();
-            OrderDetailFragment.this.mToggleTextbox();
             final CustomProgressDialog pdialog;
-
             pdialog = new CustomProgressDialog(getActivity());
             pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             pdialog.setMessage("Please wait...");
             pdialog.show();
 
-            final int interval = 5000; // 2 Second
-            Handler handler = new Handler();
-            Runnable runnable = new Runnable() {
+            Runnable progressRunnable = new Runnable() {
+                @Override
                 public void run() {
-                    new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
-                            .setTitleText("Item list loaded.")
-                            .setContentText("")
-                            .setConfirmText("OK")
-                            .showCancelButton(false)
-
-                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sDialog) {
-                                    sDialog.dismiss();
-                                    if (pdialog.isShowing()) {
-                                        pdialog.dismiss();
-                                    }
-
-                                }
-                            })
-
-                            .show();
+                    OrderDetailFragment.this.mToggleTextbox();
+                    pdialog.cancel();
                 }
             };
 
-            handler.postAtTime(runnable, System.currentTimeMillis() + interval);
-            handler.postDelayed(runnable, interval);
+            Handler pdCanceller = new Handler();
+            pdCanceller.postDelayed(progressRunnable, 67000);
 
+            final int interval = 5000; // 2 Second
+            Handler handler = new Handler();
+//            Runnable runnable = new Runnable() {
+//                public void run() {
+//                    new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+//                            .setTitleText("Item list loaded.")
+//                            .setContentText("")
+//                            .setConfirmText("OK")
+//                            .showCancelButton(false)
+//
+//                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                                @Override
+//                                public void onClick(SweetAlertDialog sDialog) {
+//                                    sDialog.dismiss();
+//                                    if (pdialog.isShowing()) {
+//                                        pdialog.dismiss();
+//                                    }
+//
+//                                }
+//                            })
+//
+//                            .show();
+//                }
+//            };
+
+//            handler.postAtTime(runnable, System.currentTimeMillis() + interval);
+//            handler.postDelayed(runnable, interval);
+
+            Log.d("order_detail", "clicked_count" + clickCount);
             Log.d("order_detail", "clicked_count" + clickCount);
         }
     }
@@ -433,6 +379,7 @@ public class OrderDetailFragment extends Fragment {
 
     public class LoardingProductFromDB extends AsyncTask<Object, Object, ArrayList<Product>> {
 
+        CustomProgressDialog pdialog;
 
         public LoardingProductFromDB() {
         }
@@ -440,11 +387,12 @@ public class OrderDetailFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
-            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-            pDialog.setTitleText("Fetch Data Please Wait.");
-            pDialog.setCancelable(false);
+            sweetAlertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
+            sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            sweetAlertDialog.setTitleText("Fetch Data Please Wait.");
+            sweetAlertDialog.setCancelable(false);
             //pDialog.show();
+         //   pdialog.dismiss();
         }
 
         @Override
@@ -454,16 +402,14 @@ public class OrderDetailFragment extends Fragment {
             strLoccode = mSharedPref.getGlobalVal("KeyLoc");
             if (new OrderDetailController(getActivity()).tableHasRecords(refNo)) {
                 productList = new OrderDetailController(getActivity()).getAlreadyOrderedItems("", strLoccode, refNo, "TxnType ='21'", mSharedPref.getGlobalVal("KeyCost"));
-//
+              //  pdialog.dismiss();
             } else {
                 productList = new ItemController(getActivity()).getAllItemFor("TxnType ='21'", refNo, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
-                allItemList.clear();
+               // allItemList.clear();
                 allItemList = productList;
-//                   new PreProductController(getActivity()).insertOrUpdatePreProducts(productList);
-            }
 
-//             productList = new OrderDetailController(getActivity()).getAllItems("",new CustomerController(getActivity()).getCurrentLocCode());//rashmi -2018-10-26
-            return productList;
+            }
+             return productList;
         }
 
 
@@ -471,15 +417,14 @@ public class OrderDetailFragment extends Fragment {
         protected void onPostExecute(ArrayList<Product> products) {
             super.onPostExecute(products);
 
-
-            //   productList = new OrderDetailController(getActivity()).getAllItems("",new CustomerController(getActivity()).getCurrentLocCode());
             lvProducts.setAdapter(new PreOrderAdapter(getActivity(), products, refNo));
             //mithsu//
-            lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(),
-                    LinearLayoutManager.VERTICAL, false));
+            lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+//            pdialog.dismiss();
             //mithsu//
 
         }
+
     }
 
 
@@ -582,7 +527,7 @@ public class OrderDetailFragment extends Fragment {
             if (pdialog.isShowing()) {
                 pdialog.dismiss();
             }
-            preSalesResponseListener.moveNextToFragment(2);
+           // preSalesResponseListener.moveNextToFragment(2);
         }
     }
 

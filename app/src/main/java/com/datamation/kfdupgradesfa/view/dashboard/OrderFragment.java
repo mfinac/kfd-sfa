@@ -475,14 +475,14 @@ public class OrderFragment extends Fragment {
 //                cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_negative));
 //            }
             else if (headerTitle.getFORDHED_IS_SYNCED().equals("1") && headerTitle.getFORDHED_IS_ACTIVE().equals("0")) {
-                stats.setText("SYNCED");
+                stats.setText("NOT SYNCED");
                 cnfrmstats.setText("Click to confirm");
-                stats.setBackground(getResources().getDrawable(R.drawable.bg_positive));
+               // stats.setBackground(getResources().getDrawable(R.drawable.bg_positive));
                 cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_positive));
             } else if (headerTitle.getFORDHED_IS_SYNCED().equals("0") && headerTitle.getFORDHED_IS_ACTIVE().equals("0")&& headerTitle.getFORDHED_STATUS().equals("SYNCED")) {
                 stats.setText("SYNCED");
                 cnfrmstats.setText("Click to confirm");
-                new OrderController(getActivity()).updateIsSynced(headerTitle.getFORDHED_REFNO(), "1", "SYNCED","0");
+                new OrderController(getActivity()).updateIsSynced(headerTitle.getFORDHED_REFNO(), "0", "SYNCED","0");
                 stats.setBackground(getResources().getDrawable(R.drawable.bg_positive));
                 cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_positive));
             }
@@ -876,6 +876,7 @@ public class OrderFragment extends Fragment {
 
     //    modified by MMS - 2022/02/17 #$#$#$#$#$//
     public void prepareListData() {
+        showData();
         listDataHeader = new OrderController(getActivity()).getAllOrders();
 
         if (listDataHeader.size() == 0) {

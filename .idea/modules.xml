@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/KFDUpgrade.iml" filepath="$PROJECT_DIR$/.idea/modules/KFDUpgrade.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KFDUpgrade.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KFDUpgrade.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KFDUpgrade.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KFDUpgrade.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KFDUpgrade.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KFDUpgrade.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KFDUpgrade.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KFDUpgrade.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/KFDUpgradeNew.iml" filepath="$PROJECT_DIR$/.idea/modules/KFDUpgradeNew.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KFDUpgradeNew.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KFDUpgradeNew.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KFDUpgradeNew.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KFDUpgradeNew.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KFDUpgradeNew.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KFDUpgradeNew.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KFDUpgradeNew.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KFDUpgradeNew.app.unitTest.iml" />
     </modules>
   </component>
 </project>

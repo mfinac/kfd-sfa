@@ -317,9 +317,6 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
         customerName = new CustomerController(getActivity()).getCusNameByCode(SharedPref.getInstance(getActivity()).getSelectedDebCode());
 
         lblSummaryHeader.setText("ORDER SUMMARY - (" + customerName + ")");
-
-        // String orRefNo = new OrderController(getActivity()).getActiveRefNoFromOrders();
-
         int ftotQty = 0, fTotFree = 0, returnQty = 0, replacements = 0;
         double ftotAmt = 0, fTotLineDisc = 0, fTotSchDisc = 0, totalReturn = 0;
         String itemCode = "";
@@ -352,10 +349,6 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
         lblQty.setText(String.valueOf(ftotQty));
 
         lblGross.setText(String.format("%.2f", gross)); // SA type total amt + discount
-        //  lblReturn.setText(String.format("%.2f", totalReturn)); // MR/UR type total amt
-        // lblNetVal.setText(String.format("%.2f", net)); // total - discount - return
-
-        //   lblReturnQty.setText(String.valueOf(returnQty));
         lblReplacements.setText(String.valueOf(fTotFree));
 
 
@@ -469,25 +462,26 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                     ordHed.setFORDHED_END_TIME_SO(EndTime);
                     ordHed.setFORDHED_START_TIME_SO(presale.getFORDHED_START_TIME_SO());
                     ordHed.setFORDHED_ADDRESS("");
+                    ordHed.setFORDHED_COST_CODE(presale.getFORDHED_COST_CODE());
 
-                    String str = presale.getFORDHED_COST_CODE();
-                    String[] arrOfCostCd = str.split("-", 2);
-
-                    ordHed.setFORDHED_COST_CODE(arrOfCostCd[0]);
+//                    String str = presale.getFORDHED_COST_CODE();
+//                    String[] arrOfCostCd = str.split("-", 2);
+//                    ordHed.setFORDHED_COST_CODE(arrOfCostCd[0]);
+//                    String str = presale.getFORDHED_COST_CODE();
+//                    String[] arrOfCostCd = str.split("-", 2);
+//
+//                    ordHed.setFORDHED_COST_CODE(arrOfCostCd[0]);
                     ordHed.setFORDHED_TOTAL_TAX("0.00");
                     ordHed.setFORDHED_TOTALDIS("0.00");
                     ordHed.setFORDHED_TOTAL_ITM_DIS("0.00");
                     ordHed.setFORDHED_TOT_MKR_AMT("0.00");
-                    // ordHed.setFORDHED_TOTALDIS(String.format("%.2f",presale.getFORDHED_TOTALDIS())+"");
-//                    ordHed.setFORDHED_TOTAL_ITM_DIS(String.format("%.2f",presale.getFORDHED_TOTALDIS())+"");
-//                    ordHed.setFORDHED_TOT_MKR_AMT(String.format("%.2f",presale.getFORDHED_TOTALDIS())+"");
                     ordHed.setFORDHED_TOTAL_AMT(lblGross.getText().toString());
                     ordHed.setFORDHED_TXN_DATE(currentDate());
                     ordHed.setFORDHED_TXN_TYPE("21");
 //                    ordHed.setFORDHED_REPCODE(mSharedPref.getGlobalVal("KeySelectedRep"));
                     ordHed.setFORDHED_REPCODE(new SalRepController(getActivity()).getCurrentRepCode());
                     ordHed.setFORDHED_IS_ACTIVE("0");
-                    ordHed.setFORDHED_IS_SYNCED("0");
+                    ordHed.setFORDHED_IS_SYNCED("1");
                     ordHed.setFORDHED_LATITUDE("0.00");
                     ordHed.setFORDHED_LONGITUDE("0.00");
                     ordHed.setFORDHED_HED_DIS_VAL(String.format("%.2f", presale.getFORDHED_TOTALDIS()) + "");
@@ -628,10 +622,10 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             ordHed.setFORDHED_START_TIME_SO(presale.getFORDHED_START_TIME_SO());
             ordHed.setFORDHED_ADDRESS("");
 
-            String str = presale.getFORDHED_COST_CODE();
-            String[] arrOfCostCd = str.split("-", 2);
-
-            ordHed.setFORDHED_COST_CODE(arrOfCostCd[0]);
+//            String str = presale.getFORDHED_COST_CODE();
+//            String[] arrOfCostCd = str.split("-", 2);
+//
+//            ordHed.setFORDHED_COST_CODE(arrOfCostCd[0]);
             ordHed.setFORDHED_COST_CODE(presale.getFORDHED_COST_CODE());
             ordHed.setFORDHED_TOTAL_TAX("0.00");
             ordHed.setFORDHED_TOTALDIS("0.00");
@@ -648,7 +642,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             ordHed.setFORDHED_TXN_TYPE("21");
             ordHed.setFORDHED_REPCODE(new SalRepController(getActivity()).getCurrentRepCode());
             ordHed.setFORDHED_IS_ACTIVE("0");
-            ordHed.setFORDHED_IS_SYNCED("0");
+            ordHed.setFORDHED_IS_SYNCED("1");
             ordHed.setFORDHED_HED_DIS_VAL(String.format("%.2f", presale.getFORDHED_TOTALDIS()) + "");
             ordHed.setFORDHED_HED_DIS_PER_VAL(String.format("%.2f", presale.getFORDHED_TOTALDIS()) + "");//String.format("%,.2f",sHeaderDisPer)
 
@@ -751,7 +745,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                                         mHandler.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "SYNCED","0");
+                                                new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "SYNCED","0");
                                               //  new OrderController(getActivity()).updateIsActive(c.getRefNo(), "0");
 //                                                new OrderController(getActivity()).up(c.getFORDHED_REFNO(), "2");
 
@@ -777,43 +771,6 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
 
 
 
-//                                if (response != null && response.body() != null) {
-//                                    int status = response.code();
-//                                    Log.d(">>>response code", ">>>res " + status);
-//                                    Log.d(">>>response message", ">>>res " + response.message());
-//                                    Log.d(">>>response body", ">>>res " + response.body().toString());
-//                                    int resLength = response.body().toString().trim().length();
-//                                    String resmsg = "" + response.body().toString();
-//                                    if (status == 200 && !resmsg.equals("") && !resmsg.equals(null) && resLength>5) {
-//                                        mHandler.post(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-////
-//                                                new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "SYNCED");
-//                                                new OrderController(getActivity()).updateIsActive(c.getRefNo(), "0");
-////                                                new OrderController(getActivity()).up(c.getFORDHED_REFNO(), "2");
-//
-//                                                Toast.makeText(getActivity(), "Order Upload successfully..!", Toast.LENGTH_LONG).show();
-//
-//                                                addRefNoResults(c.getRefNo() + " --> Success\n", orders.size());
-//
-//                                            }
-//                                        });
-//                                    } else {
-//                                        c.setIsSync("0");
-//                                        c.setIsActive("1");
-//                                        new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED");
-//                                        new OrderController(getActivity()).updateIsActive(c.getRefNo(), "0");
-//                                        Toast.makeText(getActivity(), "Order Upload Failed.", Toast.LENGTH_LONG).show();
-//                                        addRefNoResults(c.getRefNo() + " --> Failed\n", orders.size());
-//                                    }
-//                                } else {
-//                                    Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
-//                                    Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
-//                                    startActivity(intnt);
-//                                    getActivity().finish();
-//
-//                                }
 
                             }
 

@@ -1,5 +1,6 @@
 package com.datamation.kfdupgradesfa.controller;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -152,6 +153,7 @@ public class PreProductController {
         }
         return count;
     }
+   @SuppressLint("Range")
    public ArrayList<PreProduct> getSelectedItems() {
 
         if (dB == null) {
@@ -213,12 +215,9 @@ public class PreProductController {
             String sql = "INSERT OR REPLACE INTO " + ValueHolder.TABLE_PRODUCT_PRE + " (itemcode,itemname,price,qoh,qty) VALUES (?,?,?,?,?)";
 
             SQLiteStatement stmt = dB.compileStatement(sql);
-
-
-
                 stmt.bindString(1, product.getFPRODUCT_ITEMCODE());
                 stmt.bindString(2, product.getFPRODUCT_ITEMNAME());
-                double price = Double.parseDouble(product.getFPRODUCT_QTY())  * Double.parseDouble(product.getFPRODUCT_QTY());
+                double price = Double.parseDouble(product.getFPRODUCT_QTY())  * Double.parseDouble(product.getFPRODUCT_PRICE());
                 stmt.bindString(3, price+"");
                 stmt.bindString(4, product.getFPRODUCT_QOH());
                 stmt.bindString(5, product.getFPRODUCT_QTY());
@@ -276,4 +275,57 @@ public class PreProductController {
             }
         }
     }
+
+
+
+    public int insertOrUpdatePreProductsNew(Product product) {
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+
+        try {
+
+                Cursor cursor = null;
+                ContentValues values = new ContentValues();
+
+
+                String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDDET + " WHERE " + ValueHolder.ITEMCODE
+                        + " = '" + product.getFPRODUCT_ITEMCODE() + "' and " + ValueHolder.ITEMNAME
+                        + " = '" + product.getFPRODUCT_ITEMNAME() + "' ";
+
+                cursor = dB.rawQuery(selectQuery, null);
+                values.put(ValueHolder.ITEMCODE, product.getFPRODUCT_ITEMCODE());
+                values.put(ValueHolder.ITEMNAME, product.getFPRODUCT_ITEMNAME());
+                values.put(ValueHolder.PRICE, product.getFPRODUCT_PRICE());
+                values.put(ValueHolder.QOH, product.getFPRODUCT_QOH());
+                values.put(ValueHolder.QTY, product.getFPRODUCT_QTY());
+
+
+                int cn = cursor.getCount();
+
+                if (cn > 0) {
+                    count = dB.update(ValueHolder.TABLE_PRODUCT_PRE, values, ValueHolder.ITEMCODE + " = '" + product.getFPRODUCT_ITEMCODE() + "'  and " + ValueHolder.ITEMNAME + " = '" + product.getFPRODUCT_ITEMNAME() + "'", null);
+                } else {
+                    count = (int) dB.insert(ValueHolder.TABLE_PRODUCT_PRE, null, values);
+                }
+
+                cursor.close();
+
+        } catch (Exception e) {
+
+            // Log.v(TAG + " Exception", e.toString());
+
+        } finally {
+            dB.close();
+        }
+        return count;
+
+
+    }
+
+
 }

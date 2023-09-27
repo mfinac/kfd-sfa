@@ -111,7 +111,7 @@ public class UploadPreSales extends AsyncTask<ArrayList<OrderHed>, Integer, Arra
                                     public void run() {
                                         c.setIsSync("1");
                                         addRefNoResults(c.getRefNo() +" --> Success\n",RCSList.size());
-                                        new OrderController(context).updateIsSynced(c.getRefNo(),"1","SYNCED","0");
+                                        new OrderController(context).updateIsSynced(c.getRefNo(),"0","SYNCED","0");
                                     }
                                 });
                             }else{

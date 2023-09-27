@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -42,6 +43,7 @@ import com.datamation.kfdupgradesfa.controller.ReferenceController;
 import com.datamation.kfdupgradesfa.controller.RouteController;
 import com.datamation.kfdupgradesfa.controller.RouteDetController;
 import com.datamation.kfdupgradesfa.controller.SalRepController;
+import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
 import com.datamation.kfdupgradesfa.fragment.debtorlist.AllCustomerFragment;
 import com.datamation.kfdupgradesfa.helpers.OrderResponseListener;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
@@ -172,11 +174,7 @@ public class OrderHeaderFragment extends Fragment {
         year = Scalendar.get(Calendar.YEAR);
         month = Scalendar.get(Calendar.MONTH);
         day = Scalendar.get(Calendar.DAY_OF_MONTH);
-//        if(pref.generateOrderId() == 0) {
-//            long time = System.currentTimeMillis();
-//            pref.setOrderId(time);
-//            pref.setEditOrderId(time);
-//        }
+//
 
         try {
             lblPreRefno.setText("" + refNo);
@@ -184,16 +182,6 @@ public class OrderHeaderFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-//        if (new OrderController(getActivity()).isAnyActiveOrderHed(new ReferenceNum(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal))))
-//        {
-//            Order hed = new OrderController(getActivity()).getAllActiveOrdHed();
-//
-//            txtManual.setText(hed.getORDER_MANUREF());
-//            txtRemakrs.setText(hed.getORDER_REMARKS());
-        //  }
-
-
 
         /*create payment Type*/
         costList = new CostController(getActivity()).getAllCostCenters();
@@ -207,6 +195,7 @@ public class OrderHeaderFragment extends Fragment {
                 android.R.layout.simple_spinner_item, costNames);
         dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCost.setAdapter(dataAdapter1);
+
 
         spCost.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -276,6 +265,24 @@ public class OrderHeaderFragment extends Fragment {
             }
         });
 
+        final CustomProgressDialog pdialog;
+        pdialog = new CustomProgressDialog(getActivity());
+        pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        pdialog.setMessage("Please wait...");
+        pdialog.show();
+
+        Runnable progressRunnable = new Runnable() {
+            @Override
+            public void run() {
+                pdialog.cancel();
+            }
+        };
+
+        Handler pdCanceller = new Handler();
+        pdCanceller.postDelayed(progressRunnable, 67000);
+
+
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -283,12 +290,12 @@ public class OrderHeaderFragment extends Fragment {
                 if (lblCustomerName.getText().toString().equals("")) {
                     Log.d("<<<lblCustomerName<<<<", " " + lblCustomerName.getText().toString());
                     Log.d("<<<txtRoute<<<<", " " + txtRoute.getText().toString());
-                    //   preSalesResponseListener.moveBackToFragment(0);
+
                     Toast.makeText(getActivity(), "Can not proceed without Customer...", Toast.LENGTH_LONG).show();
                     checkdate();
                 } else {
                     SaveSalesHeader();
-
+                   // preSalesResponseListener.moveNextToFragment(1);
 
                 }
 
@@ -352,33 +359,6 @@ public class OrderHeaderFragment extends Fragment {
                     materialDialog.setCanceledOnTouchOutside(false);
                     materialDialog.show();
 
-//                    MaterialDialog materialDialog = new MaterialDialog.Builder(getActivity())
-//                            .content("You have active orders. Cannot back without complete.")
-//                            .positiveText("OK")
-//                            .positiveColor(getResources().getColor(R.color.material_alert_positive_button))
-////                            .negativeText("No")
-////                            .negativeColor(getResources().getColor(R.color.material_alert_negative_button))
-//
-//                            .callback(new MaterialDialog.ButtonCallback() {
-//                                @Override
-//                                public void onPositive(MaterialDialog dialog) {
-//                                    dialog.dismiss();
-//                                }
-//
-//                                @Override
-//                                public void onNegative(MaterialDialog dialog) {
-//                                    super.onNegative(dialog);
-//                                }
-//
-//                                @Override
-//                                public void onNeutral(MaterialDialog dialog) {
-//                                    super.onNeutral(dialog);
-//                                }
-//                            })
-//                            .build();
-//                    materialDialog.setCancelable(false);
-//                    materialDialog.setCanceledOnTouchOutside(false);
-//                    materialDialog.show();
                 } else {
                     MaterialDialog materialDialog = new MaterialDialog.Builder(getActivity())
                             .content("Do you want to back?")
@@ -446,9 +426,6 @@ public class OrderHeaderFragment extends Fragment {
 
             Customer cus = new CustomerController(getActivity()).getSelectedCustomerByCode(pref.getSelectedDebCode());
 
-            //  String Loc_code = new CustomerController(getActivity()).getCurrentLocCode();
-            //  String Cost_Code = new OrderController(getActivity()).getCostCodeByLocCode(Loc_code);
-
             hed.setFORDHED_REFNO(lblPreRefno.getText().toString());
 //             hed.setOrderId(pref.generateOrderId());
 
@@ -467,6 +444,7 @@ public class OrderHeaderFragment extends Fragment {
             hed.setFORDHED_CUR_CODE("LKR");
             hed.setFORDHED_CUR_RATE("1.00");
             hed.setFORDHED_IS_ACTIVE("1");
+            hed.setFORDHED_IS_SYNCED("0");
             hed.setFORDHED_LOC_CODE("");
             hed.setFORDHED_CUSADD1(cus.getCusAdd1());
             hed.setFORDHED_CUSADD2(cus.getCusAdd2());
@@ -489,13 +467,6 @@ public class OrderHeaderFragment extends Fragment {
             String[] arrOfStr = cst.split("-", 2);
             pref.setCostCode(arrOfStr[0].trim());
 
-//            if (spCost.getSelectedItemPosition() == 0) {
-//                hed.setFORDHED_PAYMENT_TYPE("CA");
-//            }else if(spCost.getSelectedItemPosition() == 1){
-//                hed.setFORDHED_PAYMENT_TYPE("CH");
-//            }else {
-//                hed.setFORDHED_PAYMENT_TYPE("OTHERS");
-//            }
             hed.setFORDHED_PAYMENT_TYPE("");
 
             ArrayList<Order> ordHedList = new ArrayList<Order>();
@@ -504,35 +475,15 @@ public class OrderHeaderFragment extends Fragment {
 
             activity.selectedPreHed = hed;
             if (ordHedDS.createOrUpdateOrdHed(ordHedList) > 0) {
-//                final int interval = 2000; // 2 Second
-//                Handler handler = new Handler();
-//                Runnable runnable = new Runnable(){
-//                    public void run() {
                         Toast.makeText(getActivity(), "Order Header Saved...", Toast.LENGTH_LONG).show();
                         preSalesResponseListener.moveNextToFragment(1);
-//                    }
-//                };
-//
-//                handler.postAtTime(runnable, System.currentTimeMillis()+interval);
-//                handler.postDelayed(runnable, interval);
+
             }
         }
     }
 
     public void mRefreshHeader() {
         Log.d("Header>>", ">>" + mSharedPref.getHeaderNextClicked());
-
-
-
-
-        //  txtRoute.setText(new RouteDetController(getActivity()).getRouteCodeByDebCode(pref.getSelectedDebCode()));
-//        txtRoute.setText("");
-
-        // lblPreRefno.setText(new ReferenceNum(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
-        //deldate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        // SaveSalesHeader();
-
-
 
         if (SharedPref.getInstance(getActivity()).getGlobalVal("PrekeyCustomer").equals("Y")) {
             ArrayList<OrderDetail> dets = new OrderDetailController(getActivity()).getSAForFreeIssueCalc("" + refNo);
@@ -567,6 +518,13 @@ public class OrderHeaderFragment extends Fragment {
     }
 
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(r);
+        Log.d("Header>>", ">>Headerpause");
+    }
+
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(r);
@@ -581,11 +539,7 @@ public class OrderHeaderFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(r, new IntentFilter("TAG_PRE_HEADER"));
 
         Log.d("Header>>", ">>Headerresume");
-//        ArrayList<OrderDetail> dets = new OrderDetailController(getActivity()).getSAForFreeIssueCalc(""+pref.generateOrderId());
-//        Log.d("Header>>",">>detsizeresume"+dets.size());
-//        if(dets.size()>0){
-//            preSalesResponseListener.moveBackToFragment(1);
-//        }
+
     }
 
 

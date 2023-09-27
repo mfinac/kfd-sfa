@@ -109,7 +109,7 @@ public class OrderController {
                 values.put(ValueHolder.ROUTECODE, ordHed.getFORDHED_ROUTE_CODE());
                 values.put(ValueHolder.DIS_VAL, ordHed.getFORDHED_HED_DIS_VAL());
                 values.put(ValueHolder.DIS_PER_VAL, ordHed.getFORDHED_HED_DIS_PER_VAL());
-                values.put(ValueHolder.IS_SYNC, "0");
+                values.put(ValueHolder.IS_SYNC, ordHed.getFORDHED_IS_SYNCED());
                 values.put(ValueHolder.IS_ACTIVE, ordHed.getFORDHED_IS_ACTIVE());
                 values.put(ValueHolder.PAYMENT_TYPE, ordHed.getFORDHED_PAYMENT_TYPE());
                 values.put(ValueHolder.STATUS, ordHed.getFORDHED_STATUS());
@@ -121,8 +121,7 @@ public class OrderController {
 
                 int cn = cursor.getCount();
                 if (cn > 0) {
-                    count = dB.update(ValueHolder.TABLE_ORDHED, values, ValueHolder.REFNO + " =?",
-                            new String[]{String.valueOf(ordHed.getFORDHED_REFNO())});
+                    count = dB.update(ValueHolder.TABLE_ORDHED, values, ValueHolder.REFNO + " =?", new String[]{String.valueOf(ordHed.getFORDHED_REFNO())});
                 } else {
                     count = (int) dB.insert(ValueHolder.TABLE_ORDHED, null, values);
                 }
@@ -205,7 +204,7 @@ public class OrderController {
 
             ContentValues values = new ContentValues();
 
-            values.put(ValueHolder.IS_ACTIVE, "0");
+           // values.put(ValueHolder.IS_ACTIVE, "1");
             values.put(ValueHolder.END_TIME_SO, UploadDate);
             values.put(ValueHolder.ADDDATE, UploadDate);
             int cn = cursor.getCount();
@@ -458,8 +457,8 @@ public class OrderController {
 
         @SuppressWarnings("static-access")
 //        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where "+ ValueHolder.IS_ACTIVE + " <> '1' ORDER BY Id DESC";
-                String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where " + ValueHolder.IS_ACTIVE + " <> '1' ORDER BY Id DESC";
-
+         String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where " + ValueHolder.IS_ACTIVE + " = '0'    ORDER BY Id DESC";
+        //  String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + "";
         Cursor cursor = dB.rawQuery(selectQuery, null);
 
 
@@ -1029,7 +1028,7 @@ public class OrderController {
 
         @SuppressWarnings("static-access")
         String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where " + ValueHolder.IS_ACTIVE
-                + "='0' and " + ValueHolder.IS_SYNC + "='0'";
+                + "='0' and " + ValueHolder.IS_SYNC + "='1'";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 
@@ -1045,7 +1044,8 @@ public class OrderController {
             order.setManuRef(cursor.getString(cursor.getColumnIndex(ValueHolder.MANU_REF)));
             order.setCurCode(cursor.getString(cursor.getColumnIndex(ValueHolder.CUR_CODE)));
             order.setCostCode(cursor.getString(cursor.getColumnIndex(ValueHolder.COSTCODE)));
-            order.setCurRate(Double.parseDouble(cursor.getString(cursor.getColumnIndex(ValueHolder.CUR_RATE))));
+          //  order.setCurRate(Double.parseDouble(cursor.getString(cursor.getColumnIndex(ValueHolder.CUR_RATE))));
+            //order.setCurCode(String.valueOf(cursor.getDouble((int) Double.parseDouble(ValueHolder.CUR_RATE))));
             order.setDebCode(cursor.getString(cursor.getColumnIndex(ValueHolder.DEBCODE)));
             order.setRemarks(cursor.getString(cursor.getColumnIndex(ValueHolder.REMARKS)));
             order.setTxnType(cursor.getString(cursor.getColumnIndex(ValueHolder.TXNTYPE)));
@@ -1114,7 +1114,7 @@ public class OrderController {
 
         @SuppressWarnings("static-access")
         String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where " + ValueHolder.IS_ACTIVE
-                + "='0' and " + ValueHolder.IS_SYNC + "='0' AND " + ValueHolder.REFNO + " = '" + RefNo + "'";
+                + "='1' and " + ValueHolder.IS_SYNC + "='1' AND " + ValueHolder.REFNO + " = '" + RefNo + "'";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 

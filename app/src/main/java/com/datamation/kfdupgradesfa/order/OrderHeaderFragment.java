@@ -265,28 +265,10 @@ public class OrderHeaderFragment extends Fragment {
             }
         });
 
-        final CustomProgressDialog pdialog;
-        pdialog = new CustomProgressDialog(getActivity());
-        pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        pdialog.setMessage("Please wait...");
-        pdialog.show();
-
-        Runnable progressRunnable = new Runnable() {
-            @Override
-            public void run() {
-                pdialog.cancel();
-            }
-        };
-
-        Handler pdCanceller = new Handler();
-        pdCanceller.postDelayed(progressRunnable, 67000);
-
-
-
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSharedPref.setHeaderNextClicked("1");
+              //  mSharedPref.setHeaderNextClicked("1");
                 if (lblCustomerName.getText().toString().equals("")) {
                     Log.d("<<<lblCustomerName<<<<", " " + lblCustomerName.getText().toString());
                     Log.d("<<<txtRoute<<<<", " " + txtRoute.getText().toString());
@@ -294,7 +276,23 @@ public class OrderHeaderFragment extends Fragment {
                     Toast.makeText(getActivity(), "Can not proceed without Customer...", Toast.LENGTH_LONG).show();
                     checkdate();
                 } else {
-                    SaveSalesHeader();
+                    final CustomProgressDialog pdialog;
+                    pdialog = new CustomProgressDialog(getActivity());
+                    pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    pdialog.setMessage("Please wait...");
+                    pdialog.show();
+
+                    Runnable progressRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            SaveSalesHeader();
+                            pdialog.cancel();
+                        }
+                    };
+
+                    Handler pdCanceller = new Handler();
+                    pdCanceller.postDelayed(progressRunnable, 67000);
+
                    // preSalesResponseListener.moveNextToFragment(1);
 
                 }

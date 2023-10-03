@@ -198,9 +198,6 @@ public class OrderActivity<extras> extends AppCompatActivity implements OrderRes
 
                     if (orderDetailFragment == null)
                         orderDetailFragment = new OrderDetailFragment();
-
-
-
                     return orderDetailFragment;
                 case 2:
 

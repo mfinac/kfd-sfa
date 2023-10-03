@@ -134,6 +134,7 @@ public class OrderDetailFragment extends Fragment {
         mSharedPref.setDiscountClicked("0");
         clickCount = 0;
 
+
         //&^&^& MMS-2022/02/01 %$%$//
         final ArrayList<Supplier> splist = new SupplierController(getActivity()).getAllSuppliers();
         final ArrayList<String> supNamesStr = new ArrayList<String>();
@@ -277,7 +278,7 @@ public class OrderDetailFragment extends Fragment {
 
             strLoccode = mSharedPref.getGlobalVal("KeyLoc");
 
-          // new LoardingProductFromDB().execute();
+         //  new LoardingProductFromDB().execute();
 
         } else {
             preSalesResponseListener.moveBackToFragment(0);
@@ -313,51 +314,6 @@ public class OrderDetailFragment extends Fragment {
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-//            mRefreshDataDet();
-            final CustomProgressDialog pdialog;
-            pdialog = new CustomProgressDialog(getActivity());
-            pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            pdialog.setMessage("Please wait...");
-            pdialog.show();
-
-            Runnable progressRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    OrderDetailFragment.this.mToggleTextbox();
-                    pdialog.cancel();
-                }
-            };
-
-            Handler pdCanceller = new Handler();
-            pdCanceller.postDelayed(progressRunnable, 67000);
-
-            final int interval = 5000; // 2 Second
-            Handler handler = new Handler();
-//            Runnable runnable = new Runnable() {
-//                public void run() {
-//                    new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
-//                            .setTitleText("Item list loaded.")
-//                            .setContentText("")
-//                            .setConfirmText("OK")
-//                            .showCancelButton(false)
-//
-//                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                                @Override
-//                                public void onClick(SweetAlertDialog sDialog) {
-//                                    sDialog.dismiss();
-//                                    if (pdialog.isShowing()) {
-//                                        pdialog.dismiss();
-//                                    }
-//
-//                                }
-//                            })
-//
-//                            .show();
-//                }
-//            };
-
-//            handler.postAtTime(runnable, System.currentTimeMillis() + interval);
-//            handler.postDelayed(runnable, interval);
 
             Log.d("order_detail", "clicked_count" + clickCount);
             Log.d("order_detail", "clicked_count" + clickCount);

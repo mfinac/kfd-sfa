@@ -6,7 +6,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CONNECTIVITY_SERVICE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -22,7 +24,8 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 <!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -57,45 +60,55 @@
         <activity
             android:name="com.datamation.kfdupgradesfa.view.ActivityHome"
             android:label="@string/title_activity_home"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithTitle" />
         <activity
             android:name="com.datamation.kfdupgradesfa.view.CustomerListActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
         <activity
             android:name="com.datamation.kfdupgradesfa.view.SettingsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
 
         <activity
             android:name="com.datamation.kfdupgradesfa.settings.ImportActivity"
-            android:theme="@style/AppThemeWithTitle" />
+            android:theme="@style/AppThemeWithTitle"
+            android:exported="true"/>
         <activity
             android:name="com.datamation.kfdupgradesfa.view.ActivityLogin"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
         <activity
             android:name="com.datamation.kfdupgradesfa.view.OrderActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
 
         <activity
             android:name="com.datamation.kfdupgradesfa.view.QuestionsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
 
         <activity
             android:name="com.datamation.kfdupgradesfa.view.DebtorDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
 
         <activity
             android:name="com.datamation.kfdupgradesfa.view.ReceiptActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
 
         <activity
             android:name="com.datamation.kfdupgradesfa.view.NonProductiveActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
 
 
         <service
             android:name="com.datamation.kfdupgradesfa.Service.MyMessagingService"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

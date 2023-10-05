@@ -92,7 +92,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.google.android.gms.internal.zzagz.runOnUiThread;
+
 
 public class TransactionDetailsFragment extends Fragment {
 
@@ -321,7 +321,7 @@ public class TransactionDetailsFragment extends Fragment {
             for (RecHed rec : receiptList) {
                 actionTakenList(rec.getStatus(), rec);
                 try {
-                    runOnUiThread(new Runnable() {
+                    getActivity().runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {

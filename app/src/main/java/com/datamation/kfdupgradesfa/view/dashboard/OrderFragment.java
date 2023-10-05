@@ -1,15 +1,9 @@
 package com.datamation.kfdupgradesfa.view.dashboard;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,37 +12,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.datamation.kfdupgradesfa.R;
-import com.datamation.kfdupgradesfa.adapter.downloadListAdapter;
 import com.datamation.kfdupgradesfa.api.ApiCllient;
 import com.datamation.kfdupgradesfa.api.ApiInterface;
 import com.datamation.kfdupgradesfa.controller.CustomerController;
-import com.datamation.kfdupgradesfa.controller.DownloadController;
 import com.datamation.kfdupgradesfa.controller.OrderController;
 import com.datamation.kfdupgradesfa.controller.OrderDetailController;
-import com.datamation.kfdupgradesfa.controller.ReceiptController;
 import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
 import com.datamation.kfdupgradesfa.dialog.PreSalePrintPreviewAlertBox;
 import com.datamation.kfdupgradesfa.helpers.NetworkFunctions;
-import com.datamation.kfdupgradesfa.helpers.OrderResponseListener;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
-import com.datamation.kfdupgradesfa.model.Control;
 import com.datamation.kfdupgradesfa.model.Order;
 import com.datamation.kfdupgradesfa.model.OrderDetail;
 import com.datamation.kfdupgradesfa.model.OrderHed;
-import com.datamation.kfdupgradesfa.model.ReceiptHed;
 import com.datamation.kfdupgradesfa.model.apimodel.Result;
-import com.datamation.kfdupgradesfa.utils.NetworkUtil;
-import com.datamation.kfdupgradesfa.view.OrderActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -66,20 +57,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.graphics.Color.rgb;
-import static com.google.android.gms.internal.zzagz.runOnUiThread;
 
 public class OrderFragment extends Fragment {
 

@@ -1,8 +1,5 @@
 package com.datamation.kfdupgradesfa.view.dashboard;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,35 +9,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.datamation.kfdupgradesfa.R;
 import com.datamation.kfdupgradesfa.adapter.ExpandableReceiptListAdapter;
 import com.datamation.kfdupgradesfa.api.ApiCllient;
 import com.datamation.kfdupgradesfa.api.ApiInterface;
-import com.datamation.kfdupgradesfa.controller.CustomerController;
-import com.datamation.kfdupgradesfa.controller.OrderController;
-import com.datamation.kfdupgradesfa.controller.OrderDetailController;
 import com.datamation.kfdupgradesfa.controller.ReceiptController;
 import com.datamation.kfdupgradesfa.controller.ReceiptDetController;
 import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
-import com.datamation.kfdupgradesfa.dialog.PreSalePrintPreviewAlertBox;
 import com.datamation.kfdupgradesfa.helpers.NetworkFunctions;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
-import com.datamation.kfdupgradesfa.model.Order;
-import com.datamation.kfdupgradesfa.model.OrderDetail;
 import com.datamation.kfdupgradesfa.model.RecHed;
 import com.datamation.kfdupgradesfa.model.ReceiptDet;
 import com.datamation.kfdupgradesfa.model.ReceiptHed;
@@ -65,8 +51,6 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.google.android.gms.internal.zzagz.runOnUiThread;
 
 public class ReceiptFragment extends Fragment {
 

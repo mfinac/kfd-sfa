@@ -133,8 +133,12 @@ public class OrderDetailFragment extends Fragment {
         mSharedPref.setGlobalVal("preKeyIsFreeClicked", "0");
         mSharedPref.setDiscountClicked("0");
         clickCount = 0;
-        mToggleTextbox();
 
+       // mToggleTextbox();
+//
+//        if(mSharedPref.getHeaderNextClicked().equals("1")){
+//            preSalesResponseListener.moveBackToFragment(0);
+//        }
 
         //&^&^& MMS-2022/02/01 %$%$//
         final ArrayList<Supplier> splist = new SupplierController(getActivity()).getAllSuppliers();
@@ -269,6 +273,7 @@ public class OrderDetailFragment extends Fragment {
             }
         });
 
+
         return view;
     }
 
@@ -314,6 +319,10 @@ public class OrderDetailFragment extends Fragment {
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            if(mSharedPref.getNextClick().equals("0")){
+                preSalesResponseListener.moveBackToFragment(0);
+            }
 
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             Log.d("order_detail", "clicked_count" + clickCount);

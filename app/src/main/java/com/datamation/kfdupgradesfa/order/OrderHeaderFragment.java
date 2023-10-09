@@ -100,6 +100,7 @@ public class OrderHeaderFragment extends Fragment {
     String address = "No Address";
     String repcode, refNo;
     String startTime  ;
+    ArrayList<Order> ordHedList = new ArrayList<Order>();
 
 
     public OrderHeaderFragment() {
@@ -176,12 +177,13 @@ public class OrderHeaderFragment extends Fragment {
         day = Scalendar.get(Calendar.DAY_OF_MONTH);
 //
 
+
         try {
             lblPreRefno.setText("" + refNo);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
         /*create payment Type*/
         costList = new CostController(getActivity()).getAllCostCenters();
@@ -195,7 +197,6 @@ public class OrderHeaderFragment extends Fragment {
                 android.R.layout.simple_spinner_item, costNames);
         dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCost.setAdapter(dataAdapter1);
-
 
         spCost.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -265,10 +266,11 @@ public class OrderHeaderFragment extends Fragment {
             }
         });
 
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  mSharedPref.setHeaderNextClicked("1");
+                mSharedPref.setHeaderNextClicked("1");
                 if (lblCustomerName.getText().toString().equals("")) {
                     Log.d("<<<lblCustomerName<<<<", " " + lblCustomerName.getText().toString());
                     Log.d("<<<txtRoute<<<<", " " + txtRoute.getText().toString());
@@ -467,7 +469,7 @@ public class OrderHeaderFragment extends Fragment {
 
             hed.setFORDHED_PAYMENT_TYPE("");
 
-            ArrayList<Order> ordHedList = new ArrayList<Order>();
+           // ArrayList<Order> ordHedList = new ArrayList<Order>();
             OrderController ordHedDS = new OrderController(getActivity());
             ordHedList.add(hed);
 
@@ -479,6 +481,10 @@ public class OrderHeaderFragment extends Fragment {
             }
         }
     }
+
+
+
+
 
     public void mRefreshHeader() {
         Log.d("Header>>", ">>" + mSharedPref.getHeaderNextClicked());
@@ -505,7 +511,7 @@ public class OrderHeaderFragment extends Fragment {
 
             }else {
 
-                SaveSalesHeader();
+               // SaveSalesHeader();
             }
 
         } else {
@@ -544,6 +550,7 @@ public class OrderHeaderFragment extends Fragment {
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             OrderHeaderFragment.this.mRefreshHeader();
         }
     }
@@ -564,10 +571,7 @@ public class OrderHeaderFragment extends Fragment {
         int i = android.provider.Settings.Global.getInt(getActivity().getContentResolver(), android.provider.Settings.Global.AUTO_TIME, 0);
         /* If option is selected */
         if (i > 0) {
-
-
-
-            /* if not selected */
+           /* if not selected */
         } else {
             Toast.makeText(getActivity(), "Date is wrong..Please correct!!!", Toast.LENGTH_LONG).show();
             /* Show Date/time settings dialog */

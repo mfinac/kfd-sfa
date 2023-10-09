@@ -30,6 +30,7 @@
 
         <ImageView
             android:id="@+id/img_refresh"
+            android:visibility="gone"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="24dp"

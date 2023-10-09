@@ -716,7 +716,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
         dialog.setTitle("Uploading order records");
         dialog.show();
 
-        if (NetworkUtil.isNetworkAvailable(getActivity())) {
+        if (NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
             if (orders.size() > 0) {
 
                 for (final OrderHed c : orders) {
@@ -795,6 +795,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             }
         } else
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Poor Internet Connection", Toast.LENGTH_LONG).show();
 
     }
 
@@ -1012,6 +1013,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             mRefreshData();
         }
     }

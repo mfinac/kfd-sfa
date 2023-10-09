@@ -133,6 +133,7 @@ public class OrderDetailFragment extends Fragment {
         mSharedPref.setGlobalVal("preKeyIsFreeClicked", "0");
         mSharedPref.setDiscountClicked("0");
         clickCount = 0;
+        mToggleTextbox();
 
 
         //&^&^& MMS-2022/02/01 %$%$//
@@ -281,9 +282,8 @@ public class OrderDetailFragment extends Fragment {
          //  new LoardingProductFromDB().execute();
 
         } else {
-            preSalesResponseListener.moveBackToFragment(0);
             Toast.makeText(getActivity(), "Cannot proceed,Please click arrow button to save header details...", Toast.LENGTH_LONG).show();
-
+            preSalesResponseListener.moveBackToFragment(0);
         }
     }
 
@@ -315,6 +315,7 @@ public class OrderDetailFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             Log.d("order_detail", "clicked_count" + clickCount);
             Log.d("order_detail", "clicked_count" + clickCount);
         }
@@ -347,8 +348,7 @@ public class OrderDetailFragment extends Fragment {
             sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
             sweetAlertDialog.setTitleText("Fetch Data Please Wait.");
             sweetAlertDialog.setCancelable(false);
-            //pDialog.show();
-         //   pdialog.dismiss();
+
         }
 
         @Override

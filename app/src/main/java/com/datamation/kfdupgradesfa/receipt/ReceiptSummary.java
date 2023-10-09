@@ -670,7 +670,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
 
 
         // new OrderController(getActivity()).updateIsActive(""+mSharedPref.generateOrderId(),"2");
-        if (NetworkUtil.isNetworkAvailable(getActivity())) {
+        if (NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
             if (Receipt.size() > 0) {
 
                 for (final RecHed rec : Receipt) {

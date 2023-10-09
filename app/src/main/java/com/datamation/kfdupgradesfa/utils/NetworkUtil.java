@@ -2,8 +2,11 @@ package com.datamation.kfdupgradesfa.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.datamation.kfdupgradesfa.helpers.ValueHolder;
 
@@ -76,5 +79,50 @@ public class NetworkUtil {
         }
         return "?";
     }
+
+    public static boolean isNotPoorConnection(Context context){
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get the active network
+        Network network = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            network = connectivityManager.getActiveNetwork();
+        }
+
+        if (network != null) {
+            // Get the network capabilities
+            NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(network);
+
+            if (networkCapabilities != null) {
+                // Check if the network is capable of measuring bandwidth
+                if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+                    // Get download and upload speeds in bits per second
+                    int downloadSpeedMbps = networkCapabilities.getLinkDownstreamBandwidthKbps();
+                    int uploadSpeedMbps = networkCapabilities.getLinkUpstreamBandwidthKbps();
+
+                    // Convert speeds to Mbps
+                    double downloadSpeedMbpsss = downloadSpeedMbps / 1024.0;
+                    double uploadSpeedMbpssss = uploadSpeedMbps / 1024.0;
+
+                    Log.wtf("Network Util Class", String.valueOf(uploadSpeedMbpssss));
+
+                    if (uploadSpeedMbpssss > 5.00)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+
+
 
 }

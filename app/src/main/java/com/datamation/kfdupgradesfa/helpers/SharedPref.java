@@ -113,12 +113,24 @@ public class SharedPref {
         editor.apply();
     }
 
+    public String getNextClick() {
+        return sharedPref.getString("NEXT_CLICKED", "0");
+    }
+
+    public void setNextClick(String val) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("NEXT_CLICKED", val);
+        editor.apply();
+    }
 
     public void setServerConnectionStatus(boolean status) {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean("connection_status", status).apply();
     }
 
+    public boolean isNextClick() {
+        return sharedPref.getBoolean("isNextClick", false);
+    }
 
     public String getTMReturn() {
         return sharedPref.getString("TMReturn", "0");

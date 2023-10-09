@@ -442,6 +442,7 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             ReceiptDetails.this.mRefreshHeader();
+
         }
     }
 

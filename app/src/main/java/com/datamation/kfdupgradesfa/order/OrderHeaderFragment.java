@@ -93,6 +93,7 @@ public class OrderHeaderFragment extends Fragment {
     private Customer outlet;
     ImageButton img_bdate;
     Calendar Scalendar;
+    Context context;
     int year, month, day;
     DatePickerDialog datePickerDialog;
     Spinner spCost, spSales_Rep;
@@ -176,14 +177,13 @@ public class OrderHeaderFragment extends Fragment {
         month = Scalendar.get(Calendar.MONTH);
         day = Scalendar.get(Calendar.DAY_OF_MONTH);
 //
-
+        mSharedPref.setNextClick("0");
 
         try {
             lblPreRefno.setText("" + refNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         /*create payment Type*/
         costList = new CostController(getActivity()).getAllCostCenters();
@@ -271,6 +271,7 @@ public class OrderHeaderFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mSharedPref.setHeaderNextClicked("1");
+                mSharedPref.setNextClick("1");
                 if (lblCustomerName.getText().toString().equals("")) {
                     Log.d("<<<lblCustomerName<<<<", " " + lblCustomerName.getText().toString());
                     Log.d("<<<txtRoute<<<<", " " + txtRoute.getText().toString());
@@ -343,7 +344,7 @@ public class OrderHeaderFragment extends Fragment {
 
                                     pref.setGlobalVal("placeAnOrder", "");
                                     Toast.makeText(getActivity(), "Order discarded successfully..!", Toast.LENGTH_SHORT).show();
-                                    Intent intnt = new Intent(getActivity(), AllCustomerFragment.class);
+                                    Intent intnt = new Intent(getContext(), AllCustomerFragment.class);
                                     intnt.putExtra("outlet", outlet);
                                     startActivity(intnt);
                                     getActivity().finish();

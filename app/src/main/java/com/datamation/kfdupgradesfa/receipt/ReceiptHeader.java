@@ -157,6 +157,7 @@ public class ReceiptHeader extends Fragment {
         startTime  = df.format(new Date());
 
         mSharedPref.setReceiptHedClicked("0");
+        mSharedPref.setNextClick("0");
 
         outStandingAmt.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

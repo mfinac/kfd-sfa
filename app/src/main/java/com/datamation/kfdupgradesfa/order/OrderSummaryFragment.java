@@ -1,5 +1,6 @@
 package com.datamation.kfdupgradesfa.order;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -708,6 +709,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     public void Upload(final ArrayList<OrderHed> orders) throws InterruptedException {
         // new OrderController(getActivity()).updateIsActive(""+mSharedPref.generateOrderId(),"2");
 

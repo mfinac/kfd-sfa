@@ -177,7 +177,7 @@ public class OrderHeaderFragment extends Fragment {
         month = Scalendar.get(Calendar.MONTH);
         day = Scalendar.get(Calendar.DAY_OF_MONTH);
 //
-        mSharedPref.setNextClick("0");
+      //  mSharedPref.setNextClick("0");
 
         try {
             lblPreRefno.setText("" + refNo);
@@ -270,7 +270,7 @@ public class OrderHeaderFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSharedPref.setHeaderNextClicked("1");
+               // mSharedPref.setHeaderNextClicked("1");
                 mSharedPref.setNextClick("1");
                 if (lblCustomerName.getText().toString().equals("")) {
                     Log.d("<<<lblCustomerName<<<<", " " + lblCustomerName.getText().toString());

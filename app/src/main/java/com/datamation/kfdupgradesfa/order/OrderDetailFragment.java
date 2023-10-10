@@ -269,7 +269,7 @@ public class OrderDetailFragment extends Fragment {
                 mSharedPref.setDiscountClicked("1");
                 new OrderDetailController(getActivity()).DeleteZeroValueData(refNo);
                 new CalculateFree(mSharedPref.getSelectedDebCode()).execute();
-                preSalesResponseListener.moveNextToFragment(1);
+                preSalesResponseListener.moveNextToFragment(2);
             }
         });
 

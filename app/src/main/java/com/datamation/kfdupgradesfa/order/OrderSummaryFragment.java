@@ -683,6 +683,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
 
                     try {
                         Upload(new OrderController(getActivity()).getAllUnSyncOrdHedNew());
+                        mSharedPref.setNextClick("0");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -739,16 +740,16 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
 
                                 int status = response.code();
 
-                                if(response.isSuccessful()){
+                                if (response.isSuccessful()) {
                                     response.body(); // have your all data
-                                    boolean result =response.body().isResponse();
-                                    Log.d( ">>response"+status,result+">>"+c.getRefNo() );
-                                    if(result){
+                                    boolean result = response.body().isResponse();
+                                    Log.d(">>response" + status, result + ">>" + c.getRefNo());
+                                    if (result) {
                                         mHandler.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "SYNCED","0");
-                                              //  new OrderController(getActivity()).updateIsActive(c.getRefNo(), "0");
+                                                new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "SYNCED", "0");
+                                                //  new OrderController(getActivity()).updateIsActive(c.getRefNo(), "0");
 //                                                new OrderController(getActivity()).up(c.getFORDHED_REFNO(), "2");
 
                                                 Toast.makeText(getActivity(), "Order Upload successfully..!", Toast.LENGTH_LONG).show();
@@ -756,22 +757,20 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                                                 addRefNoResults(c.getRefNo() + " --> Success\n", orders.size());
                                             }
                                         });
-                                    }else{
+                                    } else {
                                         c.setIsSync("0");
                                         c.setIsActive("1");
-                                        new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED","1");
-                                       // new OrderController(getActivity()).updateIsActive(c.getRefNo(), "0");
+                                        new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED", "1");
+                                        // new OrderController(getActivity()).updateIsActive(c.getRefNo(), "0");
                                         Toast.makeText(getActivity(), "Order Upload Failed.", Toast.LENGTH_LONG).show();
                                         addRefNoResults(c.getRefNo() + " --> Failed\n", orders.size());
                                     }
-                                }else {
+                                } else {
                                     Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
                                     Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
                                     startActivity(intnt);
                                     getActivity().finish();
                                 }// this will tell you why your api doesnt work most of time
-
-
 
 
                             }
@@ -795,10 +794,11 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             } else {
                 Toast.makeText(getActivity(), "No Records to upload !", android.widget.Toast.LENGTH_LONG).show();
             }
-        } else
+        } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
             Toast.makeText(getActivity(), "Poor Internet Connection", Toast.LENGTH_LONG).show();
-
+            saveSummaryDialog();
+        }
     }
 
 

@@ -107,7 +107,7 @@ public class NetworkUtil {
 
                     Log.wtf("Network Util Class", String.valueOf(uploadSpeedMbpssss));
 
-                    if (uploadSpeedMbpssss > 5.00)
+                    if (uploadSpeedMbpssss > 15.00)
                     {
                         return true;
                     }

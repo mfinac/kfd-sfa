@@ -469,9 +469,9 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
             Toast.makeText(getActivity(), "Please tap on plus button", Toast.LENGTH_LONG).show();
         }
 
-        if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("***"))
-            ReceivedAmt = Double.parseDouble(mSharedPref.getGlobalVal("ReckeyRecAmt"));
-        else
+        if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("***")) {
+             ReceivedAmt = Double.parseDouble(mSharedPref.getGlobalVal("ReckeyRecAmt"));
+        }else
             ReceivedAmt = 0.0;
 
         FetchData();

@@ -1326,7 +1326,7 @@ public class ReceiptController {
 
 
         @SuppressWarnings("static-access")
-        String selectQuery = "select * from " + ValueHolder.TABLE_FPRECHEDS + " Where IsSynced <> 1";
+        String selectQuery = "select * from " + ValueHolder.TABLE_FPRECHEDS + " Where IsSynced = 1";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 

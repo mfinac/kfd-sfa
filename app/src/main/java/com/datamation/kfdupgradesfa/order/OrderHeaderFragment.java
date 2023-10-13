@@ -1,6 +1,7 @@
 package com.datamation.kfdupgradesfa.order;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -114,6 +115,7 @@ public class OrderHeaderFragment extends Fragment {
     }
 
 
+    @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -132,7 +134,7 @@ public class OrderHeaderFragment extends Fragment {
         Scalendar.add(Calendar.DAY_OF_YEAR, 1);
         Date tomorrow = Scalendar.getTime();
 
-
+        next.setVisibility(View.GONE);
         lblCustomerName = (TextView) view.findViewById(R.id.customerName);
         outStandingAmt = (TextView) view.findViewById(R.id.lbl_Inv_outstanding_amt);
         lastBillAmt = (TextView) view.findViewById(R.id.lbl_inv_lastbill);
@@ -197,6 +199,7 @@ public class OrderHeaderFragment extends Fragment {
                 android.R.layout.simple_spinner_item, costNames);
         dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCost.setAdapter(dataAdapter1);
+
 
         spCost.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -267,6 +270,13 @@ public class OrderHeaderFragment extends Fragment {
         });
 
 
+
+        next.postDelayed(new Runnable() {
+            public void run() {
+              next.setVisibility(View.VISIBLE);
+            }
+        }, 68000);
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -277,7 +287,7 @@ public class OrderHeaderFragment extends Fragment {
                     Log.d("<<<txtRoute<<<<", " " + txtRoute.getText().toString());
 
                     Toast.makeText(getActivity(), "Can not proceed without Customer...", Toast.LENGTH_LONG).show();
-                    checkdate();
+                   // checkdate();
                 } else {
                     final CustomProgressDialog pdialog;
                     pdialog = new CustomProgressDialog(getActivity());

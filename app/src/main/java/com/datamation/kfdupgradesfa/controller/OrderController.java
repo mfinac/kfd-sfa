@@ -1274,7 +1274,7 @@ public class OrderController {
         }
 
 
-        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where IsSync <> 1 and IsActive <> 1";
+        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where IsSync=1 and IsActive=0";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 

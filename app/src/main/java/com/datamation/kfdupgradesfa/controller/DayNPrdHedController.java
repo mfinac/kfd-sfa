@@ -560,7 +560,7 @@ public class DayNPrdHedController {
 
 
         @SuppressWarnings("static-access")
-        String selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where ISsync <> 1";
+        String selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where ISsync= 1";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 

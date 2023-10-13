@@ -132,7 +132,7 @@ public class OrderDetailFragment extends Fragment {
 
         mSharedPref.setGlobalVal("preKeyIsFreeClicked", "0");
         mSharedPref.setDiscountClicked("0");
-        clickCount = 0;
+        clickCount = 1;
 
        // mToggleTextbox();
 //

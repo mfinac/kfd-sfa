@@ -121,24 +121,31 @@ public class OrderController {
 
                 int cn = cursor.getCount();
                 if (cn > 0) {
-                    count = dB.update(ValueHolder.TABLE_ORDHED, values, ValueHolder.REFNO + " =?", new String[]{String.valueOf(ordHed.getFORDHED_REFNO())});
+                    count = dB.update(ValueHolder.TABLE_ORDHED, values, ValueHolder.REFNO + " =?",
+                            new String[]{String.valueOf(ordHed.getFORDHED_REFNO())});
                 } else {
                     count = (int) dB.insert(ValueHolder.TABLE_ORDHED, null, values);
                 }
+                if(count <= 0){
+                    cn = 0;
+                }
+           }
 
-            }
-        } catch (Exception e) {
-
+        }
+        catch (Exception e)
+        {
             Log.v(TAG + " Exception", e.toString());
-
-        } finally {
-            if (cursor != null) {
+        }
+        finally
+        {
+            if (cursor != null)
+            {
                 cursor.close();
             }
             dB.close();
         }
+        count++;
         return count;
-
     }
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 

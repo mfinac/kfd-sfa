@@ -106,16 +106,20 @@ public class ItemController {
         String FreeRef = "";
 
         try {
+//
+//            String selectQuery = "SELECT itm.ItemCode,itm.ItemName,itm.NOUCase,itm.Pack , Sum(CAST(loc.QOH AS integer)) as QOH,itm.SupCode ,"
+//                    + " ifnull( (select price from TblItemPri where ItemCode = itm.ItemCode and CostCode = '" + costcd + "'),'0.00') as itpri"
+//                    + " FROM TblItem itm, TblItemLoc loc WHERE loc.ItemCode=itm.ItemCode AND loc.LocCode='"
+//                    + LocCode + "' " +
+//                    "Group By itm.ItemCode,itm.ItemName,itm.NOUCase,itm.PackSize order by CAST(loc.QOH AS integer) DESC";
 
-            String selectQuery = "SELECT itm.ItemCode,itm.ItemName,itm.NOUCase,itm.Pack , Sum(CAST(loc.QOH AS integer)) as QOH,itm.SupCode ,"
-                    + " ifnull( (select price from TblItemPri where ItemCode = itm.ItemCode and CostCode = '" + costcd + "'),'0.00') as itpri"
-                    + " FROM TblItem itm, TblItemLoc loc WHERE loc.ItemCode=itm.ItemCode AND loc.LocCode='"
-                    + LocCode + "' " +
-//             "AND itm.ItemCode not in (SELECT DISTINCT ItemCode FROM TblOrddet WHERE " + type
-//                    + " And RefNo ='" + refno
-//                    + "') " +
-                    "Group By itm.ItemCode,itm.ItemName,itm.NOUCase,itm.PackSize order by CAST(loc.QOH AS integer) DESC";
-
+            String selectQuery = "SELECT itm.ItemCode, itm.ItemName, itm.NOUCase, itm.Pack, itm.SupCode, loc.QOH " +
+                    "FROM TblItem itm LEFT JOIN TblItemLoc loc ON itm.ItemCode=loc.ItemCode " +
+                    "LEFT JOIN TblItemPri p ON itm.ItemCode=p.ItemCode WHERE loc.LocCode='" + LocCode + "' AND p.Costcode='" + costcd + "'";
+//
+////            select i.ItemCode, i.ItemName, i.NOUCase, i.Pack, i.SupCode, l.QOH
+//            from TblItem i left join TblItemLoc l on i.ItemCode=l.ItemCode
+//            left join TblItemPri p on i.ItemCode=p.ItemCode where l.LocCode='NEG01' and p.Costcode='100'
             //Log.v(TAG + " ITEMCNT ", Integer.toString(cursor.getCount()));
 
             cursor = dB.rawQuery(selectQuery, null);

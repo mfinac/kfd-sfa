@@ -284,6 +284,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                             new OrderDetailController(getActivity()).restData(RefNo);
                             new PreProductController(getActivity()).mClearTables();
                             mSharedPref.setDiscountClicked("0");
+                            mSharedPref.setOrdertHeaderNextClicked(false);
 
                         }
 
@@ -660,7 +661,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                 new ItemLocController(getActivity()).UpdateOrderQOH(RefNo, "-", locCode);
                 Toast.makeText(getActivity(), "Order saved successfully..!", Toast.LENGTH_LONG).show();
                 mSharedPref.setDiscountClicked("0");
-                mSharedPref.setHeaderNextClicked("0");
+
                 mSharedPref.setGlobalVal("placeAnOrder", "");
                 mSharedPref.setGlobalVal("KeySelectedRep", "");
                 UtilityContainer.ClearReturnSharedPref(getActivity());
@@ -683,7 +684,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
 
                     try {
                         Upload(new OrderController(getActivity()).getAllUnSyncOrdHedNew());
-                        mSharedPref.setNextClick("0");
+                        mSharedPref.setOrdertHeaderNextClicked(false);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

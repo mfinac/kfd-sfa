@@ -102,7 +102,7 @@ public class OrderHeaderFragment extends Fragment {
     String address = "No Address";
     String repcode, refNo;
     String startTime  ;
-    ArrayList<Order> ordHedList = new ArrayList<Order>();
+    //ArrayList<Order> ordHedList = new ArrayList<Order>();
 
 
     public OrderHeaderFragment() {
@@ -271,49 +271,30 @@ public class OrderHeaderFragment extends Fragment {
 
 
 
-        next.postDelayed(new Runnable() {
-            public void run() {
+       // next.postDelayed(new Runnable() {
+          //  public void run() {
               next.setVisibility(View.VISIBLE);
-            }
-        }, 68000);
+          //  }
+      //  }, 68000);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // mSharedPref.setHeaderNextClicked("1");
-                mSharedPref.setNextClick("1");
+
                 if (lblCustomerName.getText().toString().equals("")) {
                     Log.d("<<<lblCustomerName<<<<", " " + lblCustomerName.getText().toString());
                     Log.d("<<<txtRoute<<<<", " " + txtRoute.getText().toString());
 
                     Toast.makeText(getActivity(), "Can not proceed without Customer...", Toast.LENGTH_LONG).show();
-                   // checkdate();
+                    checkdate();
                 } else {
-                    final CustomProgressDialog pdialog;
-                    pdialog = new CustomProgressDialog(getActivity());
-                    pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    pdialog.setMessage("Please wait...");
-                    pdialog.show();
-
-                    Runnable progressRunnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            SaveSalesHeader();
-                            pdialog.cancel();
-                        }
-                    };
-
-                    Handler pdCanceller = new Handler();
-                    pdCanceller.postDelayed(progressRunnable, 67000);
-
-                   // preSalesResponseListener.moveNextToFragment(1);
-
-                }
+                    SaveSalesHeader();
+                 }
 
             }
         });
         Log.d("Header>>", ">>Headeroncreate");
-//        OrderHeaderFragment.this.mRefreshHeader();
+        //OrderHeaderFragment.this.mRefreshHeader();
         return view;
     }
     /*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
@@ -480,12 +461,13 @@ public class OrderHeaderFragment extends Fragment {
 
             hed.setFORDHED_PAYMENT_TYPE("");
 
-           // ArrayList<Order> ordHedList = new ArrayList<Order>();
+            ArrayList<Order> ordHedList = new ArrayList<Order>();
             OrderController ordHedDS = new OrderController(getActivity());
             ordHedList.add(hed);
 
             activity.selectedPreHed = hed;
-            if (ordHedDS.createOrUpdateOrdHed(ordHedList) > 0) {
+            if (ordHedDS.createOrUpdateOrdHed(ordHedList) >= 0) {
+                        mSharedPref.setOrdertHeaderNextClicked(true);
                         Toast.makeText(getActivity(), "Order Header Saved...", Toast.LENGTH_LONG).show();
                         preSalesResponseListener.moveNextToFragment(1);
 
@@ -493,12 +475,8 @@ public class OrderHeaderFragment extends Fragment {
         }
     }
 
-
-
-
-
     public void mRefreshHeader() {
-        Log.d("Header>>", ">>" + mSharedPref.getHeaderNextClicked());
+      //  Log.d("Header>>", ">>" + mSharedPref.getHeaderNextClicked());
 
         if (SharedPref.getInstance(getActivity()).getGlobalVal("PrekeyCustomer").equals("Y")) {
             ArrayList<OrderDetail> dets = new OrderDetailController(getActivity()).getSAForFreeIssueCalc("" + refNo);
@@ -522,11 +500,12 @@ public class OrderHeaderFragment extends Fragment {
 
             }else {
 
-               // SaveSalesHeader();
+                SaveSalesHeader();
             }
 
         } else {
-            Toast.makeText(getActivity(), "Select a customer to continue...", Toast.LENGTH_SHORT).show();
+         //   SaveSalesHeaderNew();
+           // Toast.makeText(getActivity(), "Select a customer to continue...", Toast.LENGTH_SHORT).show();
             txtRemakrs.setEnabled(false);
             txtManual.setEnabled(false);
         }

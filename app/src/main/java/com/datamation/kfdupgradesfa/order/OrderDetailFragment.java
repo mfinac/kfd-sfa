@@ -3,6 +3,7 @@ package com.datamation.kfdupgradesfa.order;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -98,6 +99,7 @@ public class OrderDetailFragment extends Fragment {
     ArrayList<Item> loadlist;
     String debCode, strLoccode;
     ImageView remove;
+    ProgressDialog pDialog;
 
 
 
@@ -126,13 +128,13 @@ public class OrderDetailFragment extends Fragment {
         remove = (ImageView) view.findViewById(R.id.img_remove);
         mainActivity = (OrderActivity) getActivity();
         tmpsoHed = new Order();
-
-        allItemList = new ArrayList<Product>();
         new LoardingProductFromDB().execute();
+        allItemList = new ArrayList<Product>();
 
         mSharedPref.setGlobalVal("preKeyIsFreeClicked", "0");
         mSharedPref.setDiscountClicked("0");
-        clickCount = 1;
+        clickCount = 0;
+
 
        // mToggleTextbox();
 //
@@ -279,16 +281,17 @@ public class OrderDetailFragment extends Fragment {
 
     public void mToggleTextbox() {
         Log.d("Detail>>", ">>" + mSharedPref.getHeaderNextClicked());
-        if (mSharedPref.getHeaderNextClicked() == "1") {
+        if (mSharedPref.getOrderHeaderNextClicked().booleanValue()== true) {
             debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
 
             strLoccode = mSharedPref.getGlobalVal("KeyLoc");
 
-         //  new LoardingProductFromDB().execute();
+          // new LoardingProductFromDB().execute();
 
         } else {
-            Toast.makeText(getActivity(), "Cannot proceed,Please click arrow button to save header details...", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Please click arrow button to save header details...", Toast.LENGTH_LONG).show();
             preSalesResponseListener.moveBackToFragment(0);
+           // new LoardingProductFromDB().execute();
         }
     }
 
@@ -320,8 +323,28 @@ public class OrderDetailFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if(mSharedPref.getNextClick().equals("0")){
+            if(mSharedPref.getOrderHeaderNextClicked().booleanValue()==false){
                 preSalesResponseListener.moveBackToFragment(0);
+            } else if (mSharedPref.getOrderHeaderNextClicked().booleanValue()==true && mSharedPref.getDiscountClicked().equals("0"))
+            {
+
+//                    final CustomProgressDialog pdialog;
+//                    pdialog = new CustomProgressDialog(getActivity());
+//                    pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                    pdialog.setMessage("Please wait...");
+//                    pdialog.show();
+//
+//                    Runnable progressRunnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            // SaveSalesHeader();
+//                            pdialog.cancel();
+//                        }
+//                    };
+//
+//                    Handler pdCanceller = new Handler();
+//                    pdCanceller.postDelayed(progressRunnable, 67000);
+
             }
 
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
@@ -358,6 +381,7 @@ public class OrderDetailFragment extends Fragment {
             sweetAlertDialog.setTitleText("Fetch Data Please Wait.");
             sweetAlertDialog.setCancelable(false);
 
+
         }
 
         @Override
@@ -370,8 +394,9 @@ public class OrderDetailFragment extends Fragment {
               //  pdialog.dismiss();
             } else {
                 productList = new ItemController(getActivity()).getAllItemFor("TxnType ='21'", refNo, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
+                Log.wtf("LocCode",toString());
                // allItemList.clear();
-                allItemList = productList;
+              //  allItemList = productList;
 
             }
              return productList;

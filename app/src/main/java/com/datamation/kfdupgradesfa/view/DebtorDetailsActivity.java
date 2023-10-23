@@ -158,12 +158,12 @@ public class DebtorDetailsActivity extends AppCompatActivity {
         if (dataIntent.hasExtra("outlet")) {
             outlet = (Debtor) dataIntent.getExtras().get("outlet");
             if (outlet == null) {
-                Toast.makeText(DebtorDetailsActivity.this, "Error receiving the outlet. Please try again.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DebtorDetailsActivity.this, "Error receiving the outlet. Please try again.", Toast.LENGTH_SHORT).show();
                 onBackPressed();
 
             }
         } else {
-            Toast.makeText(DebtorDetailsActivity.this, "Error receiving the outlet. Please try again.", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(DebtorDetailsActivity.this, "Error receiving the outlet. Please try again.", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
         locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);

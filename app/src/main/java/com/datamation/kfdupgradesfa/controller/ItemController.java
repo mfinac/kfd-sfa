@@ -104,6 +104,7 @@ public class ItemController {
         double unitPrice;
         String freeSchema = "";
         String FreeRef = "";
+       // LocCode = "NEG01";
 
         try {
 //
@@ -113,15 +114,16 @@ public class ItemController {
 //                    + LocCode + "' " +
 //                    "Group By itm.ItemCode,itm.ItemName,itm.NOUCase,itm.PackSize order by CAST(loc.QOH AS integer) DESC";
 
-            String selectQuery = "SELECT itm.ItemCode, itm.ItemName, itm.NOUCase, itm.Pack, itm.SupCode, loc.QOH " +
-                    "FROM TblItem itm LEFT JOIN TblItemLoc loc ON itm.ItemCode=loc.ItemCode " +
-                    "LEFT JOIN TblItemPri p ON itm.ItemCode=p.ItemCode WHERE loc.LocCode='" + LocCode + "' AND p.Costcode='" + costcd + "'";
-//
-////            select i.ItemCode, i.ItemName, i.NOUCase, i.Pack, i.SupCode, l.QOH
-//            from TblItem i left join TblItemLoc l on i.ItemCode=l.ItemCode
-//            left join TblItemPri p on i.ItemCode=p.ItemCode where l.LocCode='NEG01' and p.Costcode='100'
-            //Log.v(TAG + " ITEMCNT ", Integer.toString(cursor.getCount()));
+//            String selectQuery = "SELECT itm.ItemCode, itm.ItemName, itm.NOUCase, itm.Pack, itm.SupCode, loc.QOH " +
+//                    "FROM TblItem itm LEFT JOIN TblItemLoc loc ON itm.ItemCode=loc.ItemCode " +
+//                    "LEFT JOIN TblItemPri p ON itm.ItemCode=p.ItemCode WHERE loc.LocCode='" + LocCode + "' AND p.Costcode='" + costcd + "'";
 
+            String selectQuery ="SELECT i.ItemCode, i.ItemName, i.NOUCase, i.Pack, i.SupCode, l.qoh,p.price "
+                                + "FROM TblItemLoc l inner join Tblitem i on l.ItemCode=i.ItemCode "
+                                + "left join TblItemPri p on i.ItemCode=p.ItemCode where l.LocCode='" + LocCode + "' and p.Costcode='" + costcd + "'";
+
+
+//
             cursor = dB.rawQuery(selectQuery, null);
             while (cursor.moveToNext()) {
                 Product product = new Product();
@@ -135,7 +137,7 @@ public class ItemController {
                 product.setFPRODUCT_QTY("0");
                 //unitPrice = Double.parseDouble(new ItemPriDS(context).getProductPriceByCode(product.getFPRODUCT_ITEMCODE(),mSharedPref.getGlobalVal("PrekeyCost"))) / Double.parseDouble(product.getFPRODUCT_NOUCASE());
                 //product.setFPRODUCT_PRICE(String.format("%.2f", unitPrice));
-                product.setFPRODUCT_PRICE(cursor.getString(cursor.getColumnIndex("itpri")));
+                product.setFPRODUCT_PRICE(cursor.getString(cursor.getColumnIndex("Price")));
                 //FreeRef = cursor.getString(cursor.getColumnIndex("freeref"));
 
                 //freeSchema = new FreeMslabDS(context).getFreeDetailsnew(FreeRef,debCode);

@@ -328,22 +328,22 @@ public class OrderDetailFragment extends Fragment {
             } else if (mSharedPref.getOrderHeaderNextClicked().booleanValue()==true && mSharedPref.getDiscountClicked().equals("0"))
             {
 
-                    final CustomProgressDialog pdialog;
-                    pdialog = new CustomProgressDialog(getActivity());
-                    pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    pdialog.setMessage("Please wait...");
-                    pdialog.show();
-
-                    Runnable progressRunnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            // SaveSalesHeader();
-                            pdialog.cancel();
-                        }
-                    };
-
-                    Handler pdCanceller = new Handler();
-                    pdCanceller.postDelayed(progressRunnable, 67000);
+//                    final CustomProgressDialog pdialog;
+//                    pdialog = new CustomProgressDialog(getActivity());
+//                    pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                    pdialog.setMessage("Please wait...");
+//                    pdialog.show();
+//
+//                    Runnable progressRunnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            // SaveSalesHeader();
+//                            pdialog.cancel();
+//                        }
+//                    };
+//
+//                    Handler pdCanceller = new Handler();
+//                    pdCanceller.postDelayed(progressRunnable, 67000);
 
             }
 
@@ -394,6 +394,7 @@ public class OrderDetailFragment extends Fragment {
               //  pdialog.dismiss();
             } else {
                 productList = new ItemController(getActivity()).getAllItemFor("TxnType ='21'", refNo, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
+                Log.wtf("LocCode",toString());
                // allItemList.clear();
               //  allItemList = productList;
 

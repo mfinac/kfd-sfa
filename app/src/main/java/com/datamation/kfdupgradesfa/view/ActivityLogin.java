@@ -501,11 +501,7 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
             return false;
         }
 
-//        protected void onProgressUpdate(Integer... progress) {
-//            super.onProgressUpdate(progress);
-//            pDialog.setMessage("Prefetching data..." + progress[0] + "/" + totalRecords);
 //
-//        }
 
 
         @Override

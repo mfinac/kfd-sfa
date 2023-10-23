@@ -328,24 +328,8 @@ public class OrderDetailFragment extends Fragment {
             } else if (mSharedPref.getOrderHeaderNextClicked().booleanValue()==true && mSharedPref.getDiscountClicked().equals("0"))
             {
 
-//                    final CustomProgressDialog pdialog;
-//                    pdialog = new CustomProgressDialog(getActivity());
-//                    pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                    pdialog.setMessage("Please wait...");
-//                    pdialog.show();
 //
-//                    Runnable progressRunnable = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            // SaveSalesHeader();
-//                            pdialog.cancel();
-//                        }
-//                    };
-//
-//                    Handler pdCanceller = new Handler();
-//                    pdCanceller.postDelayed(progressRunnable, 67000);
-
-            }
+                   }
 
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             Log.d("order_detail", "clicked_count" + clickCount);

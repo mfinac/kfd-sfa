@@ -1098,6 +1098,7 @@ public class OrderController {
             order.setOrderDetDetails(detDS.getAllUnSyncNew(cursor.getString(cursor.getColumnIndex(ValueHolder.REFNO))));
             order.setFreeIssueDetails(freeIssDS.getAllFreeIssuesNew(cursor.getString(cursor.getColumnIndex(ValueHolder.REFNO))));
 
+
             list.add(order);
 
         }

@@ -177,7 +177,13 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                                     @Override
                                     public void onPositive(MaterialDialog dialog) {
                                         super.onPositive(dialog);
-                                        SaveAndUploadDialog();
+                                        if (!NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
+                                            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getActivity(), "Poor Internet Connection", Toast.LENGTH_LONG).show();
+                                            saveSummaryDialog();
+                                        } else {
+                                            SaveAndUploadDialog();
+                                        }
                                     }
 
                                     @Override
@@ -720,7 +726,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
         dialog.setTitle("Uploading order records");
         dialog.show();
 
-        if (NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
+      //  if (!NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
             if (orders.size() > 0) {
 
                 for (final OrderHed c : orders) {
@@ -795,11 +801,12 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             } else {
                 Toast.makeText(getActivity(), "No Records to upload !", android.widget.Toast.LENGTH_LONG).show();
             }
-        } else {
-            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
-            Toast.makeText(getActivity(), "Poor Internet Connection", Toast.LENGTH_LONG).show();
-            saveSummaryDialog();
-        }
+//        } else {
+//            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), "Poor Internet Connection", Toast.LENGTH_LONG).show();
+//           // saveSummaryDialog();
+//            dialog.dismiss();
+//        }
     }
 
 

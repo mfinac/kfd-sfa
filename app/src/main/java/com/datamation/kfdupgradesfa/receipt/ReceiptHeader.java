@@ -156,8 +156,12 @@ public class ReceiptHeader extends Fragment {
         //df.setTimeZone(tz);
         startTime  = df.format(new Date());
 
-        mSharedPref.setReceiptHedClicked("0");
-        mSharedPref.setNextClick("0");
+//        mSharedPref.setReceiptHedClicked("0");
+//        mSharedPref.setNextClick("0");
+
+        mSharedPref.setReceipttHeaderNextClicked(false);
+
+
 
         outStandingAmt.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -545,6 +549,7 @@ public class ReceiptHeader extends Fragment {
             @Override
             public void onClick(View v) {
                 mSharedPref.setGlobalVal("isHeaderComplete", "1");
+                mSharedPref.setReceipttHeaderNextClicked(true);
                 if (txtReceAmt.getText().toString().equals("") || txtReceAmt.getText().toString() == "") {
                     Toast.makeText(getActivity(), "Received amount can't be empty", Toast.LENGTH_LONG).show();
                     txtReceAmt.requestFocus();
@@ -922,6 +927,7 @@ public class ReceiptHeader extends Fragment {
         RecHedList.add(activity.selectedRecHed);
 
         new ReceiptController(getActivity()).createOrUpdateRecHedS(RecHedList);
+
     }
 
     /*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/

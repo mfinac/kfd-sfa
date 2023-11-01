@@ -628,7 +628,7 @@ public class SharedPref {
         //return sharedPref.getString("baseURL", "http://203.143.21.121:8080");
         // return sharedPref.getString("baseURL", "http://13.76.45.176:1010");
        //  return sharedPref.getString("baseURL", "http://124.43.5.227:1030");
-        /*****Live****/ //return sharedPref.getString("baseURL", "http://123.231.15.146:1030");
+        /*****Live****/ // return sharedPref.getString("baseURL", "http://123.231.15.146:1030");
         /******Test******/  return sharedPref.getString("baseURL", "http://192.168.0.5:1035");
 
        //  return sharedPref.getString("baseURL", "http://192.168.0.5:1035");
@@ -723,6 +723,17 @@ public class SharedPref {
     }
 
     public void setOrdertHeaderNextClicked(boolean val) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("IS_ORDER_HEADER_CLICKED", val);
+        editor.apply();
+    }
+
+
+    public Boolean getReceiptHeaderNextClicked() {
+        return sharedPref.getBoolean("IS_ORDER_HEADER_CLICKED", false);
+    }
+
+    public void setReceipttHeaderNextClicked(boolean val) {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean("IS_ORDER_HEADER_CLICKED", val);
         editor.apply();

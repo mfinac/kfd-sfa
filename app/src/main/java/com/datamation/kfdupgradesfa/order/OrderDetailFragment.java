@@ -252,15 +252,15 @@ public class OrderDetailFragment extends Fragment {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (supSearch.getText().length() > 0) {
-                    supSearch.setText("");
-
-                }
+//                if (supSearch.getText().length() > 0) {
+//                    supSearch.setText("");
+//
+//                }
                 if (itemSearch.getText().length() > 0) {
 
                     itemSearch.setText("");
                 }
-                new LoardingProductFromDB().execute();
+//                new LoardingProductFromDB().execute();
 
             }
         });

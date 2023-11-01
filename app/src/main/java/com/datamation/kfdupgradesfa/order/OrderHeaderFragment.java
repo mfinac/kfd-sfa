@@ -56,6 +56,7 @@ import com.datamation.kfdupgradesfa.model.OrderDetail;
 import com.datamation.kfdupgradesfa.settings.ReferenceNum;
 import com.datamation.kfdupgradesfa.view.ActivityHome;
 import com.datamation.kfdupgradesfa.view.CustomerListActivity;
+import com.datamation.kfdupgradesfa.view.DebtorDetailsActivity;
 import com.datamation.kfdupgradesfa.view.OrderActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -178,6 +179,7 @@ public class OrderHeaderFragment extends Fragment {
         year = Scalendar.get(Calendar.YEAR);
         month = Scalendar.get(Calendar.MONTH);
         day = Scalendar.get(Calendar.DAY_OF_MONTH);
+        context = getActivity();
 //
       //  mSharedPref.setNextClick("0");
 
@@ -335,10 +337,10 @@ public class OrderHeaderFragment extends Fragment {
 
                                     pref.setGlobalVal("placeAnOrder", "");
                                     Toast.makeText(getActivity(), "Order discarded successfully..!", Toast.LENGTH_SHORT).show();
-                                    Intent intnt = new Intent(getContext(), AllCustomerFragment.class);
+                                    Intent intnt = new Intent(context, DebtorDetailsActivity.class);
                                     intnt.putExtra("outlet", outlet);
                                     startActivity(intnt);
-                                    getActivity().finish();
+
                                 }
 
                                 @Override

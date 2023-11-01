@@ -85,6 +85,9 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
         lv_order_det = (ListView) view.findViewById(R.id.lv_order_det);
         //  RefNo = new ReferenceNum(getActivity()).getCurrentRefNo(getResources().getString(R.string.ReceiptNumVal));
         mainActivity = (ReceiptActivity) getActivity();
+        mSharedPref.setReceiptHedClicked("0");
+
+
 
         Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar);
         getActivity().invalidateOptionsMenu();
@@ -332,8 +335,12 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
         bDone.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                listener.moveToDetailsRece(2);
+                mSharedPref.setReceipttHeaderNextClicked(false);
+                mSharedPref.setReceiptHedClicked("1");
+                if( mSharedPref.getReceiptHeaderNextClicked().booleanValue() == false && mSharedPref.getReceiptHedClicked().equals("1")){
+                    listener.moveToDetailsRece(2);
+                }
+//
             }
         });
 
@@ -464,25 +471,18 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
     /*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     public void mRefreshHeader() {
-        if (mSharedPref.getReceiptHedClicked().equals("0")) {
+        if (mSharedPref.getReceiptHeaderNextClicked().booleanValue()==false) {
             listener.moveBackToDetailsRece(0);
-            Toast.makeText(getActivity(), "Please tap on plus button", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Please tap on Arrow button", Toast.LENGTH_LONG).show();
         }
 
-        if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("***")) {
+        if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("")) {
              ReceivedAmt = Double.parseDouble(mSharedPref.getGlobalVal("ReckeyRecAmt"));
         }else
             ReceivedAmt = 0.0;
 
         FetchData();
     }
-
-
-
-
-
-
-
 
     public void navigateToHeader(int position) {
         ReceiptActivity activity = (ReceiptActivity) getActivity();

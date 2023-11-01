@@ -6,6 +6,5 @@
         android:id="@+id/close"
         android:icon="@drawable/exit"
         android:title="EXIT"
-        android:visible="false"
         app:showAsAction="always" />
 </menu>

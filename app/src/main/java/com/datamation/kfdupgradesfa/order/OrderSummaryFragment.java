@@ -106,6 +106,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
     List<String> resultListPreSale;
     ProgressDialog dialog;
     String EndTime  ;
+    Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -129,6 +130,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
         lblGross = (TextView) view.findViewById(R.id.lblGross_Inv);
         lblQty = (TextView) view.findViewById(R.id.lblQty_Inv);
 
+        context=getActivity();
         resultListPreSale = new ArrayList<>();
 
         mactivity = getActivity();
@@ -227,6 +229,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             @Override
             public void onClick(View view) {
                 undoEditingData();
+                mSharedPref.setOrdertHeaderNextClicked(false);
             }
         });
 
@@ -513,6 +516,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                         mSharedPref.setHeaderNextClicked("0");
                         mSharedPref.setGlobalVal("placeAnOrder", "");
                         mSharedPref.setGlobalVal("KeySelectedRep", "");
+                        mSharedPref.setOrdertHeaderNextClicked(false);
                         UtilityContainer.ClearReturnSharedPref(getActivity());
                         //  outlet = new CustomerController(getActivity()).getSelectedCustomerByCode(mSharedPref.getSelectedDebCode());
                         // new PreProductController(getActivity()).mClearTables();
@@ -773,8 +777,8 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                                         addRefNoResults(c.getRefNo() + " --> Failed\n", orders.size());
                                     }
                                 } else {
-                                    Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
-                                    Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
+                                    Toast.makeText(context, " Invalid response when order upload", Toast.LENGTH_LONG).show();
+                                    Intent intnt = new Intent(context, DebtorDetailsActivity.class);
                                     startActivity(intnt);
                                     getActivity().finish();
                                 }// this will tell you why your api doesnt work most of time

@@ -291,21 +291,11 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
 
             //***************************************************************** need to undo comment after adding debtor list - 2021/12/02
 
-//            Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
-//            intnt.putExtra("outlet", outlet);
-//            startActivity(intnt);
-//            getActivity().finish();
 
             //**************************************************************************
         } else
             Toast.makeText(activity, "Select Customer/Fill in header details before Pause", Toast.LENGTH_SHORT).show();
-//        if (new ReceiptDetController(getActivity()).getItemCount(RefNo) > 0) {
-//            Intent intnt = new Intent(getActivity(),DebtorDetailsActivity.class);
-//            startActivity(intnt);
-//            getActivity().finish();
-//        } else
-//            Toast.makeText(activity, "Add details before pause ...!", Toast.LENGTH_SHORT).show();
-
+//
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*Clear Shared preference-*-*-*-*-*-*--*-*-*--*-*-*-*-*-*-*-*-*-*-*-*/
@@ -528,7 +518,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
             lblCHQNo.setText(mSharedPref.getGlobalVal("ReckeyCHQNo"));
         }
 
-        if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("0") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("***"))
+        if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("0") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals(""))
             lblRecAmt.setText(String.format("%,.2f", Double.parseDouble(mSharedPref.getGlobalVal("ReckeyRecAmt").replaceAll(",", ""))));
 
         FetchData();
@@ -640,9 +630,9 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
 
                 Toast.makeText(getActivity(), "Receipt saved successfully..!", Toast.LENGTH_SHORT).show();
 
-
-                Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed());
-
+               // if (NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
+                    Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed());
+              //  }
 //                    dialog.dismiss();
                 ClearSharedPref();/* Clear shared preference */
 
@@ -670,7 +660,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
 
 
         // new OrderController(getActivity()).updateIsActive(""+mSharedPref.generateOrderId(),"2");
-        if (NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
+      //  if (NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
             if (Receipt.size() > 0) {
 
                 for (final RecHed rec : Receipt) {
@@ -735,40 +725,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
                                 }// this will tell you why your api doesnt work most of time
 
 
-//                                if (response != null && response.body() != null) {
-//                                    int status = response.code();
-//                                    Log.d(">>>response code", ">>>res " + status);
-//                                    Log.d(">>>response message", ">>>res " + response.message());
-//                                    Log.d(">>>response body", ">>>res " + response.body());
-//                              //      int resLength = response.body().trim().length();
-//                                    String resmsg = "" + response.body();
-//                                    if (status == 200 && !resmsg.equals("") && !resmsg.equals(null) ) {
-//                                        mHandler.post(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                rec.setIsSync("1");
-//                                                rec.setIsActive("0");
-//                                                new ReceiptController(getActivity()).updateIsSyncedReceipt(rec.getRefNo(), "0","1","SYNCED");
 //
-//                                                Toast.makeText(getActivity(), "Receipt Upload successfully..!", Toast.LENGTH_LONG).show();
-//
-//                                                addRefNoResults(rec.getRefNo() + " --> Success\n", Receipt.size());
-//                                            }
-//                                        });
-//                                    } else {
-//                                        rec.setIsSync("0");
-//                                        rec.setIsActive("1");
-//                                        new ReceiptController(getActivity()).updateIsSyncedReceipt(rec.getRefNo(), "1","0","NOT SYNCED");
-//
-//                                        Toast.makeText(getActivity(), "Receipt Upload Failed.", Toast.LENGTH_LONG).show();
-//                                        addRefNoResults(rec.getRefNo() + " --> Failed\n", Receipt.size());
-//                                    }
-//                                } else {
-//                                    Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
-//                                    Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
-//                                    startActivity(intnt);
-//                                    getActivity().finish();
-//                                }
 
                             }
 
@@ -790,8 +747,8 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
             } else {
                 Toast.makeText(getActivity(), "No Records to upload !", android.widget.Toast.LENGTH_LONG).show();
             }
-        } else
-            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
+//        } else
+//            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
 
     }
 

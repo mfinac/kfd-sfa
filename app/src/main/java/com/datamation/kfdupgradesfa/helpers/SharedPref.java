@@ -739,4 +739,14 @@ public class SharedPref {
         editor.apply();
     }
 
+    public Boolean getUpdateClicked() {
+        return sharedPref.getBoolean("IS_UPDATE_CLICKED", false);
+    }
+
+    public void setUpdateClicked(boolean val) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("IS_UPDATE_CLICKED", val);
+        editor.apply();
+    }
+
 }

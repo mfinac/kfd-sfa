@@ -156,7 +156,7 @@ public class DebtorDetailsActivity extends AppCompatActivity {
 
         Intent dataIntent = getIntent();
         if (dataIntent.hasExtra("outlet")) {
-            outlet = (Debtor) dataIntent.getExtras().get("outlet");
+           // outlet = (Debtor) dataIntent.getExtras().get("outlet");
             if (outlet == null) {
                 //Toast.makeText(DebtorDetailsActivity.this, "Error receiving the outlet. Please try again.", Toast.LENGTH_SHORT).show();
                 onBackPressed();

@@ -155,11 +155,8 @@ public class ReceiptHeader extends Fragment {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
         //df.setTimeZone(tz);
         startTime  = df.format(new Date());
-
-//        mSharedPref.setReceiptHedClicked("0");
-//        mSharedPref.setNextClick("0");
-
         mSharedPref.setReceipttHeaderNextClicked(false);
+        mSharedPref.setUpdateClicked(false);
 
 
 
@@ -196,8 +193,6 @@ public class ReceiptHeader extends Fragment {
                                     activity.selectedDebtor = null;
                                     activity.selectedRecHed = null;
                                     Toast.makeText(getActivity(), "Receipt discarded successfully..!", Toast.LENGTH_SHORT).show();
-
-
                                     Intent intent = new Intent(getActivity(), DebtorDetailsActivity.class);
                                     startActivity(intent);
 
@@ -315,28 +310,7 @@ public class ReceiptHeader extends Fragment {
                 b = true;
             }
         });
-//        spnPayMode.setOnItemSelectedListener(new OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                b = true;
-//            }
 //
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-//        spnCostCenter.setOnItemSelectedListener(new OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                b = true;
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
         txtAddUser.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -548,8 +522,7 @@ public class ReceiptHeader extends Fragment {
 
             @Override
             public void onClick(View v) {
-                mSharedPref.setGlobalVal("isHeaderComplete", "1");
-                mSharedPref.setReceipttHeaderNextClicked(true);
+               mSharedPref.setReceipttHeaderNextClicked(true);
                 if (txtReceAmt.getText().toString().equals("") || txtReceAmt.getText().toString() == "") {
                     Toast.makeText(getActivity(), "Received amount can't be empty", Toast.LENGTH_LONG).show();
                     txtReceAmt.requestFocus();
@@ -659,58 +632,6 @@ public class ReceiptHeader extends Fragment {
 
         });
 
-        /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
-
-//        txtReceAmt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                ReceiptActivity activity = new ReceiptActivity();
-//                if (hasFocus) {
-//                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    if (imm != null) {
-//                        imm.showSoftInput(txtReceAmt, InputMethodManager.SHOW_IMPLICIT);
-//                    }
-//
-//                    txtReceAmt.selectAll();
-//                    txtReceAmt.setText(txtReceAmt.getText().toString().replaceAll(",", ""));
-//                    if(txtReceAmt.getText().toString().contains(","))
-//                    {
-//                        activity.ReceivedAmt = Double.parseDouble(txtReceAmt.getText().toString().replace(",", ""));
-//                    }
-//
-//                    if(txtReceAmt.getText().toString() == null || txtReceAmt.getText().toString().isEmpty() || txtReceAmt.getText().toString().equals("") || txtReceAmt.getText().toString() == "" )
-//                    {
-//                        Toast.makeText(getActivity(), "Please fill in Received amount", Toast.LENGTH_LONG).show();
-//                        txtReceAmt.requestFocus();
-//                    }
-//                    else
-//                    {
-//                        SaveReceiptHeader();
-//                    }
-//
-//                } else {
-//                    if (txtReceAmt.getText().length() > 0) {
-//                        txtReceAmt.setText(String.format("%,.2f", Double.parseDouble(txtReceAmt.getText().toString().replaceAll(",", ""))));
-//                        if(txtReceAmt.getText().toString().contains(","))
-//                        {
-//                            activity.ReceivedAmt = Double.parseDouble(txtReceAmt.getText().toString().replace(",", ""));
-//                        }
-//                        if(txtReceAmt.getText().toString() == null || txtReceAmt.getText().toString().isEmpty() || txtReceAmt.getText().toString().equals("") || txtReceAmt.getText().toString() == "" )
-//                        {
-//                            Toast.makeText(getActivity(), "Please fill in Received amount", Toast.LENGTH_LONG).show();
-//                            txtReceAmt.requestFocus();
-//                        }
-//                        else
-//                        {
-//                            SaveReceiptHeader();
-//                        }
-//                    }
-//                }
-//            }
-//        });
-
-        /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
         txtReceAmt.setOnClickListener(new View.OnClickListener() {
 
@@ -729,13 +650,7 @@ public class ReceiptHeader extends Fragment {
 
                     }
                 });
-//                keypadPrice.show();
-
-//                keypadPrice.setHeader("Enter Received Amount");
-//                if(preProduct.getPREPRODUCT_CHANGED_PRICE().equals("0")){
-//                keypadPrice.loadValue(activity.ReceivedAmt);
-                //  txtReceAmt.selectAll();
-
+//
 
             }
         });
@@ -1065,18 +980,12 @@ public class ReceiptHeader extends Fragment {
     /*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     public void mRefreshHeader() {
-
         Log.d("123456", "454544545");
         ReceiptActivity mainActivity = new ReceiptActivity();
-        // if (mSharedPref.getGlobalVal("ReckeyCustomer").equals("1")) {
         payModePos = mSharedPref.getGlobalVal("ReckeyPayModePos");
-
         if (!(payModePos.equalsIgnoreCase("-SELECT-")))
             spnPayMode.setSelection(Integer.parseInt(payModePos));
-
         Log.d("Customer", mSharedPref.getSelectedDebName());
-
-        // }
 
 
     }

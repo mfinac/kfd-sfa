@@ -1,5 +1,6 @@
 package com.datamation.kfdupgradesfa.receipt;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -49,6 +50,7 @@ import com.datamation.kfdupgradesfa.controller.ReceiptController;
 import com.datamation.kfdupgradesfa.controller.ReceiptDetController;
 import com.datamation.kfdupgradesfa.controller.SalRepController;
 import com.datamation.kfdupgradesfa.fragment.FragmentTools;
+import com.datamation.kfdupgradesfa.helpers.ReceiptResponseListener;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
 import com.datamation.kfdupgradesfa.helpers.UploadTaskListener;
 import com.datamation.kfdupgradesfa.model.Customer;
@@ -107,6 +109,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
     List<String> resultListPreSale;
     ProgressDialog dialog;
     String EndTime  ;
+    ReceiptResponseListener responseListener;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -321,11 +324,11 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**/
 
     public void FetchData() {
-        // if (((ReceiptActivity) getActivity()).selectedDebtor != null) {
+
         lv_fddbnote.setAdapter(null);
         fddbnoteList = new OutstandingController(getActivity()).getAllRecords(SharedPref.getInstance(getActivity()).getSelectedDebCode(), true);
         lv_fddbnote.setAdapter(new ReceiptSummaryAdapter(getActivity(), fddbnoteList, true, RefNo));
-        // }
+
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**/
@@ -462,6 +465,18 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
 
     /*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            responseListener = (ReceiptResponseListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onButtonPressed");
+        }
+    }
+
+
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(r);
@@ -478,6 +493,17 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
     /*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     public void mRefreshHeader() {
+
+        if (mSharedPref.getReceiptHeaderNextClicked().booleanValue()==false) {
+            responseListener.moveBackToDetailsRece(0);
+            Toast.makeText(getActivity(), "Please tap on Arrow button", Toast.LENGTH_LONG).show();
+        }
+
+        if(mSharedPref.getReceiptHeaderNextClicked().booleanValue()==true && mSharedPref.getUpdateClicked().booleanValue()==false){
+            responseListener.moveBackToDetailsRece(1);
+            Toast.makeText(getActivity(), "Please tap on DONE button", Toast.LENGTH_LONG).show();
+        }
+
 
         ReceiptHed RCHed = new ReceiptController(getActivity()).getReceiptByRefno(RefNo);
         lblPayMode.setText(mSharedPref.getGlobalVal("ReckeyPayMode").toString());
@@ -518,9 +544,9 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
             lblCHQNo.setText(mSharedPref.getGlobalVal("ReckeyCHQNo"));
         }
 
-        if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("0") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals(""))
+        if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("0") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("")) {
             lblRecAmt.setText(String.format("%,.2f", Double.parseDouble(mSharedPref.getGlobalVal("ReckeyRecAmt").replaceAll(",", ""))));
-
+        }
         FetchData();
     }
 

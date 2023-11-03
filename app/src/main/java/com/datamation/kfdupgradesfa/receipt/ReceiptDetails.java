@@ -85,7 +85,8 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
         lv_order_det = (ListView) view.findViewById(R.id.lv_order_det);
         //  RefNo = new ReferenceNum(getActivity()).getCurrentRefNo(getResources().getString(R.string.ReceiptNumVal));
         mainActivity = (ReceiptActivity) getActivity();
-        mSharedPref.setReceiptHedClicked("0");
+
+        mSharedPref.setUpdateClicked(false);
 
 
 
@@ -257,7 +258,6 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
             @Override
             public void onClick(View v) {
 
-
                 if (et_enterAmt.getText().toString().equals("") || et_enterAmt.getText().toString() == "") {
                     Toast.makeText(getActivity(), "Enter amount can't be empty", Toast.LENGTH_LONG).show();
                     et_enterAmt.requestFocus();
@@ -335,10 +335,11 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
         bDone.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSharedPref.setReceipttHeaderNextClicked(false);
-                mSharedPref.setReceiptHedClicked("1");
-                if( mSharedPref.getReceiptHeaderNextClicked().booleanValue() == false && mSharedPref.getReceiptHedClicked().equals("1")){
+                mSharedPref.setUpdateClicked(true);
+                if(mSharedPref.getUpdateClicked().booleanValue()==true){
                     listener.moveToDetailsRece(2);
+                }else {
+                    listener.moveBackToDetailsRece(1);
                 }
 //
             }
@@ -374,9 +375,6 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
         Log.d("Received", mSharedPref.getGlobalVal("ReckeyPayMode"));
         Log.d("debcode", SharedPref.getInstance(getActivity()).getSelectedDebCode());
 
-//            if (!mSharedPref.getGlobalVal("ReckeyPayMode").equals("***") &&
-//                    !mSharedPref.getGlobalVal("ReckeyPayMode").equals("-SELECT-") &&
-//        !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("***") && !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("0")) {
         if (!SharedPref.getInstance(getActivity()).getSelectedDebCode().equals("0")) {
             lv_order_det.setAdapter(null);
             orderList = new OutstandingController(getActivity()).getAllRecords(SharedPref.getInstance(getActivity()).getSelectedDebCode(), false);
@@ -405,10 +403,6 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
 
             mSharedPref.setGlobalVal("ReckeyRemnant", et_remnant.getText().toString().replaceAll(",", ""));
         }
-//        else
-//        {
-//            navigateToHeader(0);
-//        }
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
@@ -475,6 +469,10 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
             listener.moveBackToDetailsRece(0);
             Toast.makeText(getActivity(), "Please tap on Arrow button", Toast.LENGTH_LONG).show();
         }
+//      } else if (mSharedPref.getUpdateClicked().booleanValue()==true) {
+//            listener.moveToDetailsRece(2);
+//        }
+
 
         if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("")) {
              ReceivedAmt = Double.parseDouble(mSharedPref.getGlobalVal("ReckeyRecAmt"));

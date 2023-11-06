@@ -493,13 +493,12 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
     /*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     public void mRefreshHeader() {
-
         if (mSharedPref.getReceiptHeaderNextClicked().booleanValue()==false) {
             responseListener.moveBackToDetailsRece(0);
             Toast.makeText(getActivity(), "Please tap on Arrow button", Toast.LENGTH_LONG).show();
         }
 
-        if(mSharedPref.getReceiptHeaderNextClicked().booleanValue()==true && mSharedPref.getUpdateClicked().booleanValue()==false){
+        if(mSharedPref.getUpdateClicked().booleanValue()==false){
             responseListener.moveBackToDetailsRece(1);
             Toast.makeText(getActivity(), "Please tap on DONE button", Toast.LENGTH_LONG).show();
         }
@@ -544,7 +543,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
             lblCHQNo.setText(mSharedPref.getGlobalVal("ReckeyCHQNo"));
         }
 
-        if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("0") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("")) {
+        if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("") || !mSharedPref.getGlobalVal("ReckeyRecAmt").equals("")) {
             lblRecAmt.setText(String.format("%,.2f", Double.parseDouble(mSharedPref.getGlobalVal("ReckeyRecAmt").replaceAll(",", ""))));
         }
         FetchData();
@@ -733,6 +732,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
                                                 Toast.makeText(getActivity(), "Receipt Upload successfully..!", Toast.LENGTH_LONG).show();
 
                                                 addRefNoResults(rec.getRefNo() + " --> Success\n", Receipt.size());
+                                                mSharedPref.setUpdateClicked(false);
                                             }
                                         });
                                     }else{

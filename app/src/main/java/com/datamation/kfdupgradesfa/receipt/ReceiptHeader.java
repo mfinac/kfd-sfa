@@ -155,8 +155,8 @@ public class ReceiptHeader extends Fragment {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
         //df.setTimeZone(tz);
         startTime  = df.format(new Date());
-        mSharedPref.setReceipttHeaderNextClicked(false);
-        mSharedPref.setUpdateClicked(false);
+
+//        mSharedPref.setUpdateClicked(false);
 
 
 

@@ -87,6 +87,7 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
         mainActivity = (ReceiptActivity) getActivity();
 
         mSharedPref.setUpdateClicked(false);
+        mSharedPref.setReceipttHeaderNextClicked(false);
 
 
 
@@ -335,13 +336,14 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
         bDone.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+               // listener.moveToDetailsRece(2);
                 mSharedPref.setUpdateClicked(true);
                 if(mSharedPref.getUpdateClicked().booleanValue()==true){
                     listener.moveToDetailsRece(2);
                 }else {
                     listener.moveBackToDetailsRece(1);
                 }
-//
+
             }
         });
 
@@ -469,9 +471,7 @@ public class ReceiptDetails extends Fragment implements OnClickListener {
             listener.moveBackToDetailsRece(0);
             Toast.makeText(getActivity(), "Please tap on Arrow button", Toast.LENGTH_LONG).show();
         }
-//      } else if (mSharedPref.getUpdateClicked().booleanValue()==true) {
-//            listener.moveToDetailsRece(2);
-//        }
+
 
 
         if (!mSharedPref.getGlobalVal("ReckeyRecAmt").equals("")) {

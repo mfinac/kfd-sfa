@@ -628,8 +628,8 @@ public class SharedPref {
         //return sharedPref.getString("baseURL", "http://203.143.21.121:8080");
         // return sharedPref.getString("baseURL", "http://13.76.45.176:1010");
        //  return sharedPref.getString("baseURL", "http://124.43.5.227:1030");
-        /*****Live****/ // return sharedPref.getString("baseURL", "http://123.231.15.146:1030");
-        /******Test******/  return sharedPref.getString("baseURL", "http://192.168.0.5:1035");
+        /*****Live****/  return sharedPref.getString("baseURL", "http://123.231.15.146:1030");
+        /******Test******/ // return sharedPref.getString("baseURL", "http://192.168.0.5:1035");
 
        //  return sharedPref.getString("baseURL", "http://192.168.0.5:1035");
        // return sharedPref.getString("baseURL", "http://123.231.15.146:8080");

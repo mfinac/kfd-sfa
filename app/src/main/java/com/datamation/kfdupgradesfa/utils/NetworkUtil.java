@@ -17,8 +17,8 @@ import com.datamation.kfdupgradesfa.helpers.ValueHolder;
  */
 
 public class NetworkUtil {
-    public static int TYPE_WIFI = 1;
-    public static int TYPE_MOBILE = 2;
+    public static int TYPE_WIFI = 2;
+    public static int TYPE_MOBILE = 1;
     public static int TYPE_NOT_CONNECTED = 0;
     /**
      * Function to check if network connectivity is available.
@@ -30,6 +30,9 @@ public class NetworkUtil {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+
+
 
     //------------------------------------------------------------------------------------------------------------------------------------
     public static int getConnectivityStatus(Context context) {
@@ -107,7 +110,7 @@ public class NetworkUtil {
 
                     Log.wtf("Network Util Class", String.valueOf(uploadSpeedMbpssss));
 
-                    if (uploadSpeedMbpssss > 15.00)
+                    if (uploadSpeedMbpssss > 5.00)
                     {
                         return true;
                     }

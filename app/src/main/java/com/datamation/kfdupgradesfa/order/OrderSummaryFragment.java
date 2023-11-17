@@ -179,7 +179,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                                     @Override
                                     public void onPositive(MaterialDialog dialog) {
                                         super.onPositive(dialog);
-                                        if (!NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
+                                        if (NetworkUtil.isNetworkAvailable(getActivity()) && (NetworkUtil.isNotPoorConnection(getActivity())==false)) {
                                             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
                                             Toast.makeText(getActivity(), "Poor Internet Connection", Toast.LENGTH_LONG).show();
                                             saveSummaryDialog();
@@ -655,6 +655,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             ordHed.setFORDHED_REPCODE(new SalRepController(getActivity()).getCurrentRepCode());
             ordHed.setFORDHED_IS_ACTIVE("0");
             ordHed.setFORDHED_IS_SYNCED("1");
+           // ordHed.setFORDHED_STATUS("NOT SYNCED");
             ordHed.setFORDHED_HED_DIS_VAL(String.format("%.2f", presale.getFORDHED_TOTALDIS()) + "");
             ordHed.setFORDHED_HED_DIS_PER_VAL(String.format("%.2f", presale.getFORDHED_TOTALDIS()) + "");//String.format("%,.2f",sHeaderDisPer)
 
@@ -769,9 +770,9 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                                             }
                                         });
                                     } else {
-                                        c.setIsSync("0");
-                                        c.setIsActive("1");
-                                        new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED", "1");
+                                        c.setIsSync("1");
+                                        c.setIsActive("0");
+                                        new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "NOT SYNCED", "0");
                                         // new OrderController(getActivity()).updateIsActive(c.getRefNo(), "0");
                                         Toast.makeText(getActivity(), "Order Upload Failed.", Toast.LENGTH_LONG).show();
                                         addRefNoResults(c.getRefNo() + " --> Failed\n", orders.size());

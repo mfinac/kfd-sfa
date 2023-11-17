@@ -488,9 +488,24 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
 
                 } catch (IOException e) {
                     Log.e("networkFunctions ->", "IOException -> " + e.toString());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText((context),e.toString(), Toast.LENGTH_SHORT).show();
+                            pdialog.dismiss();
+                        }
+                    });
+
                     throw e;
                 } catch (JSONException e) {
                     Log.e("networkFunctions ->", "JSONException -> " + e.toString());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText((context),e.toString(), Toast.LENGTH_SHORT).show();
+                            pdialog.dismiss();
+                        }
+                    });
                     throw e;
                 }
 

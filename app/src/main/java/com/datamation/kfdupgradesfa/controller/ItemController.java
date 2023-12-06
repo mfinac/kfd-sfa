@@ -120,7 +120,10 @@ public class ItemController {
 
             String selectQuery ="SELECT i.ItemCode, i.ItemName, i.NOUCase, i.Pack, i.SupCode, l.qoh,p.price "
                                 + "FROM TblItemLoc l inner join Tblitem i on l.ItemCode=i.ItemCode "
-                                + "left join TblItemPri p on i.ItemCode=p.ItemCode where l.LocCode='" + LocCode + "' and p.Costcode='" + costcd + "'";
+                                + "left join TblItemPri p on i.ItemCode=p.ItemCode where l.LocCode='"
+                                + LocCode + "' and p.Costcode='" + costcd + "'"
+                                + "and cast(l.qoh as DECIMAL) > 0 "
+                                + "order by cast(l.qoh as decimal) desc";
 
 
 //

@@ -201,77 +201,78 @@ public class OrderFragment extends Fragment {
 
      //   if (NetworkUtil.isNetworkAvailable(getActivity())) {
             if (stats.equals("NOT SYNCED")) {
-                try {
-                    if (new OrderController(getActivity()).getAllNotIssueOrders().size() > 0) {
-                        try {
-
-                            JsonParser jsonParser = new JsonParser();
-                            String orderJson = new Gson().toJson(c);
-                            JsonObject objectFromString = jsonParser.parse(orderJson).getAsJsonObject();
-                            JsonArray jsonArray = new JsonArray();
-                            jsonArray.add(objectFromString);
-                            Log.d(">>>Orderjson",">>>"+objectFromString);
-                            String content_type = "application/json";
-                            ApiInterface apiInterface = ApiCllient.getClient(getActivity()).create(ApiInterface.class);
-
-                            Call<Result> resultCall = apiInterface.uploadOrder(objectFromString, content_type);
-                            resultCall.enqueue(new Callback<Result>() {
-                                @Override
-                                public void onResponse(Call<Result> call, Response<Result> response) {
-                                    int status = response.code();
-
-                                    if(response.isSuccessful()){
-                                        response.body(); // have your all data
-                                        boolean result =response.body().isResponse();
-                                        Log.d( ">>response"+status,result+">>"+c.getRefNo() );
-                                        if(result){
-                                            mHandler.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-
-                                                    c.setIsSync("1");
-                                            new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "SYNCED","0");
-
-                                            listVanAdapter.notifyDataSetChanged();
-
-                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
-                                                }
-                                            });
-                                        }else{
-                                            Log.d(">>>Orderjson",">>>"+objectFromString);
-                                            c.setIsSync("0");
-                                            new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED","1");
-                                            listVanAdapter.notifyDataSetChanged();
-                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
-                                        }
-                                    }else {
-                                        Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
-                                    }// this will tell you why your api doesnt work most of time
-
-
-                                }
-
-                                @Override
-                                public void onFailure(Call<Result> call, Throwable t) {
-                                    Toast.makeText(getActivity(), "Error response "+t.toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                orderActionUpdateTask(c.getRefNo(), "NOT SYNCED");
+//                try {
+//                    if (new OrderController(getActivity()).getAllNotIssueOrders().size() > 0) {
+//                        try {
+//
+//                            JsonParser jsonParser = new JsonParser();
+//                            String orderJson = new Gson().toJson(c);
+//                            JsonObject objectFromString = jsonParser.parse(orderJson).getAsJsonObject();
+//                            JsonArray jsonArray = new JsonArray();
+//                            jsonArray.add(objectFromString);
+//                            Log.d(">>>Orderjson",">>>"+objectFromString);
+//                            String content_type = "application/json";
+//                            ApiInterface apiInterface = ApiCllient.getClient(getActivity()).create(ApiInterface.class);
+//
+//                            Call<Result> resultCall = apiInterface.uploadOrder(objectFromString, content_type);
+//                            resultCall.enqueue(new Callback<Result>() {
+//                                @Override
+//                                public void onResponse(Call<Result> call, Response<Result> response) {
+//                                    int status = response.code();
+//
+//                                    if(response.isSuccessful()){
+//                                        response.body(); // have your all data
+//                                        boolean result =response.body().isResponse();
+//                                        Log.d( ">>response"+status,result+">>"+c.getRefNo() );
+//                                        if(result){
+//                                            mHandler.post(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//
+//                                                    c.setIsSync("1");
+//                                            new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "SYNCED","0");
+//
+//                                            listVanAdapter.notifyDataSetChanged();
+//
+//                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
+//                                                }
+//                                            });
+//                                        }else{
+//                                            Log.d(">>>Orderjson",">>>"+objectFromString);
+//                                            c.setIsSync("0");
+//                                            new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED","1");
+//                                            listVanAdapter.notifyDataSetChanged();
+//                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
+//                                        }
+//                                    }else {
+//                                        Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
+//                                    }// this will tell you why your api doesnt work most of time
+//
+//
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<Result> call, Throwable t) {
+//                                    Toast.makeText(getActivity(), "Error response "+t.toString(), Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
 //                        }
-
-                    } else {
-                        orderActionUpdateTask(c.getRefNo(), "NOT SYNCED");
-                        Toast.makeText(getActivity(), "No Records to upload !", Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    Log.e(">>>ERROR In EDIT", ">>>" + e.toString());
-                    throw e;
-                }
+////                        }
+//
+//                    } else {
+//                        orderActionUpdateTask(c.getRefNo(), "NOT SYNCED");
+//                      //  Toast.makeText(getActivity(), "No Records to upload !", Toast.LENGTH_LONG).show();
+//                    }
+//                } catch (Exception e) {
+//                    Log.e(">>>ERROR In EDIT", ">>>" + e.toString());
+//                    throw e;
+//                }
             } else if (stats.equals("SYNCED")) {
 
 //                new OrderStatusDownload(c.getFORDHED_REFNO(), "SYNCED").execute();

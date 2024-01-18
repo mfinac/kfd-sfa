@@ -144,11 +144,7 @@ public class AllCustomerFragment extends Fragment {
             }
         });
 
-        new
-
-                getAllCustomer("").
-
-                execute();
+        new getAllCustomer("").execute();
         return view;
     }
 

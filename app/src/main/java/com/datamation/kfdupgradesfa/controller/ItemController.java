@@ -122,7 +122,7 @@ public class ItemController {
                                 + "FROM TblItemLoc l inner join Tblitem i on l.ItemCode=i.ItemCode "
                                 + "left join TblItemPri p on i.ItemCode=p.ItemCode where l.LocCode='"
                                 + LocCode + "' and p.Costcode='" + costcd + "'"
-                                + "and cast(l.qoh as DECIMAL) > 0 "
+                          //      + "and cast(l.qoh as DECIMAL) > 0 "
                                 + "order by cast(l.qoh as decimal) desc";
 
 

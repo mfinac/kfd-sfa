@@ -573,7 +573,7 @@ public class CustomerController {
         Cursor cursor = null;
         try {
             String selectQuery = "select * from " + ValueHolder.TABLE_DEBTOR + " where " + ValueHolder.FDEBTOR_NAME
-                    + " like '" + newText + "%'";
+                    + " like '%" + newText + "%'";
             // dbHelper.TABLE_FDEBTOR + " where " + dbHelper.FDEBTOR_CODE + " ||
             // " +
             // dbHelper.FDEBTOR_NAME + " like '%" + newText + "%'";

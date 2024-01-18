@@ -739,7 +739,7 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
 
                     /*****************outlets**********************************************************************/
 
-                    if (pref.getIsFirstInstallation().equals(false)) {
+               //     if (pref.getIsFirstInstallation().equals(false)) {
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -756,7 +756,7 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                             errors.add(e.toString());
                             throw e;
                         }
-                    }
+                 //   }
                     /*****************Settings*****************************************************************************/
                     getActivity().runOnUiThread(new Runnable() {
                         @Override

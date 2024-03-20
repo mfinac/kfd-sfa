@@ -93,7 +93,7 @@ public class ItemController {
 
     }
 
-    public ArrayList<Product> getAllItemFor(String type, String refno, String LocCode, String debCode, String costcd) {
+    public ArrayList<Product> getAllItemFor(String itemName, String supCode, String LocCode, String debCode, String costcd) {
         if (dB == null) {
             open();
         } else if (!dB.isOpen()) {
@@ -107,26 +107,15 @@ public class ItemController {
        // LocCode = "NEG01";
 
         try {
-//
-//            String selectQuery = "SELECT itm.ItemCode,itm.ItemName,itm.NOUCase,itm.Pack , Sum(CAST(loc.QOH AS integer)) as QOH,itm.SupCode ,"
-//                    + " ifnull( (select price from TblItemPri where ItemCode = itm.ItemCode and CostCode = '" + costcd + "'),'0.00') as itpri"
-//                    + " FROM TblItem itm, TblItemLoc loc WHERE loc.ItemCode=itm.ItemCode AND loc.LocCode='"
-//                    + LocCode + "' " +
-//                    "Group By itm.ItemCode,itm.ItemName,itm.NOUCase,itm.PackSize order by CAST(loc.QOH AS integer) DESC";
-
-//            String selectQuery = "SELECT itm.ItemCode, itm.ItemName, itm.NOUCase, itm.Pack, itm.SupCode, loc.QOH " +
-//                    "FROM TblItem itm LEFT JOIN TblItemLoc loc ON itm.ItemCode=loc.ItemCode " +
-//                    "LEFT JOIN TblItemPri p ON itm.ItemCode=p.ItemCode WHERE loc.LocCode='" + LocCode + "' AND p.Costcode='" + costcd + "'";
-
-            String selectQuery ="SELECT i.ItemCode, i.ItemName, i.NOUCase, i.Pack, i.SupCode, l.qoh,p.price "
-                                + "FROM TblItemLoc l inner join Tblitem i on l.ItemCode=i.ItemCode "
-                                + "left join TblItemPri p on i.ItemCode=p.ItemCode where l.LocCode='"
-                                + LocCode + "' and p.Costcode='" + costcd + "'"
-                          //      + "and cast(l.qoh as DECIMAL) > 0 "
-                                + "order by cast(l.qoh as decimal) desc";
 
 
-//
+            String selectQuery ="    SELECT i.ItemCode, i.ItemName, i.NOUCase, i.Pack, i.SupCode, l.qoh, p.price "
+                                 +"   FROM Tblitem i inner JOIN TblItemLoc l on l.ItemCode=i.ItemCode "
+                                 + "  left join TblItemPri p on i.ItemCode=p.ItemCode "
+                                 + "  where l.LocCode='" + LocCode + "'  and p.Costcode='" + costcd + "' and i.SupCode like '%" + supCode + "%' and i.itemname like '%" + itemName + "%'"
+                                 +" order by l.qoh desc";
+
+
             cursor = dB.rawQuery(selectQuery, null);
             while (cursor.moveToNext()) {
                 Product product = new Product();
@@ -138,12 +127,7 @@ public class ItemController {
                 product.setFPRODUCT_QOH(cursor.getString(cursor.getColumnIndex(ValueHolder.QOH)));
                 product.setSupCode(cursor.getString(cursor.getColumnIndex(ValueHolder.SUP_CODE)));
                 product.setFPRODUCT_QTY("0");
-                //unitPrice = Double.parseDouble(new ItemPriDS(context).getProductPriceByCode(product.getFPRODUCT_ITEMCODE(),mSharedPref.getGlobalVal("PrekeyCost"))) / Double.parseDouble(product.getFPRODUCT_NOUCASE());
-                //product.setFPRODUCT_PRICE(String.format("%.2f", unitPrice));
                 product.setFPRODUCT_PRICE(cursor.getString(cursor.getColumnIndex("Price")));
-                //FreeRef = cursor.getString(cursor.getColumnIndex("freeref"));
-
-                //freeSchema = new FreeMslabDS(context).getFreeDetailsnew(FreeRef,debCode);
                 freeSchema = "";
                 product.setFPRODUCT_DEBCODE(debCode);
                 product.setFPRODUCT_FREESCREMA(freeSchema);
@@ -177,14 +161,6 @@ public class ItemController {
 
         try {
 
-//            String selectQuery = "SELECT itm.ItemCode,itm.ItemName,itm.NOUCase,itm.Pack , Sum(CAST(loc.QOH AS integer)) as QOH,itm.SupCode ,"
-//                    + " ifnull( (select price from TblItemPri where ItemCode = itm.ItemCode and CostCode = '" + costcd + "'),'0.00') as itpri"
-//                    + " FROM TblItem itm, TblItemLoc loc WHERE itm.SupCode LIKE '" + searchStr + "%' AND loc.ItemCode=itm.ItemCode AND loc.LocCode='"
-//                    + locCode + "' " +
-////             "AND itm.ItemCode not in (SELECT DISTINCT ItemCode FROM TblOrddet WHERE " + type
-////                    + " And RefNo ='" + refno
-////                    + "') " +
-//                    "Group By itm.ItemCode,itm.ItemName,itm.NOUCase,itm.PackSize order by CAST(loc.QOH AS integer) DESC";
 
             String selectQuery = "SELECT  itm.ItemCode AS ItemCode , itm.ItemName AS ItemName ,itm.NOUCase, itm.Pack AS Pack,itm.SupCode," +
             " ifnull( (select price from TblItemPri where ItemCode = itm.ItemCode and CostCode = '" + costcd + "'),'0.00')as itpri , " +
@@ -1168,6 +1144,45 @@ public class ItemController {
             dB.close();
         }
         return "";
+    }
+
+
+    public ArrayList<Item> getFilterdItemsBySupCodeandItemCode(String supCode,String itemName) {
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+        ArrayList<Item> list = new ArrayList<Item>();
+
+
+        try {
+
+            String selectQuery = "SELECT * FROM TblItem WHERE SupCode LIKE '" + supCode + "%' AND itemname LIKE '" + itemName + "%' ";
+
+
+            cursor = dB.rawQuery(selectQuery, null);
+            while (cursor.moveToNext()) {
+                Item item = new Item();
+
+                item.setFITEM_ITEM_CODE(cursor.getString(cursor.getColumnIndex(ValueHolder.ITEMCODE)));
+                item.setFITEM_ITEM_NAME(cursor.getString(cursor.getColumnIndex(ValueHolder.ITEMNAME)));
+
+                list.add(item);
+            }
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        } finally {
+            cursor.close();
+            dB.close();
+        }
+
+        return list;
     }
 
 

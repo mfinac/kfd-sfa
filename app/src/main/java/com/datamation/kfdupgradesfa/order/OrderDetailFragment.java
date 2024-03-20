@@ -83,7 +83,8 @@ public class OrderDetailFragment extends Fragment {
     int seqno = 0;
     SweetAlertDialog sweetAlertDialog;
     OrderResponseListener preSalesResponseListener;
-    ArrayList<Product> productList = null, allItemList = null;
+    ArrayList<Product> productList = null;
+    ArrayList<Product> allItemList = null;
     int clickCount = 0;
     OrderActivity mainActivity;
     private String refNo, repCode;
@@ -98,8 +99,10 @@ public class OrderDetailFragment extends Fragment {
     OrderResponseListener responseListener;
     ArrayList<Item> loadlist;
     String debCode, strLoccode;
-    ImageView remove;
+    ImageView remove, img_remove_Sup;
     ProgressDialog pDialog;
+    String itemName;
+    String searchkey;
 
 
 
@@ -126,9 +129,10 @@ public class OrderDetailFragment extends Fragment {
 
         lvProducts.setLongClickable(true);
         remove = (ImageView) view.findViewById(R.id.img_remove);
+        img_remove_Sup = (ImageView) view.findViewById(R.id.img_remove_Sup);
         mainActivity = (OrderActivity) getActivity();
         tmpsoHed = new Order();
-        new LoardingProductFromDB().execute();
+        new LoardingProductFromDB("","").execute();
         allItemList = new ArrayList<Product>();
 
         mSharedPref.setGlobalVal("preKeyIsFreeClicked", "0");
@@ -156,50 +160,41 @@ public class OrderDetailFragment extends Fragment {
 
         final ArrayList<String> itemNamesStr = new ArrayList<String>();
 
+
         supSearch.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                itemSearch.setText("");
+            public void onTextChanged(CharSequence itmqry, int i, int i1, int i2) {
 
             }
-
 
             @Override
             public void afterTextChanged(Editable editable) {
                 debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
-
-                if (editable.equals("")) {
-
-                    itemSearch.setText("");
+                strLoccode = mSharedPref.getGlobalVal("KeyLoc");
 
 
-                } else if (!editable.equals("")) {
-
-                    strLoccode = mSharedPref.getGlobalVal("KeyLoc");
-                    productList.clear();
-
-                    String str = editable.toString();
-                    String[] arrOfStr = str.split("-", 2);
-
-                    productList = new ItemController(getActivity()).getAllItemsBySupplier(arrOfStr[0].trim(), refNo, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
-                    lvProducts.setAdapter(new PreOrderAdapter(getActivity(), productList, refNo));
-                    lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                    if (editable.equals("")) {
 
 
-                    //&^&^& MMS-2022/02/02 %$%$//
-                    final ArrayList<Item> itmlist = new ItemController(getActivity()).getAllItemsBySupCode(arrOfStr[0].trim());
+                        ArrayList<Product> prdList = filter(productList, editable, editable.length());
+                        Log.d(">>>prdList", "afterTextChanged: " + productList);
+                        lvProducts.setAdapter(new PreOrderAdapter(getActivity(), prdList, refNo));
 
-                    for (Item item : itmlist) {
-                        itemNamesStr.add(item.getFITEM_ITEM_NAME().trim());
                     }
-                }
 
+                    else  {
+                        String str = editable.toString();
+                        String[] arrOfStr = str.split("-", 2);
+                        new LoardingProductFromDB("",arrOfStr[0].trim()).execute();
+
+                   }
+                lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
             }
         });
@@ -226,23 +221,23 @@ public class OrderDetailFragment extends Fragment {
             public void afterTextChanged(Editable itemquery) {
                 debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
                 strLoccode = mSharedPref.getGlobalVal("KeyLoc");
+                String supCode =supSearch.getText().toString();
 
                 if (supSearch.getText().length() > 0) {
                     if (!itemquery.equals("")) {
 
+                        String str = itemquery.toString();
+                        String[] arrOfStr = supCode.split("-", 2);
+                        new LoardingProductFromDB(str,arrOfStr[0].trim()).execute();
 
-                        ArrayList<Product> prdList = filter(productList, itemquery, itemquery.length());
-                        Log.d(">>>prdList", "afterTextChanged: " + productList);
-                        lvProducts.setAdapter(new PreOrderAdapter(getActivity(), prdList, refNo));
-
-                    }
-                } else {
-                    if (!itemquery.equals("")) {
-
-                        ArrayList<Product> prdItmList = filter(productList, itemquery, itemquery.length());
-                        lvProducts.setAdapter(new PreOrderAdapter(getActivity(), prdItmList, refNo));
                     }
                 }
+                else if (!itemquery.equals(""))
+                {
+                        ArrayList<Product> prdItmList = filter(productList, itemquery, itemquery.length());
+                        lvProducts.setAdapter(new PreOrderAdapter(getActivity(), prdItmList, refNo));
+                }
+
                 lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
 
@@ -254,7 +249,6 @@ public class OrderDetailFragment extends Fragment {
             public void onClick(View view) {
 //                if (supSearch.getText().length() > 0) {
 //                    supSearch.setText("");
-//
 //                }
                 if (itemSearch.getText().length() > 0) {
 
@@ -262,6 +256,16 @@ public class OrderDetailFragment extends Fragment {
                 }
 //                new LoardingProductFromDB().execute();
 
+            }
+        });
+
+        img_remove_Sup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (supSearch.getText().length() > 0)
+                {
+                    supSearch.setText("");
+                }
             }
         });
 
@@ -353,8 +357,12 @@ public class OrderDetailFragment extends Fragment {
     public class LoardingProductFromDB extends AsyncTask<Object, Object, ArrayList<Product>> {
 
         CustomProgressDialog pdialog;
+        String itemName;
+        String supCode;
 
-        public LoardingProductFromDB() {
+        public LoardingProductFromDB(String itemName,String supCode) {
+            this.itemName= itemName;
+            this.supCode = supCode;
         }
 
         @Override
@@ -377,7 +385,7 @@ public class OrderDetailFragment extends Fragment {
                 productList = new OrderDetailController(getActivity()).getAlreadyOrderedItems("", strLoccode, refNo, "TxnType ='21'", mSharedPref.getGlobalVal("KeyCost"));
               //  pdialog.dismiss();
             } else {
-                productList = new ItemController(getActivity()).getAllItemFor("TxnType ='21'", refNo, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
+                productList = new ItemController(getActivity()).getAllItemFor(itemName,supCode, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
                 Log.wtf("LocCode",toString());
                // allItemList.clear();
               //  allItemList = productList;

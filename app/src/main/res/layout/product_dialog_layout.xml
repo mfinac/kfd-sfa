@@ -82,14 +82,25 @@
             android:layout_height="35dp"
             android:layout_margin="2dp"
             android:layout_marginLeft="2dp"
-            android:visibility="gone"
-            android:layout_weight="1"
+            android:visibility="visible"
+            android:layout_weight="1.55"
             android:background="@drawable/custom_textbox"
             android:gravity="center"
             android:paddingLeft="16dp"
             android:selectAllOnFocus="true"
-            app:defaultQueryHint="Search supplier"
-            app:queryHint="Type supplier keyword here..." />
+            android:hint="Search Supplier" />
+
+        <ImageView
+            android:id="@+id/img_remove_Sup"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/remove"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/search_supplier"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!--        <androidx.appcompat.widget.SearchView-->
         <!--            android:id="@+id/item_search"-->
@@ -109,13 +120,13 @@
             android:layout_height="35dp"
             android:layout_margin="2dp"
             android:layout_marginLeft="2dp"
-            android:layout_weight="2.5"
+            android:layout_weight="1.15"
             android:background="@drawable/custom_textbox"
             android:gravity="center"
             android:paddingLeft="16dp"
             android:selectAllOnFocus="true"
-            app:defaultQueryHint="Search supplier"
-            app:queryHint="Type supplier keyword here..." />
+            app:defaultQueryHint="Search Items"
+            android:hint="Search Item " />
 
         <ImageView
             android:id="@+id/img_remove"

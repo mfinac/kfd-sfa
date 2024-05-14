@@ -400,10 +400,9 @@ public class OrderDetailFragment extends Fragment {
             super.onPostExecute(products);
 
             lvProducts.setAdapter(new PreOrderAdapter(getActivity(), products, refNo));
-            //mithsu//
+
             lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-//            pdialog.dismiss();
-            //mithsu//
+
 
         }
 

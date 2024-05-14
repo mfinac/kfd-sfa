@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.datamation.kfdupgradesfa.R;
@@ -58,14 +59,16 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
         final Product product = list.get(i);
 
         try {
-            if (Integer.parseInt(product.getFPRODUCT_QOH()) == 0) {
-                preOrders.itemBonus.setTextColor(Color.parseColor("#FF5252"));
-                preOrders.pack.setTextColor(Color.parseColor("#FF5252"));
-                preOrders.ItemName.setTextColor(Color.parseColor("#FF5252"));
-                preOrders.Price.setTextColor(Color.parseColor("#FF5252"));
-                preOrders.HoQ.setTextColor(Color.parseColor("#FF5252"));
-                preOrders.lblQty.setTextColor(Color.parseColor("#FF5252"));
-                preOrders.lblCase.setTextColor(Color.parseColor("#FF5252"));
+            if (product.getFPRODUCT_QOH().equals("0.0")) {
+                preOrders.ad_container.setBackgroundColor(Color.parseColor("#f0aa98"));
+                preOrders.lnStripe.setBackgroundColor(Color.parseColor("#4682B4"));
+                preOrders.itemBonus.setTextColor(Color.parseColor("#4682B4"));
+                preOrders.pack.setTextColor(Color.parseColor("#4682B4"));
+                preOrders.ItemName.setTextColor(Color.parseColor("#4682B4"));
+                preOrders.Price.setTextColor(Color.parseColor("#4682B4"));
+                preOrders.HoQ.setTextColor(Color.parseColor("#4682B4"));
+                preOrders.lblQty.setTextColor(Color.parseColor("#4682B4"));
+                preOrders.lblCase.setTextColor(Color.parseColor("#4682B4"));
             } else {
                 preOrders.itemBonus.setTextColor(Color.parseColor("#4682B4"));
                 preOrders.pack.setTextColor(Color.parseColor("#4682B4"));
@@ -315,6 +318,7 @@ class PreOrders extends RecyclerView.ViewHolder {
     LinearLayout lnStripe;
     TextView itemBonus, pack, ItemName, Price, HoQ, lblQty, lblCase;
     ImageButton btnPlus, btnMinus;
+    ConstraintLayout ad_container;
 
     public PreOrders(View itemView) {
         super(itemView);
@@ -328,6 +332,7 @@ class PreOrders extends RecyclerView.ViewHolder {
         lblCase = itemView.findViewById(R.id.et_case);
         btnPlus = itemView.findViewById(R.id.btnAddition);
         btnMinus = itemView.findViewById(R.id.btnSubtract);
+        ad_container = itemView.findViewById(R.id.ad_container);
     }
 
 }

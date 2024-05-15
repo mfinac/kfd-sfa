@@ -294,6 +294,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                             new PreProductController(getActivity()).mClearTables();
                             mSharedPref.setDiscountClicked("0");
                             mSharedPref.setOrdertHeaderNextClicked(false);
+                            mSharedPref.setIsQuantityAdded(false);
 
                         }
 
@@ -475,13 +476,6 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                     ordHed.setFORDHED_ADDRESS("");
                     ordHed.setFORDHED_COST_CODE(presale.getFORDHED_COST_CODE());
 
-//                    String str = presale.getFORDHED_COST_CODE();
-//                    String[] arrOfCostCd = str.split("-", 2);
-//                    ordHed.setFORDHED_COST_CODE(arrOfCostCd[0]);
-//                    String str = presale.getFORDHED_COST_CODE();
-//                    String[] arrOfCostCd = str.split("-", 2);
-//
-//                    ordHed.setFORDHED_COST_CODE(arrOfCostCd[0]);
                     ordHed.setFORDHED_TOTAL_TAX("0.00");
                     ordHed.setFORDHED_TOTALDIS("0.00");
                     ordHed.setFORDHED_TOTAL_ITM_DIS("0.00");
@@ -526,8 +520,8 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                         Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
                         startActivity(intnt);
                         getActivity().finish();
+                        mSharedPref.setIsQuantityAdded(false);
 
-                        //  Upload(new OrderController(getActivity()).getAllUnSyncOrdHed());
 
                     } else {
                         Toast.makeText(getActivity(), "Order Save Failed..", Toast.LENGTH_SHORT).show();
@@ -634,18 +628,11 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             ordHed.setFORDHED_START_TIME_SO(presale.getFORDHED_START_TIME_SO());
             ordHed.setFORDHED_ADDRESS("");
 
-//            String str = presale.getFORDHED_COST_CODE();
-//            String[] arrOfCostCd = str.split("-", 2);
-//
-//            ordHed.setFORDHED_COST_CODE(arrOfCostCd[0]);
             ordHed.setFORDHED_COST_CODE(presale.getFORDHED_COST_CODE());
             ordHed.setFORDHED_TOTAL_TAX("0.00");
             ordHed.setFORDHED_TOTALDIS("0.00");
             ordHed.setFORDHED_TOTAL_ITM_DIS("0.00");
             ordHed.setFORDHED_TOT_MKR_AMT("0.00");
-            // ordHed.setFORDHED_TOTALDIS(String.format("%.2f",presale.getFORDHED_TOTALDIS())+"");
-//                    ordHed.setFORDHED_TOTAL_ITM_DIS(String.format("%.2f",presale.getFORDHED_TOTALDIS())+"");
-//                    ordHed.setFORDHED_TOT_MKR_AMT(String.format("%.2f",presale.getFORDHED_TOTALDIS())+"");
 
             ordHed.setFORDHED_LONGITUDE(SharedPref.getInstance(getActivity()).getGlobalVal("Longitude").equals("") ? "0.00" : mSharedPref.getGlobalVal("Longitude"));
             ordHed.setFORDHED_LATITUDE(SharedPref.getInstance(getActivity()).getGlobalVal("Latitude").equals("") ? "0.00" : mSharedPref.getGlobalVal("Latitude"));
@@ -696,6 +683,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                     try {
                         Upload(new OrderController(getActivity()).getAllUnSyncOrdHedNew());
                         mSharedPref.setOrdertHeaderNextClicked(false);
+                        mSharedPref.setIsQuantityAdded(false);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

@@ -289,6 +289,14 @@ public class OrderDetailFragment extends Fragment {
             debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
 
             strLoccode = mSharedPref.getGlobalVal("KeyLoc");
+            if (mSharedPref.getIsQuantityAdded())
+            {
+                preSalesResponseListener.moveNextToFragment(1);
+            }
+            else
+            {
+                new LoardingProductFromDB("","").execute();
+            }
 
           // new LoardingProductFromDB().execute();
 

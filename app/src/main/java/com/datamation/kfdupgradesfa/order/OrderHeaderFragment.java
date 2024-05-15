@@ -483,7 +483,8 @@ public class OrderHeaderFragment extends Fragment {
         if (SharedPref.getInstance(getActivity()).getGlobalVal("PrekeyCustomer").equals("Y")) {
             ArrayList<OrderDetail> dets = new OrderDetailController(getActivity()).getSAForFreeIssueCalc("" + refNo);
             Log.d("Header>>", ">>detsize" + dets.size());
-            if (dets.size() > 0) {
+
+            if (dets.size() > 0 && mSharedPref.getIsQuantityAdded()) {
                 preSalesResponseListener.moveBackToFragment(1);
             }
 

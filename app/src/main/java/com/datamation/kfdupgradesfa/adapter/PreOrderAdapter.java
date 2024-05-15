@@ -154,8 +154,10 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                 ArrayList<OrderDetail> toSaveOrderDetails = new OrderDetailController(context).mUpdatePrsSalesNew(product, ref);
                 if (new OrderDetailController(context).createOrUpdateOrdDet(toSaveOrderDetails) > 0) {
                     Log.d("ORDER_DETAILS", "Order det saved successfully...");
+                    mSharedPref.setIsQuantityAdded(true);
                 } else {
                     Log.d("ORDER_DETAILS", "Order det saved unsuccess...");
+                    mSharedPref.setIsQuantityAdded(false);
                 }
                 /*Change colors*/
                 if (qty == 0)
@@ -187,8 +189,10 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
 
                     if (new OrderDetailController(context).createOrUpdateOrdDet(toSaveOrderDetails) > 0) {
                         Log.d("ORDER_DETAILS", "Order det saved successfully...");
+                        mSharedPref.setIsQuantityAdded(true);
                     } else {
                         Log.d("ORDER_DETAILS", "Order det saved unsuccess...");
+                        mSharedPref.setIsQuantityAdded(false);
                     }
                 } else {
                     Toast.makeText(context, "Exceeds available  stock"
@@ -272,8 +276,10 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                             ArrayList<OrderDetail> toSaveOrderDetails = new OrderDetailController(context).mUpdatePrsSales(product, ref);
                             if (new OrderDetailController(context).createOrUpdateOrdDet(toSaveOrderDetails) > 0) {
                                 Log.d("ORDER_DETAILS", "Order det saved successfully...");
+                                mSharedPref.setIsQuantityAdded(true);
                             } else {
                                 Log.d("ORDER_DETAILS", "Order det saved unsuccess...");
+                                mSharedPref.setIsQuantityAdded(false);
                             }
                         }
 

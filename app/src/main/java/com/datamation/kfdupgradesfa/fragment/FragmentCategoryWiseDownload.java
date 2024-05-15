@@ -26,7 +26,11 @@ import com.datamation.kfdupgradesfa.R;
 import com.datamation.kfdupgradesfa.adapter.downloadListAdapter;
 import com.datamation.kfdupgradesfa.api.ApiCllient;
 import com.datamation.kfdupgradesfa.api.ApiInterface;
+import com.datamation.kfdupgradesfa.controller.AreaController;
+import com.datamation.kfdupgradesfa.controller.BankController;
+import com.datamation.kfdupgradesfa.controller.BrandController;
 import com.datamation.kfdupgradesfa.controller.CompanyDetailsController;
+import com.datamation.kfdupgradesfa.controller.CostController;
 import com.datamation.kfdupgradesfa.controller.CustomerController;
 import com.datamation.kfdupgradesfa.controller.DayNPrdHedController;
 import com.datamation.kfdupgradesfa.controller.DownloadController;
@@ -39,17 +43,23 @@ import com.datamation.kfdupgradesfa.controller.FreeDetController;
 import com.datamation.kfdupgradesfa.controller.FreeHedController;
 import com.datamation.kfdupgradesfa.controller.FreeItemController;
 import com.datamation.kfdupgradesfa.controller.FreeMslabController;
+import com.datamation.kfdupgradesfa.controller.GroupController;
 import com.datamation.kfdupgradesfa.controller.ItemController;
 import com.datamation.kfdupgradesfa.controller.ItemLocController;
 import com.datamation.kfdupgradesfa.controller.ItemPriceController;
 import com.datamation.kfdupgradesfa.controller.OrderController;
 import com.datamation.kfdupgradesfa.controller.OutstandingController;
+import com.datamation.kfdupgradesfa.controller.ReasonController;
 import com.datamation.kfdupgradesfa.controller.ReceiptController;
 import com.datamation.kfdupgradesfa.controller.ReferenceDetailDownloader;
 import com.datamation.kfdupgradesfa.controller.ReferenceSettingController;
 import com.datamation.kfdupgradesfa.controller.RepDebtorController;
 import com.datamation.kfdupgradesfa.controller.RouteController;
 import com.datamation.kfdupgradesfa.controller.RouteDetController;
+import com.datamation.kfdupgradesfa.controller.SalRepController;
+import com.datamation.kfdupgradesfa.controller.SupplierController;
+import com.datamation.kfdupgradesfa.controller.TownController;
+import com.datamation.kfdupgradesfa.controller.TypeController;
 import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
 import com.datamation.kfdupgradesfa.helpers.NetworkFunctions;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
@@ -93,11 +103,13 @@ public class FragmentCategoryWiseDownload extends Fragment {
     private long timeInMillis;
 
     ArrayList<Control> downloadList;
+    SharedPref pref;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.category_download, container, false);
+        pref = SharedPref.getInstance(getActivity());
 
         getActivity().setTitle("Category Wise Download");
         networkFunctions = new NetworkFunctions(getActivity());
@@ -122,10 +134,7 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     if (isAllUploaded(getActivity())) {
 
                         try {
-                            //mithsu//
-                            new itemsDownload(SharedPref.getInstance(getActivity())
-                                    .getLoginUser().getFREP_CODE()).execute();
-                            //mithsu//
+                            new itemsDownload(SharedPref.getInstance(getActivity()).getLoginUser().getFREP_CODE()).execute();
                         } catch (Exception e) {
                             Log.e("## ErrorInItemDown ##", e.toString());
                         }
@@ -148,11 +157,10 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     if (isAllUploaded(getActivity())) {
 
                         try {
-                            //mithsu//
+
                             new freeDownload(SharedPref.getInstance(getActivity())
                                     .getLoginUser().getFREP_CODE()).execute();
-                            //mithsu//
-                            // new freeDownload(SharedPref.getInstance(getActivity()).getLoginUser().getRepCode()).execute();
+
                         } catch (Exception e) {
                             Log.e("## ErrorInItemDown ##", e.toString());
                         }
@@ -174,11 +182,9 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     if (isAllUploaded(getActivity())) {
 
                         try {
-                            //mithsu//
-                            new routeDownload(SharedPref.getInstance(getActivity())
-                                    .getLoginUser().getFREP_CODE()).execute();
-                            //mithsu//
-                            // new routeDownload(SharedPref.getInstance(getActivity()).getLoginUser().getRepCode()).execute();
+
+                            new routeDownload(SharedPref.getInstance(getActivity()).getLoginUser().getFREP_CODE()).execute();
+
                         } catch (Exception e) {
                             Log.e("## ErrorInItemDown ##", e.toString());
                         }
@@ -385,11 +391,11 @@ public class FragmentCategoryWiseDownload extends Fragment {
     //item download asynctask
     private class itemsDownload extends AsyncTask<String, Integer, Boolean> {
         CustomProgressDialog pdialog;
-        private String debcode;
+        private String repcode;
         int totalRecords = 0;
 
-        public itemsDownload(String debcode) {
-            this.debcode = debcode;
+        public itemsDownload(String repcode) {
+            this.repcode = repcode;
             this.pdialog = new CustomProgressDialog(getActivity());
         }
 
@@ -417,44 +423,21 @@ public class FragmentCategoryWiseDownload extends Fragment {
 
                     String item = "";
                     try {
-                        item = networkFunctions.getItems(debcode);
-                        // Log.d(LOG_TAG, "OUTLETS :: " + outlets);
+                        ItemController itemController = new ItemController(getActivity());
+                        itemController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Items, networkFunctions.getItems(repcode));
                     } catch (IOException e) {
                         e.printStackTrace();
                         throw e;
                     }
 
-                    // Processing item
-                    try {
-                        JSONObject itemJSON = new JSONObject(item);
-                        JSONArray itemJSONArray = itemJSON.getJSONArray("data");
-                        totalRecords = itemJSONArray.length();
 
-                        ArrayList<Item> itemList = new ArrayList<Item>();
-
-                        for (int i = 0; i < itemJSONArray.length(); i++) {
-                            itemList.add(Item.parseItem(itemJSONArray.getJSONObject(i)));
-                        }
-
-                        ItemController itemController = new ItemController(getActivity());
-                        itemController.deleteAll();
-                        itemController.InsertOrReplaceItems(itemList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + itemList.size(), "" + totalRecords, "Item Info");
-
-
-                    } catch (JSONException | NumberFormatException e) {
-
-//                        ErrorUtil.logException("LoginActivity -> Authenticate -> doInBackground() # Process Routes and Outlets",
-//                                e, routes, BugReport.SEVERITY_HIGH);
-
-                        throw e;
-                    }
                     /*****************end item **********************************************************************/
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            pdialog.setMessage("Download complete...");
+                            pdialog.setMessage("Item Download complete...");
                         }
                     });
                     return true;
@@ -462,15 +445,18 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     //errors.add("Please enter correct username and password");
                     return false;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-
-                return false;
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-                return false;
-            } catch (NumberFormatException e) {
+            }
+//            catch (IOException e) {
+//                e.printStackTrace();
+//
+//                return false;
+//            }
+//            catch (JSONException e) {
+//                e.printStackTrace();
+//
+//                return false;
+//            }
+            catch (NumberFormatException | IOException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -507,11 +493,11 @@ public class FragmentCategoryWiseDownload extends Fragment {
     //free download asynctask
     private class freeDownload extends AsyncTask<String, Integer, Boolean> {
         CustomProgressDialog pdialog;
-        private String debcode;
+        private String repcode;
 
 
-        public freeDownload(String debcode) {
-            this.debcode = debcode;
+        public freeDownload(String repcode) {
+            this.repcode = repcode;
             this.pdialog = new CustomProgressDialog(getActivity());
         }
 
@@ -529,187 +515,129 @@ public class FragmentCategoryWiseDownload extends Fragment {
             try {
                 if (SharedPref.getInstance(getActivity()).getLoginUser() != null && SharedPref.getInstance(getActivity()).isLoggedIn()) {
                     new DownloadController(getActivity()).deleteAll();
-                    FreeHedController freeHedController = new FreeHedController(getActivity());
-                    freeHedController.deleteAll();
-                    FreeDetController freedetController = new FreeDetController(getActivity());
-                    freedetController.deleteAll();
-                    FreeDebController freedebController = new FreeDebController(getActivity());
-                    freedebController.deleteAll();
-                    FreeItemController freeitemController = new FreeItemController(getActivity());
-                    freeitemController.deleteAll();
+
+
+
                     FreeMslabController freeMslabController = new FreeMslabController(getActivity());
                     freeMslabController.deleteAll();
 
                     /*****************FreeHed**********************************************************************/
-                    String freehed = "";
-                    int totalHedRecords = 0;
-                    try {
-                        freehed = networkFunctions.getFreeHed(debcode);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw e;
-                    }
+//
 
-
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Processing downloaded data (free)...");
+                        }
+                    });
                     // Processing freehed
                     try {
-                        JSONObject freeHedJSON = new JSONObject(freehed);
-                        JSONArray freeHedJSONArray = freeHedJSON.getJSONArray("data");
-                        totalHedRecords = freeHedJSONArray.length();
-                        ArrayList<FreeHed> freeHedList = new ArrayList<FreeHed>();
 
-                        for (int i = 0; i < freeHedJSONArray.length(); i++) {
-                            freeHedList.add(FreeHed.parseFreeHed(freeHedJSONArray.getJSONObject(i)));
-                        }
-                        freeHedController.createOrUpdateFreeHed(freeHedList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + freeHedList.size(), "" + totalHedRecords, "Free Hed Info");
-
-                    } catch (JSONException | NumberFormatException e) {
-
-//                        ErrorUtil.logException("LoginActivity -> Authenticate -> doInBackground() # Process Routes and Outlets",
-//                                e, routes, BugReport.SEVERITY_HIGH);
+                        FreeHedController freeHedController = new FreeHedController(getActivity());
+                        freeHedController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Freehed, networkFunctions.getFreeHed(repcode));
+                    } catch (Exception e) {
 
                         throw e;
                     }
+                    // Processing freehed
+
                     /*****************end freeHed**********************************************************************/
                     /*****************Freedet**********************************************************************/
-                    String freedet = "";
-                    int totalDetRecords = 0;
-                    try {
-                        freedet = networkFunctions.getFreeDet(debcode);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw e;
-                    }
 
-                    try {
-                        JSONObject freedetJSON = new JSONObject(freedet);
-                        JSONArray freedetJSONArray = freedetJSON.getJSONArray("data");
-                        totalDetRecords = freedetJSONArray.length();
-                        ArrayList<FreeDet> freedetList = new ArrayList<FreeDet>();
-
-                        for (int i = 0; i < freedetJSONArray.length(); i++) {
-                            freedetList.add(FreeDet.parseFreeDet(freedetJSONArray.getJSONObject(i)));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Processing downloaded data (free)...");
                         }
-                        freedetController.createOrUpdateFreeDet(freedetList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + freedetList.size(), "" + totalDetRecords, "Free Det Info");
+                    });
 
-                    } catch (JSONException | NumberFormatException e) {
+                    try {
 
-//                        ErrorUtil.logException("LoginActivity -> Authenticate -> doInBackground() # Process Routes and Outlets",
-//                                e, routes, BugReport.SEVERITY_HIGH);
+                        FreeDetController freeDetController = new FreeDetController(getActivity());
+                        freeDetController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Freedet, networkFunctions.getFreeDet(repcode));
 
+                    } catch (Exception e) {
                         throw e;
                     }
+
+
                     /*****************end freedet**********************************************************************/
                     /*****************freedeb**********************************************************************/
-                    String freedeb = "";
-                    int totalDebRecords = 0;
 
-                    try {
-                        freedeb = networkFunctions.getFreeDebs(debcode);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw e;
-                    }
-
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Processing downloaded data (free)...");
+                        }
+                    });
 
                     // Processing freedeb
                     try {
-                        JSONObject freedebJSON = new JSONObject(freedeb);
-                        JSONArray freedebJSONArray = freedebJSON.getJSONArray("data");
-                        totalDebRecords = freedebJSONArray.length();
-                        ArrayList<FreeDeb> freedebList = new ArrayList<FreeDeb>();
 
-                        for (int i = 0; i < freedebJSONArray.length(); i++) {
-                            freedebList.add(FreeDeb.parseFreeDeb(freedebJSONArray.getJSONObject(i)));
-                        }
-                        freedebController.createOrUpdateFreeDeb(freedebList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + freedebList.size(), "" + totalDebRecords, "Free Deb Info");
-
-                    } catch (JSONException | NumberFormatException e) {
-
-//                        ErrorUtil.logException("LoginActivity -> Authenticate -> doInBackground() # Process Routes and Outlets",
-//                                e, routes, BugReport.SEVERITY_HIGH);
+                        FreeDebController freeDebController = new FreeDebController(getActivity());
+                        freeDebController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Freedeb, networkFunctions.getFreeDebs(repcode));
+                    } catch (Exception e) {
 
                         throw e;
                     }
+
+
+
                     /*****************end freedeb**********************************************************************/
                     /*****************FreeItem*********************************************************************/
-                    String freeitem = "";
-                    int totalItemRecords = 0;
-                    try {
-                        freeitem = networkFunctions.getFreeItems();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw e;
-                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Processing downloaded data (free)...");
+                        }
+                    });
 
                     // Processing freeItem
                     try {
-                        JSONObject freeitemJSON = new JSONObject(freeitem);
-                        JSONArray freeitemJSONArray = freeitemJSON.getJSONArray("data");
-                        totalItemRecords = freeitemJSONArray.length();
-                        ArrayList<FreeItem> freeitemList = new ArrayList<FreeItem>();
 
-                        for (int i = 0; i < freeitemJSONArray.length(); i++) {
-                            freeitemList.add(FreeItem.parseFreeItem(freeitemJSONArray.getJSONObject(i)));
-                        }
-                        freeitemController.createOrUpdateFreeItem(freeitemList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + freeitemList.size(), "" + totalItemRecords, "Free Item Info");
-
-                    } catch (JSONException | NumberFormatException e) {
-
-//                        ErrorUtil.logException("LoginActivity -> Authenticate -> doInBackground() # Process Routes and Outlets",
-//                                e, routes, BugReport.SEVERITY_HIGH);
+                        FreeItemController freeItemController = new FreeItemController(getActivity());
+                        freeItemController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Freeitem, networkFunctions.getFreeItems());
+                    } catch (Exception e) {
 
                         throw e;
                     }
+
+
                     /*****************end freeItem**********************************************************************/
 
                     /*****************Freemslab - kaveesha -11-06-2020 *********************************************************************/
-                    String freemslab = "";
-                    int totalMsRecords = 0;
-                    try {
-                        freemslab = networkFunctions.getFreeMslab();
-                    } catch (IOException e) {
 
-                        throw e;
-                    }
-
-                    // Processing Freemslab
-                    try {
-                        JSONObject freemslabJSON = new JSONObject(freemslab);
-                        JSONArray freemslabJSONArray = freemslabJSON.getJSONArray("data");
-                        totalMsRecords = freemslabJSONArray.length();
-                        ArrayList<FreeMslab> freeMslabsList = new ArrayList<FreeMslab>();
-
-                        for (int i = 0; i < freemslabJSONArray.length(); i++) {
-                            freeMslabsList.add(FreeMslab.parseFreeMslab(freemslabJSONArray.getJSONObject(i)));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Processing downloaded data (free)...");
                         }
-                        freeMslabController.createOrUpdateFreeMslab(freeMslabsList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + freeMslabsList.size(), "" + totalMsRecords, "Free Ms Info");
+                    });
+                    // Processing freeMslab
+                    try {
 
-                    } catch (JSONException | NumberFormatException e) {
-
-//                        ErrorUtil.logException("LoginActivity -> Authenticate -> doInBackground() # Process Routes and Outlets",
-//                                e, routes, BugReport.SEVERITY_HIGH);
+                        FreeMslabController freemSlabController = new FreeMslabController(getActivity());
+                        freemSlabController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Freemslab, networkFunctions.getFreeMslab());
+                    } catch (Exception e) {
                         throw e;
                     }
+
                     return true;
                 } else {
-                    //errors.add("Please enter correct username and password");
+
                     return false;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
 
                 return false;
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-                return false;
-            } catch (NumberFormatException e) {
+            }  catch (NumberFormatException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -748,10 +676,10 @@ public class FragmentCategoryWiseDownload extends Fragment {
     //route download asynctask
     private class routeDownload extends AsyncTask<String, Integer, Boolean> {
         CustomProgressDialog pdialog;
-        private String debcode;
+        private String repcode;
 
-        public routeDownload(String debcode) {
-            this.debcode = debcode;
+        public routeDownload(String repcode) {
+            this.repcode = repcode;
             this.pdialog = new CustomProgressDialog(getActivity());
         }
 
@@ -769,8 +697,7 @@ public class FragmentCategoryWiseDownload extends Fragment {
             try {
                 if (SharedPref.getInstance(getActivity()).getLoginUser() != null && SharedPref.getInstance(getActivity()).isLoggedIn()) {
                     new DownloadController(getActivity()).deleteAll();
-                    RouteController routeController = new RouteController(getActivity());
-                    routeController.deleteAll();
+
                     RouteDetController routedetController = new RouteDetController(getActivity());
                     routedetController.deleteAll();
                     FItenrHedController fItenrHedController = new FItenrHedController(getActivity());
@@ -781,46 +708,25 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            pdialog.setMessage("Downloading route data...");
+                            pdialog.setMessage("Downloading route details...");
                         }
                     });
+                    // Processing route
 
-                    String route = "";
-                    int totalRouteRecords = 0;
                     try {
-                        route = networkFunctions.getRoutes(debcode);
-                    } catch (IOException e) {
+                        RouteController routeController = new RouteController(getActivity());
+                        routeController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Route, networkFunctions.getRoutes(repcode));
+                    } catch (Exception e) {
                         e.printStackTrace();
+
                         throw e;
                     }
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            pdialog.setMessage("Processing downloaded data (routes)...");
-                        }
-                    });
+
 
                     // Processing route
-                    try {
-                        JSONObject routeJSON = new JSONObject(route);
-                        JSONArray routeJSONArray = routeJSON.getJSONArray("data");
-                        totalRouteRecords = routeJSONArray.length();
-                        ArrayList<Route> routeList = new ArrayList<Route>();
 
-                        for (int i = 0; i < routeJSONArray.length(); i++) {
-                            routeList.add(Route.parseRoute(routeJSONArray.getJSONObject(i)));
-                        }
-                        routeController.createOrUpdateFRoute(routeList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + routeList.size(), "" + totalRouteRecords, "Route Info");
-
-                    } catch (JSONException | NumberFormatException e) {
-
-//                        ErrorUtil.logException("LoginActivity -> Authenticate -> doInBackground() # Process Routes and Outlets",
-//                                e, routes, BugReport.SEVERITY_HIGH);
-
-                        throw e;
-                    }
                     /*****************end route**********************************************************************/
                     /*****************Route det**********************************************************************/
 
@@ -831,10 +737,10 @@ public class FragmentCategoryWiseDownload extends Fragment {
                         }
                     });
 
-                    String routedet = "";
-                    int totalRouteDetRecords = 0;
                     try {
-                        routedet = networkFunctions.getRouteDets(debcode);
+                        RouteDetController routeDetController = new RouteDetController(getActivity());
+                        routeDetController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.RouteDet, networkFunctions.getRouteDets(repcode));
                     } catch (IOException e) {
                         e.printStackTrace();
                         throw e;
@@ -848,25 +754,7 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     });
 
                     // Processing route
-                    try {
-                        JSONObject routeJSON = new JSONObject(routedet);
-                        JSONArray routeJSONArray = routeJSON.getJSONArray("data");
-                        totalRouteDetRecords = routeJSONArray.length();
-                        ArrayList<RouteDet> routeList = new ArrayList<RouteDet>();
 
-                        for (int i = 0; i < routeJSONArray.length(); i++) {
-                            routeList.add(RouteDet.parseRoute(routeJSONArray.getJSONObject(i)));
-                        }
-                        routedetController.InsertOrReplaceRouteDet(routeList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + routeList.size(), "" + totalRouteDetRecords, "Route Detail Info");
-
-                    } catch (JSONException | NumberFormatException e) {
-
-//                        ErrorUtil.logException("LoginActivity -> Authenticate -> doInBackground() # Process Routes and Outlets",
-//                                e, routes, BugReport.SEVERITY_HIGH);
-
-                        throw e;
-                    }
                     /*****************end route det**********************************************************************/
 
 
@@ -878,14 +766,9 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     });
                     return true;
                 } else {
-                    //errors.add("Please enter correct username and password");
                     return false;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-
-                return false;
-            } catch (JSONException e) {
                 e.printStackTrace();
 
                 return false;
@@ -927,11 +810,11 @@ public class FragmentCategoryWiseDownload extends Fragment {
     //outstanding download asynctask
     private class outstandingDownload extends AsyncTask<String, Integer, Boolean> {
         CustomProgressDialog pdialog;
-        private String debcode;
+        private String repcode;
         int totalRecords = 0;
 
-        public outstandingDownload(String debcode) {
-            this.debcode = debcode;
+        public outstandingDownload(String repcode) {
+            this.repcode = repcode;
             this.pdialog = new CustomProgressDialog(getActivity());
         }
 
@@ -949,22 +832,19 @@ public class FragmentCategoryWiseDownload extends Fragment {
             try {
                 if (SharedPref.getInstance(getActivity()).getLoginUser() != null && SharedPref.getInstance(getActivity()).isLoggedIn()) {
                     new DownloadController(getActivity()).deleteAll();
-                    OutstandingController outstandingController = new OutstandingController(getActivity());
-                    outstandingController.deleteAll();
+
                     /*****************fDdbNoteWithCondition*****************************************************************************/
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            pdialog.setMessage("Downloading outstanding data...");
+                            pdialog.setMessage("Downloading Outsatnding...");
                         }
                     });
 
-                    /*****************fddbnote*****************************************************************************/
-
-                    String fddbnote = "";
                     try {
-                        fddbnote = networkFunctions.getFddbNotes(debcode);
-                        // Log.d(LOG_TAG, "OUTLETS :: " + outlets);
+                        OutstandingController outstandingController = new OutstandingController(getActivity());
+                        outstandingController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.fddbnote, networkFunctions.getFddbNotes(repcode));
                     } catch (IOException e) {
                         e.printStackTrace();
                         throw e;
@@ -978,29 +858,11 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     });
 
                     // Processing fddbnote
-                    try {
-                        JSONObject fddbnoteJSON = new JSONObject(fddbnote);
-                        JSONArray fddbnoteJSONArray = fddbnoteJSON.getJSONArray("data");
-                        totalRecords = fddbnoteJSONArray.length();
-                        ArrayList<FddbNote> fddbnoteList = new ArrayList<FddbNote>();
 
-                        for (int i = 0; i < fddbnoteJSONArray.length(); i++) {
-                            fddbnoteList.add(FddbNote.parseFddbnote(fddbnoteJSONArray.getJSONObject(i)));
-                        }
-                        outstandingController.createOrUpdateFDDbNote(fddbnoteList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + fddbnoteList.size(), "" + totalRecords, "DB Note Info");
-
-                    } catch (JSONException | NumberFormatException e) {
-
-//                        ErrorUtil.logException("LoginActivity -> Authenticate -> doInBackground() # Process Routes and Outlets",
-//                                e, routes, BugReport.SEVERITY_HIGH);
-
-                        throw e;
-                    }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            pdialog.setMessage("Download complete...");
+                            pdialog.setMessage("Outstanding Download complete...");
                         }
                     });
                     return true;
@@ -1012,10 +874,7 @@ public class FragmentCategoryWiseDownload extends Fragment {
                 e.printStackTrace();
 
                 return false;
-            } catch (JSONException e) {
-                e.printStackTrace();
 
-                return false;
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 return false;
@@ -1086,6 +945,258 @@ public class FragmentCategoryWiseDownload extends Fragment {
                 if (SharedPref.getInstance(getActivity()).getLoginUser() != null && SharedPref.getInstance(getActivity()).isLoggedIn()) {
                     new DownloadController(getActivity()).deleteAll();
                     /*****************company details**********************************************************************/
+
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading banks...");
+                        }
+                    });
+                    /*****************banks**********************************************************************/
+
+                    try {
+                        BankController bankController = new BankController(getActivity());
+                        bankController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Bank, networkFunctions.getBanks());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading Towns...");
+                        }
+                    });
+
+                    // Processing towns
+                    try {
+                        TownController townController = new TownController(getActivity());
+                        townController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Towns, networkFunctions.getTowns());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    /***************** Groups - kaveesha - 2020/10/05 *****************************/
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading Groups...");
+                        }
+                    });
+
+                    // Processing group
+                    try {
+                        GroupController groupController = new GroupController(getActivity());
+                        groupController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Groups, networkFunctions.getGroups());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    /***************** Brands - kaveesha - 2020/10/06 *****************************/
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading Brands...");
+                        }
+                    });
+
+                    // Processing brands
+                    try {
+                        BrandController brandController = new BrandController(getActivity());
+                        brandController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Brand, networkFunctions.getBrands());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading Area Details...");
+                        }
+                    });
+
+                    // Processing area
+                    try {
+                        AreaController areaController = new AreaController(getActivity());
+                        areaController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Area, networkFunctions.getArea());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading Rep Allocated Debtors...");
+                        }
+                    });
+
+                    // Processing RepDebtors
+
+                    try {
+                        RepDebtorController repDebtorController = new RepDebtorController(getActivity());
+                        repDebtorController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.RepDebtor, networkFunctions.getRepDebtor(repcode));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading Cost...");
+                        }
+                    });
+                    // Processing Cost
+
+                    try {
+                        CostController costController = new CostController(getActivity());
+                        costController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Cost, networkFunctions.getCost(repcode));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    /*****************Supplier**********************************************************************/
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading Supplier...");
+                        }
+                    });
+
+                    // Processing Supplier
+
+                    try {
+                        SupplierController supplierController = new SupplierController(getActivity());
+                        supplierController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Supplier, networkFunctions.getSupplier(repcode));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Items downloaded\nDownloading reasons...");
+                        }
+                    });
+                    // Processing reasons
+
+                    try {
+                        ReasonController reasonController = new ReasonController(getActivity());
+                        reasonController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Reason, networkFunctions.getReasons());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading Settings...");
+                        }
+                    });
+                    // Processing company settings
+                    try {
+                        ReferenceSettingController settingController = new ReferenceSettingController(getActivity());
+                        settingController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Settings, networkFunctions.getReferenceSettings());
+                    } catch (Exception e) {
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    /*****************Branches*****************************************************************************/
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading data (reference details)...");
+                        }
+                    });
+
+
+                    // Processing Branches
+                    try {
+                        ReferenceDetailDownloader branchController = new ReferenceDetailDownloader(getActivity());
+                        branchController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Reference, networkFunctions.getReferences(repcode));
+                    } catch (Exception e) {
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    /***************** Types - *************************************************/
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading Types....");
+                        }
+                    });
+
+                    // Processing Types
+                    try {
+                        TypeController typeController = new TypeController(getActivity());
+                        typeController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Type, networkFunctions.getTypes());
+                    } catch (Exception e) {
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading SalRep...");
+                        }
+                    });
+
+                    try {
+                        SalRepController salRepController = new SalRepController(getActivity());
+                        salRepController.deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.SalRep, networkFunctions.getSalRep(repcode.trim(), pref.getUserPwd().trim()));
+                    } catch (Exception e) {
+                        errors.add(e.toString());
+                        throw e;
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pdialog.setMessage("Downloading data(Company details)...");
+                        }
+                    });
+                    // Processing controls
+                    try {
+                        new CompanyDetailsController(getActivity()).deleteAll();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Controllist, networkFunctions.getCompanyDetails(repcode));
+                    } catch (Exception e) {
+                        errors.add(e.toString());
+                        throw e;
+                    }
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -1255,11 +1366,11 @@ public class FragmentCategoryWiseDownload extends Fragment {
     //stock download asynctask
     private class stockDownload extends AsyncTask<String, Integer, Boolean> {
         CustomProgressDialog pdialog;
-        private String debcode;
+        private String repcode;
         int totalRecords = 0;
 
-        public stockDownload(String debcode) {
-            this.debcode = debcode;
+        public stockDownload(String repcode) {
+            this.repcode = repcode;
             this.pdialog = new CustomProgressDialog(getActivity());
         }
 
@@ -1286,41 +1397,17 @@ public class FragmentCategoryWiseDownload extends Fragment {
                         }
                     });
 
-                    String stock = "";
                     try {
-                        stock = networkFunctions.getItemLocations(debcode);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        ItemLocController itemLocController = new ItemLocController(getActivity());
+                        itemLocController.deleteAllItemLoc();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.ItemLoc, networkFunctions.getItemLocations(repcode));
+                    } catch (Exception e) {
+
                         throw e;
                     }
 
                     // Processing stock
-                    try {
-                        JSONObject stockJSON = new JSONObject(stock);
-                        JSONArray stockJSONArray = stockJSON.getJSONArray("data");
-                        Log.d("mithsu", "doInBackground: " + stockJSONArray);
-                        totalRecords = stockJSONArray.length();
-                        ArrayList<ItemLoc> stockList = new ArrayList<ItemLoc>();
 
-                        for (int i = 0; i < stockJSONArray.length(); i++) {
-                            stockList.add(ItemLoc.parseItemLocs(stockJSONArray.getJSONObject(i)));
-                        }
-
-                        //mithsu//
-                        ItemLocController itemLocController = new ItemLocController(getActivity());
-                        itemLocController.deleteAllItemLoc();
-                        itemLocController.InsertOrReplaceItemLoc(stockList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + stockList.size(), "" + totalRecords, "Item Loc Info");
-//                        UtilityContainer.download(getActivity(), TaskTypeDownload.ItemLoc,
-//                                networkFunctions.getItemLocations(SharedPref
-//                                        .getInstance(getActivity())
-//                                        .getLoginUser().getFREP_CODE()));
-
-                        //mithsu//
-
-                    } catch (JSONException | NumberFormatException e) {
-                        throw e;
-                    }
                     /*****************end stock ***************************************************/
 
                     getActivity().runOnUiThread(new Runnable() {
@@ -1337,11 +1424,7 @@ public class FragmentCategoryWiseDownload extends Fragment {
                 e.printStackTrace();
 
                 return false;
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-                return false;
-            } catch (NumberFormatException e) {
+            }  catch (NumberFormatException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -1379,11 +1462,11 @@ public class FragmentCategoryWiseDownload extends Fragment {
     //price download asynctask
     private class priceDownload extends AsyncTask<String, Integer, Boolean> {
         CustomProgressDialog pdialog;
-        private String debcode;
+        private String repcode;
         int totalRecords = 0;
 
-        public priceDownload(String debcode) {
-            this.debcode = debcode;
+        public priceDownload(String repcode) {
+            this.repcode = repcode;
             this.pdialog = new CustomProgressDialog(getActivity());
         }
 
@@ -1406,42 +1489,21 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            pdialog.setMessage("Downloading Prices data...");
+                            pdialog.setMessage("Items downloaded\nDownloading Item Pri...");
                         }
                     });
+                    // Processing Item Pri
 
-                    String price = "";
                     try {
-                        price = networkFunctions.getItemPrices(debcode);
+                        ItemPriceController itemPriceController = new ItemPriceController(getActivity());
+                        itemPriceController.deleteAllItemPri();
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.ItemPri, networkFunctions.getItemPrices(repcode));
                     } catch (IOException e) {
                         e.printStackTrace();
                         throw e;
                     }
 
-                    // Processing price
-                    try {
-                        JSONObject priceJSON = new JSONObject(price);
-                        JSONArray priceJSONArray = priceJSON.getJSONArray("data");
-                        totalRecords = priceJSONArray.length();
-                        ArrayList<ItemPri> priceList = new ArrayList<ItemPri>();
 
-                        for (int i = 0; i < priceJSONArray.length(); i++) {
-                            priceList.add(ItemPri.parseItemPrices(priceJSONArray.getJSONObject(i)));
-                        }
-
-                        ItemPriceController itemPriceController = new ItemPriceController(getActivity());
-                        itemPriceController.deleteAllItemPri();
-                        itemPriceController.InsertOrReplaceItemPri(priceList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + priceList.size(), "" + totalRecords, "Item Price Info");
-//
-//                        UtilityContainer.download(getActivity(), TaskTypeDownload.ItemPri,
-//                                networkFunctions.getItemLocations(SharedPref
-//                                        .getInstance(getActivity())
-//                                        .getLoginUser().getFREP_CODE()));
-
-                    } catch (JSONException | NumberFormatException e) {
-                        throw e;
-                    }
                     /*****************end price ***************************************************/
 
                     getActivity().runOnUiThread(new Runnable() {
@@ -1458,11 +1520,7 @@ public class FragmentCategoryWiseDownload extends Fragment {
                 e.printStackTrace();
 
                 return false;
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-                return false;
-            } catch (NumberFormatException e) {
+            }  catch (NumberFormatException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -1527,50 +1585,26 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            pdialog.setMessage("Downloading customer data...");
+                            pdialog.setMessage("Downloading Customers...");
                         }
                     });
 
-                    String customer = "";
                     try {
-//                        customer = networkFunctions.getItems(debcode);
-                        customer = networkFunctions.getCustomer(repcode);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw e;
-                    }
-
-                    // Processing customer
-                    try {
-                        JSONObject customerJSON = new JSONObject(customer);
-                        JSONArray customerJSONArray = customerJSON
-                                .getJSONArray("data");
-                        totalRecords = customerJSONArray.length();
-                        ArrayList<Debtor> customerList = new ArrayList<Debtor>();
-
-                        for (int i = 0; i < customerJSONArray.length(); i++) {
-                            customerList.add(Debtor.parseOutlet(customerJSONArray.getJSONObject(i)));
-                        }
-
                         CustomerController customerController = new CustomerController(getActivity());
                         customerController.deleteAll();
-                        customerController.InsertOrReplaceDebtor(customerList);
-                        new DownloadController(getActivity()).createOrUpdateDownload("" + customerList.size(), "" + totalRecords, "Debtor Info");
-
-//                        UtilityContainer.download(getActivity(), TaskTypeDownload.Customers,
-//                                networkFunctions.getCustomer(SharedPref
-//                                        .getInstance(getActivity())
-//                                        .getLoginUser().getFREP_CODE()));
-
-                    } catch (JSONException | NumberFormatException e) {
+                        UtilityContainer.download(getActivity(), TaskTypeDownload.Customers, networkFunctions.getCustomer(repcode));
+                    } catch (Exception e) {
+                       e.printStackTrace();
                         throw e;
                     }
+                    // Processing customer
+
                     /*****************end sutomer *************************************************/
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            pdialog.setMessage("Download complete...");
+                            pdialog.setMessage("get Customer Download complete...");
                         }
                     });
                     return true;
@@ -1578,10 +1612,6 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     return false;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-
-                return false;
-            } catch (JSONException e) {
                 e.printStackTrace();
 
                 return false;

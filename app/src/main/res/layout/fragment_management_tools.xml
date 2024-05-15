@@ -149,14 +149,14 @@
                             android:id="@+id/imgDownload"
                             android:layout_width="@dimen/finac_dashboard_image_height"
                             android:layout_height="@dimen/finac_dashboard_image_height"
-                            android:visibility="invisible"
+                            android:visibility="visible"
                             android:src="@drawable/circle_ic_download_new"/>
 
                         <com.datamation.kfdupgradesfa.utils.CustomFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:singleLine="true"
-                            android:visibility="invisible"
+                            android:visibility="visible"
                             android:text="CATEGORY WISE DOWNLOAD"
                             android:textAlignment="center"
                             android:textColor="#000"

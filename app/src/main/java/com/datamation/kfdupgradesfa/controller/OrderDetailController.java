@@ -20,6 +20,7 @@ import com.datamation.kfdupgradesfa.model.Product;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -1379,5 +1380,46 @@ public class OrderDetailController {
         return SOList;
     }
 
+    public int AutoDataClearingOrderDetail() {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, -1);
+
+        Date previousMonthDate = calendar.getTime();
+
+        String previousMonthDateString = new SimpleDateFormat("yyyy-MM-dd").format(previousMonthDate);
+        Log.v("Previous Month", previousMonthDateString + "");
+
+        try {
+
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDDET ;
+            cursor = dB.rawQuery(selectQuery, null);
+            int cn = cursor.getCount();
+
+            if (cn > 0) {
+                count = dB.delete(ValueHolder.TABLE_ORDDET, "TxnDate < ?", new String[]{previousMonthDateString});
+                Log.v("Success", count + "");
+            }
+
+        } catch (Exception e) {
+            Log.v(TAG + " Exception", e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+        return count;
+
+    }
 
 }

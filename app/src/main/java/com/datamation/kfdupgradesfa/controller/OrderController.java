@@ -1686,5 +1686,46 @@ public class OrderController {
 
     }
 
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+    public int AutoDataClearingOrder() {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, -1);
+
+        Date previousMonthDate = calendar.getTime();
+
+        String previousMonthDateString = new SimpleDateFormat("yyyy-MM-dd").format(previousMonthDate);
+        Log.v("Previous Month", previousMonthDateString + "");
+
+        try {
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDHED ;
+            cursor = dB.rawQuery(selectQuery, null);
+            int cn = cursor.getCount();
+
+            if (cn > 0) {
+                count = dB.delete(ValueHolder.TABLE_ORDHED, "TxnDate < ?", new String[]{previousMonthDateString});
+                Log.v("Success", count + "");
+            }
+
+        } catch (Exception e) {
+            Log.v(TAG + " Exception", e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+        return count;
+
+    }
+
 }

@@ -62,6 +62,7 @@ import com.datamation.kfdupgradesfa.controller.ItemLocController;
 import com.datamation.kfdupgradesfa.controller.ItemPriceController;
 import com.datamation.kfdupgradesfa.controller.LocationsController;
 import com.datamation.kfdupgradesfa.controller.OrderController;
+import com.datamation.kfdupgradesfa.controller.OrderDetailController;
 import com.datamation.kfdupgradesfa.controller.OutstandingController;
 import com.datamation.kfdupgradesfa.controller.ReasonController;
 import com.datamation.kfdupgradesfa.controller.ReceiptController;
@@ -681,6 +682,8 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
             try {
                 if (SharedPref.getInstance(getActivity()).getLoginUser() != null && SharedPref.getInstance(getActivity()).isLoggedIn()) {
                     new DownloadController(getActivity()).deleteAll();
+                    new OrderController(context).AutoDataClearingOrder();
+                    new OrderDetailController(context).AutoDataClearingOrderDetail();
 
                     Log.d(">>>>>***", "isinstaled: "+pref.getIsFirstInstallation());
                     if (pref.getIsFirstInstallation().equals(false)) {

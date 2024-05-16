@@ -349,6 +349,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ValueHolder.FINVDETL3_SEQ_NO + " TEXT, " + ValueHolder.FINVDETL3_TAX_AMT + " TEXT, " + ValueHolder.FINVDETL3_TAX_COM_CODE + " TEXT, " +
             ValueHolder.FINVDETL3_TXN_DATE + " TEXT); ";
 
+    private static final String CREATE_TBLCONNECTION = "CREATE  TABLE IF NOT EXISTS " + ValueHolder.TABLE_CONNECTION +
+            " (" + ValueHolder.CONNE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ValueHolder.CONN_BASE_URL + " TEXT, " +
+            ValueHolder.CONN_NAME + " TEXT, "  + ValueHolder.CONN_STATUS + " TEXT); ";
+
+
+
     @Override
     public void onCreate(SQLiteDatabase arg0) {
         arg0.execSQL(CREATE_FDEBTOR_TABLE);
@@ -417,6 +423,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         arg0.execSQL(CREATE_TBLINVHEDL3_TABLE);
         arg0.execSQL(CREATE_TBLINVDETL3_TABLE);
         arg0.execSQL(IDXFSALREP);
+        arg0.execSQL(CREATE_TBLCONNECTION);
 
     }
 
@@ -493,6 +500,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             arg0.execSQL(CREATE_TBLINVHEDL3_TABLE);
             arg0.execSQL(CREATE_TBLINVDETL3_TABLE);
             arg0.execSQL(IDXFSALREP);
+            arg0.execSQL(CREATE_TBLCONNECTION);
 
             try {
                 arg0.execSQL("ALTER TABLE TblRecHedS ADD COLUMN Status TEXT DEFAULT ''");

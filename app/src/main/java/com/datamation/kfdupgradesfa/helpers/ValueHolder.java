@@ -121,6 +121,7 @@ public class ValueHolder {
     public static final String TABLE_ATTENDANCE = "TblAttendance";
     public static final String TABLE_FINVHEDL3 = "TblinvHedL3";
     public static final String TABLE_FINVDETL3 = "TblinvDetL3";
+    public static final String TABLE_CONNECTION = "TblConnection";
 
     // Company Branch
     public static final String BRANCH_CODE = "BranchCode";
@@ -516,6 +517,15 @@ public class ValueHolder {
     public static final String FINVDETL3_TAX_AMT = "TaxAmt";
     public static final String FINVDETL3_TAX_COM_CODE = "TaxComCode";
     public static final String FINVDETL3_TXN_DATE = "TxnDate";
+
+
+    //table TableConnection details
+
+    public static final String CONNE_ID = "Conne_id";
+    public static final String CONN_BASE_URL = "Base_URL";
+    public static final String CONN_STATUS = "Conn_Status";
+    public static final String CONN_NAME = "Conn_Name";
+
 
 
 }

@@ -521,10 +521,9 @@ public class ValueHolder {
 
     //table TableConnection details
 
-    public static final String CONNE_ID = "Conne_id";
-    public static final String CONN_BASE_URL = "Base_URL";
-    public static final String CONN_STATUS = "Conn_Status";
-    public static final String CONN_NAME = "Conn_Name";
+    public static final String CONN_BASE_URL = "BaseURL";
+    public static final String CONN_STATUS = "ConnStatus";
+    public static final String CONN_NAME = "ConnName";
 
 
 

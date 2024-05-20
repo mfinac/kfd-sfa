@@ -350,7 +350,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ValueHolder.FINVDETL3_TXN_DATE + " TEXT); ";
 
     private static final String CREATE_TBLCONNECTION = "CREATE  TABLE IF NOT EXISTS " + ValueHolder.TABLE_CONNECTION +
-            " (" + ValueHolder.CONNE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ValueHolder.CONN_BASE_URL + " TEXT, " +
+            " (" + ValueHolder.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ValueHolder.CONN_BASE_URL + " TEXT, " +
             ValueHolder.CONN_NAME + " TEXT, "  + ValueHolder.CONN_STATUS + " TEXT); ";
 
 

@@ -13,6 +13,7 @@ import android.view.Window;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.datamation.kfdupgradesfa.R;
+import com.datamation.kfdupgradesfa.controller.BaseUrlController;
 import com.datamation.kfdupgradesfa.controller.OrderDetailController;
 import com.datamation.kfdupgradesfa.controller.ReferenceController;
 import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
@@ -62,7 +63,7 @@ public class OrderActivity<extras> extends AppCompatActivity implements OrderRes
         pref = SharedPref.getInstance(context);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("SALES ORDER (APP VERSION-"+getVersionCode()+") "+pref.getConnectionName());
+        setTitle("SALES ORDER (APP VERSION-"+getVersionCode()+") "+new BaseUrlController(context).getActiveConnectionName(context));
 
 
         PagerSlidingTabStrip slidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.presale_tab_strip);

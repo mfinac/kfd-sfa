@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.datamation.kfdupgradesfa.R;
+import com.datamation.kfdupgradesfa.controller.BaseUrlController;
 import com.datamation.kfdupgradesfa.controller.ReceiptDetController;
 import com.datamation.kfdupgradesfa.helpers.ReceiptResponseListener;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
@@ -54,7 +55,7 @@ public class ReceiptActivity extends AppCompatActivity implements ReceiptRespons
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        toolbar.inflateMenu(R.menu.mnu_exit);
-        toolbar.setTitle("RECEIPT(APP VERSION-"+getVersionCode()+") "+pref.getConnectionName());
+        toolbar.setTitle("RECEIPT(APP VERSION-"+getVersionCode()+") "+new BaseUrlController(context).getActiveConnectionName(context));
 
         PagerSlidingTabStrip slidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.presale_tab_strip);
         viewPager = (ViewPager) findViewById(R.id.presale_viewpager);

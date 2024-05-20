@@ -759,4 +759,15 @@ public class SharedPref {
         editor.apply();
     }
 
+    public Boolean getActiveStatus() {
+        return sharedPref.getBoolean("ActiveStatus", false);
+    }
+
+    public void setActiveStatus(Boolean val) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("ActiveStatus", val);
+        editor.apply();
+    }
+
+
 }

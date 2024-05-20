@@ -42,6 +42,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.datamation.kfdupgradesfa.R;
 import com.datamation.kfdupgradesfa.api.ApiCllient;
 import com.datamation.kfdupgradesfa.api.ApiInterface;
+import com.datamation.kfdupgradesfa.controller.BaseUrlController;
 import com.datamation.kfdupgradesfa.controller.CompanyDetailsController;
 import com.datamation.kfdupgradesfa.controller.DayNPrdDetController;
 import com.datamation.kfdupgradesfa.controller.DownloadController;
@@ -152,7 +153,7 @@ public class DebtorDetailsActivity extends AppCompatActivity {
         context = this;
         gpsTracker = new GPSTracker(context);
         debCode = sharedPref.getSelectedDebCode();
-        setTitle("CUSTOMER DETAILS (APP VERSION-"+getVersionCode()+") "+sharedPref.getConnectionName());
+        setTitle("CUSTOMER DETAILS (APP VERSION-"+getVersionCode()+") "+ new BaseUrlController(context).getActiveConnectionName(context));
 
         Intent dataIntent = getIntent();
         if (dataIntent.hasExtra("outlet")) {

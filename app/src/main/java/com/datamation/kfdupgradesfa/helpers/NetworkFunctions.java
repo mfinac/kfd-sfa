@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.datamation.kfdupgradesfa.R;
+import com.datamation.kfdupgradesfa.controller.BaseUrlController;
 import com.datamation.kfdupgradesfa.model.CustomNameValuePair;
 import com.datamation.kfdupgradesfa.model.Debtor;
 import com.datamation.kfdupgradesfa.model.SalRep;
@@ -55,7 +56,9 @@ public class NetworkFunctions {
     public NetworkFunctions(Context contextt) {
         this.context = contextt;
         pref = SharedPref.getInstance(context);
-        String domain = pref.getBaseURL();
+
+        String domain = new BaseUrlController(context).getActiveURL(context);
+       // String domain = pref.getBaseURL();
         Log.d("baseURL>>>>>>>>>", domain);
         baseURL = domain + context.getResources().getString(R.string.connection_string);
         //dbname = pref.getDistDB();

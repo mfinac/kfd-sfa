@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.datamation.kfdupgradesfa.R;
+import com.datamation.kfdupgradesfa.controller.BaseUrlController;
 import com.datamation.kfdupgradesfa.fragment.debtorlist.AllCustomerFragment;
 import com.datamation.kfdupgradesfa.fragment.debtorlist.RouteCustomerFragment;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
@@ -51,7 +52,7 @@ public class CustomerListActivity extends AppCompatActivity{
         TextView title = (TextView) toolbar.findViewById(R.id.toolbar_title);
         ImageView backIc = (ImageView) toolbar.findViewById(R.id.back);
         //Switch gpsSw = (Switch)toolbar.findViewById(R.id.gps_switch);
-        title.setText("CUSTOMER LIST "+pref.getConnectionName());
+        title.setText("CUSTOMER LIST "+ new BaseUrlController(context).getActiveConnectionName(context));
          backIc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

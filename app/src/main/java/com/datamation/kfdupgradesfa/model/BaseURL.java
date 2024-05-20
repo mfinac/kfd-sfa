@@ -2,41 +2,34 @@ package com.datamation.kfdupgradesfa.model;
 
 public class BaseURL {
 
-    private String CONNE_ID;
-    private String CONN_BASE_URL;
-    private String CONN_NAME;
-    private String CONN_STATUS;
 
-    public String getCONNE_ID() {
-        return CONNE_ID;
+    private String BASE_URL_URL;
+    private String BASE_URL_NAME;
+    private String BASE_URL_STATUS;
+
+
+    public String getBASE_URL_URL() {
+        return BASE_URL_URL;
     }
 
-    public void setCONNE_ID(String CONNE_ID) {
-        this.CONNE_ID = CONNE_ID;
+    public void setBASE_URL_URL(String BASE_URL_URL) {
+        this.BASE_URL_URL = BASE_URL_URL;
     }
 
-    public String getCONN_BASE_URL() {
-        return CONN_BASE_URL;
+    public String getBASE_URL_NAME() {
+        return BASE_URL_NAME;
     }
 
-    public void setCONN_BASE_URL(String CONN_BASE_URL) {
-        this.CONN_BASE_URL = CONN_BASE_URL;
+    public void setBASE_URL_NAME(String BASE_URL_NAME) {
+        this.BASE_URL_NAME = BASE_URL_NAME;
     }
 
-    public String getCONN_NAME() {
-        return CONN_NAME;
+    public String getBASE_URL_STATUS() {
+        return BASE_URL_STATUS;
     }
 
-    public void setCONN_NAME(String CONN_NAME) {
-        this.CONN_NAME = CONN_NAME;
-    }
-
-    public String getCONN_STATUS() {
-        return CONN_STATUS;
-    }
-
-    public void setCONN_STATUS(String CONN_STATUS) {
-        this.CONN_STATUS = CONN_STATUS;
+    public void setBASE_URL_STATUS(String BASE_URL_STATUS) {
+        this.BASE_URL_STATUS = BASE_URL_STATUS;
     }
 
 

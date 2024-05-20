@@ -1,6 +1,7 @@
 package com.datamation.kfdupgradesfa.view;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -19,6 +20,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +30,7 @@ import com.datamation.kfdupgradesfa.api.ApiInterface;
 import com.datamation.kfdupgradesfa.controller.AreaController;
 import com.datamation.kfdupgradesfa.controller.AttendanceController;
 import com.datamation.kfdupgradesfa.controller.BankController;
+import com.datamation.kfdupgradesfa.controller.BaseUrlController;
 import com.datamation.kfdupgradesfa.controller.BrandController;
 import com.datamation.kfdupgradesfa.controller.CompanyDetailsController;
 import com.datamation.kfdupgradesfa.controller.CostController;
@@ -62,7 +65,9 @@ import com.datamation.kfdupgradesfa.controller.TypeController;
 import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
 import com.datamation.kfdupgradesfa.fragment.FragmentMarkAttendance;
 import com.datamation.kfdupgradesfa.fragment.FragmentTools;
+import com.datamation.kfdupgradesfa.helpers.ValueHolder;
 import com.datamation.kfdupgradesfa.model.Attendance;
+import com.datamation.kfdupgradesfa.model.BaseURL;
 import com.datamation.kfdupgradesfa.model.Control;
 import com.datamation.kfdupgradesfa.model.Debtor;
 import com.datamation.kfdupgradesfa.model.NonPrdHed;
@@ -74,6 +79,7 @@ import com.datamation.kfdupgradesfa.settings.TaskTypeDownload;
 import com.datamation.kfdupgradesfa.utils.GPSTracker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
@@ -85,7 +91,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -153,6 +162,8 @@ public class ActivityHome extends AppCompatActivity {
     public static BottomNavigationView navigation;
     public double latitude, longitude;
 
+    Spinner spConnection;
+
     private ScheduledExecutorService scheduler;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -203,74 +214,19 @@ public class ActivityHome extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Please do the day end", Toast.LENGTH_LONG).show();
                                     Log.d("Test Attendance", "Day start without previous day end");
                                 } else {
-                                    // Commented by MENAKA on request of KFD //
-//                            if (new AttendanceController(context).hasTodayRecord() < 1) {
-//                                if ((sharedPref.getGlobalVal("dayStart").equalsIgnoreCase("Y")) && (sharedPref.getGlobalVal("DayStartDate").equalsIgnoreCase(dateFormat.format(new Date(timeInMillis))))) {
-                                    // Commented by MENAKA on request of KFD //
-//                            if(pref.isOtherDownload()){
+
                                     Log.d("Test Attendance", "Day start ok for today");
                                     Intent intent = new Intent(getApplicationContext(), CustomerListActivity.class);
                                     startActivity(intent);
                                     finish();
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), "Please do other download inside category wise download", Toast.LENGTH_LONG).show();
 //
-//                            }
-
-                                    // Commented by MENAKA on request of KFD //
-//                                } else {
-//                                    Log.d("Test Attendance", "Do day start for today");
-//                                    UtilityContainer.mLoadFragment(new FragmentMarkAttendance(), ActivityHome.this);
-//                                    Toast.makeText(getApplicationContext(), "Please enter attendance details", Toast.LENGTH_LONG).show();
-//
-//                                }
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), "Day end is done for today. You can't continue, Please contact help-desk", Toast.LENGTH_LONG).show();
-//
-//                            }
-                                    // Commented by MENAKA on request of KFD //
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), "Data sync issue occured..! please do the sync again", Toast.LENGTH_LONG).show();
 
                             }
 
-//                        if (sharedPref.getGlobalVal("SyncDate").equalsIgnoreCase(dateFormat.format(new Date(timeInMillis)))) {
-//                            Log.d("Test SecondarySync", "Secondary sync done");
-//                            if (tours.size() > 0 && !(sharedPref.getGlobalVal("DayStartDate").equalsIgnoreCase(dateFormat.format(new Date(timeInMillis))))) {
-//                                UtilityContainer.mLoadFragment(new FragmentMarkAttendance(), ActivityHome.this);
-//                                Toast.makeText(getApplicationContext(), "Please do the day end", Toast.LENGTH_LONG).show();
-//                                Log.d("Test Attendance", "Day start without previous day end");
-//                            } else {
-//                                if (new AttendanceController(context).hasTodayRecord() < 1) {
-//                                    if ((sharedPref.getGlobalVal("dayStart").equalsIgnoreCase("Y")) && (sharedPref.getGlobalVal("DayStartDate").equalsIgnoreCase(dateFormat.format(new Date(timeInMillis))))) {
 //
-//                                        if(pref.isSyncedSuccess()){
-//                                            Log.d("Test Attendance", "Day start ok for today");
-//                                            Intent intent = new Intent(getApplicationContext(), CustomerListActivity.class);
-//                                            startActivity(intent);
-//                                            finish();
-//                                        } else {
-//                                            Toast.makeText(getApplicationContext(), "Please do the secondary sync", Toast.LENGTH_LONG).show();
-//
-//                                        }
-//                                    } else {
-//                                        Log.d("Test Attendance", "Do day start for today");
-//                                        UtilityContainer.mLoadFragment(new FragmentMarkAttendance(), ActivityHome.this);
-//                                        Toast.makeText(getApplicationContext(), "Please enter attendance details", Toast.LENGTH_LONG).show();
-//
-//                                    }
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), "Day end is done for today. You can't continue, Please contact help-desk", Toast.LENGTH_LONG).show();
-//
-//                                }
-//                            }
-//
-//
-//                        } else {
-//                            Toast.makeText(getApplicationContext(), "Please do the secondary sync", Toast.LENGTH_LONG).show();
-//                            //UtilityContainer.mLoadFragment(new FragmentMarkAttendance(), ActivityHome.this);
-//                        }
                         }
 
                     case R.id.navigation_tools:
@@ -288,6 +244,7 @@ public class ActivityHome extends AppCompatActivity {
     };
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -301,20 +258,86 @@ public class ActivityHome extends AppCompatActivity {
         //loggedUser = pref.getLoginUser();
         currentVersion = getVersionCode();
         timeInMillis = System.currentTimeMillis();
+        pref.setActiveStatus(true);
+        new BaseUrlController(context).deleteAll();
 
-        setTitle("HOME (APP VERSION-"+currentVersion+") "+pref.getConnectionName());
+
+        ArrayList<String> splist = new ArrayList<>();
+        splist.add("SLT");
+        splist.add("Dialog");
+
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+            View customActionBarView = inflater.inflate(R.layout.action_bar_spinner, null);
+
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setCustomView(customActionBarView);
+
+
+            Spinner actionBarSpinner = customActionBarView.findViewById(R.id.action_bar_spinner);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                    R.array.titles_array, android.R.layout.simple_spinner_item);
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            actionBarSpinner.setAdapter(adapter);
+
+            actionBarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedTitle = (String) parent.getItemAtPosition(position);
+                    setTitle("HOME (APP VERSION - " + currentVersion + ")    " + selectedTitle);
+                    BaseURL baseURL = new BaseURL();
+                    if (pref.getActiveStatus().equals(true)) {
+                        if (actionBarSpinner.getSelectedItem().equals("SLT")) {
+                            //baseURL.setBASE_URL_URL("http://124.43.5.227:1030");//Live-SLT
+                            baseURL.setBASE_URL_URL("http://124.43.5.227:1031");//testing-slt
+                            baseURL.setBASE_URL_NAME("SLT");
+                            baseURL.setBASE_URL_STATUS("Active");
+                            ArrayList<BaseURL> BaseUrlList = new ArrayList<BaseURL>();
+                            BaseUrlList.add(baseURL);
+
+
+                            new BaseUrlController(context).deleteAll();
+                            new BaseUrlController(context).CreateOrUpdateBaseUrl(BaseUrlList);
+                            Toast.makeText(context, "Base-URL " + baseURL.getBASE_URL_NAME(), Toast.LENGTH_SHORT).show();
+
+
+                        } else if (actionBarSpinner.getSelectedItem().equals("DIALOG")) {
+                           // baseURL.setBASE_URL_URL("http://123.231.15.146:1030");// Live-Dialog
+                            baseURL.setBASE_URL_URL("http://123.231.15.146:1031");//testing-dialog
+                            baseURL.setBASE_URL_NAME("Dialog");
+                            baseURL.setBASE_URL_STATUS("Active");
+                            ArrayList<BaseURL> BaseUrlList = new ArrayList<BaseURL>();
+                            BaseUrlList.add(baseURL);
+
+
+                            new BaseUrlController(context).deleteAll();
+                            new BaseUrlController(context).CreateOrUpdateBaseUrl(BaseUrlList);
+                            Toast.makeText(context, "Base-URL " + baseURL.getBASE_URL_NAME(), Toast.LENGTH_SHORT).show();
+
+                        }
+
+
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
         //set home frgament
         changeFragment(0);
-//        if (NetworkUtil.isNetworkAvailable(context)) {
-//            new checkVersion().execute();
-//        } else {
-//            Toast.makeText(context, "No internet connection for validate app version", Toast.LENGTH_LONG).show();
-//        }
+//
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         pref.setImageFlag("1");
 
-//MMS - 2022/01/28 *&*&*&*&*&*&*&*&*&*&&*&*&*&*&*&*&*&
+
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -366,7 +389,7 @@ public class ActivityHome extends AppCompatActivity {
                     LocalTime now = null;
                     String timeNow = "";
 
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         now = LocalTime.now();
                         timeNow = now.format(DateTimeFormatter.ofPattern(pattern));
                     }
@@ -615,6 +638,7 @@ public class ActivityHome extends AppCompatActivity {
                 pref.setUserPwd("");
                 pref.setUserPrefix("");
                 pref.clearPref();
+                pref.setActiveStatus(false);
             }
         });
         Ldialog.show();

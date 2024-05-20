@@ -86,4 +86,14 @@
     <!-- Print Preview Van Sale Invoice -->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="DATABASE_NAME">kfdsfa_database.db</string>
+
+
+
+    <string-array name="titles_array">
+        <item>-SELECT CON-</item>
+        <item>SLT</item>
+        <item>DIALOG</item>
+    </string-array>
+
+
 </resources>

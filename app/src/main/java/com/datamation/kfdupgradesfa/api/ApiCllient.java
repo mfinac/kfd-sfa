@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.datamation.kfdupgradesfa.R;
+import com.datamation.kfdupgradesfa.controller.BaseUrlController;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
 
 import java.util.concurrent.TimeUnit;
@@ -32,7 +33,8 @@ public class ApiCllient {
                 .writeTimeout(2, TimeUnit.MINUTES);
 
         pref = SharedPref.getInstance(contextt);
-        String domain = pref.getBaseURL();
+        //String domain = pref.getBaseURL();
+        String domain = new BaseUrlController(contextt).getActiveURL(contextt);
         Log.d("baseURL>>>>>>>>>", domain);
         baseURL = domain + contextt.getResources().getString(R.string.connection_string);
 

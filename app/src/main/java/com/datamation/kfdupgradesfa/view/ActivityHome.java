@@ -161,6 +161,7 @@ public class ActivityHome extends AppCompatActivity {
     private LocationManager lm;
     public static BottomNavigationView navigation;
     public double latitude, longitude;
+    private String selectedTitle;
 
     Spinner spConnection;
 
@@ -258,8 +259,8 @@ public class ActivityHome extends AppCompatActivity {
         //loggedUser = pref.getLoginUser();
         currentVersion = getVersionCode();
         timeInMillis = System.currentTimeMillis();
-        pref.setActiveStatus(true);
-        new BaseUrlController(context).deleteAll();
+       // pref.setActiveStatus(false);
+       // new BaseUrlController(context).deleteAll();
 
 
         ArrayList<String> splist = new ArrayList<>();
@@ -284,13 +285,24 @@ public class ActivityHome extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             actionBarSpinner.setAdapter(adapter);
 
+            selectedTitle = pref.getSelectedTitle();
+            if (selectedTitle != null) {
+                int spinnerPosition = adapter.getPosition(selectedTitle);
+                actionBarSpinner.setSelection(spinnerPosition);
+            }
+
             actionBarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String selectedTitle = (String) parent.getItemAtPosition(position);
+                    selectedTitle = (String) parent.getItemAtPosition(position);
                     setTitle("HOME (APP VERSION - " + currentVersion + ")    " + selectedTitle);
                     BaseURL baseURL = new BaseURL();
-                    if (pref.getActiveStatus().equals(true)) {
+                    if(!selectedTitle.equals("-SELECT CON-")){
+                        pref.setActiveStatus(true);
+                        pref.setSelectedTitle(selectedTitle);
+                    }
+
+                    if (pref.getActiveStatus()) {
                         if (actionBarSpinner.getSelectedItem().equals("SLT")) {
                             //baseURL.setBASE_URL_URL("http://124.43.5.227:1030");//Live-SLT
                             baseURL.setBASE_URL_URL("http://124.43.5.227:1031");//testing-slt
@@ -320,8 +332,10 @@ public class ActivityHome extends AppCompatActivity {
 
                         }
 
-
+                    }else {
+                        Toast.makeText(context, "No Base URL ", Toast.LENGTH_SHORT).show();
                     }
+
                 }
 
                 @Override

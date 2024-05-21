@@ -759,14 +759,24 @@ public class SharedPref {
         editor.apply();
     }
 
-    public Boolean getActiveStatus() {
-        return sharedPref.getBoolean("ActiveStatus", false);
+    public void setActiveStatus(boolean status) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("activeStatus", status);
+        editor.apply();
     }
 
-    public void setActiveStatus(Boolean val) {
+    public boolean getActiveStatus() {
+        return sharedPref.getBoolean("activeStatus", false);
+    }
+
+    public void setSelectedTitle(String title) {
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean("ActiveStatus", val);
+        editor.putString("selectedTitle", title);
         editor.apply();
+    }
+
+    public String getSelectedTitle() {
+        return sharedPref.getString("selectedTitle", null);
     }
 
 

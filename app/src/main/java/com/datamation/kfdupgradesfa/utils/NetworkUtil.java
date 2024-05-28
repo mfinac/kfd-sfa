@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.datamation.kfdupgradesfa.helpers.ValueHolder;
 
@@ -107,10 +108,12 @@ public class NetworkUtil {
                     // Convert speeds to Mbps
                     double downloadSpeedMbpsss = downloadSpeedMbps / 1024.0;
                     double uploadSpeedMbpssss = uploadSpeedMbps / 1024.0;
+                    double roundedSpeed = Math.round(uploadSpeedMbpssss);
+                    Log.wtf("Network Util Class", String.valueOf(roundedSpeed));
+                    Toast.makeText(context,"Network Speed - "+ String.valueOf(roundedSpeed + "Mbps"),Toast.LENGTH_LONG).show();
 
-                    Log.wtf("Network Util Class", String.valueOf(uploadSpeedMbpssss));
 
-                    if (uploadSpeedMbpssss > 5.00)
+                    if (roundedSpeed > 5.00)
                     {
                         return true;
                     }

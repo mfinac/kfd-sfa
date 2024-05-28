@@ -127,18 +127,22 @@ public class BaseUrlController {
             open();
         }
 
+        int count=0;
+        String domain = null;
         String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_CONNECTION ;
         Cursor cursor = dB.rawQuery(selectQuery, null);
 
-        while(cursor.moveToNext()){
-            return cursor.getString(cursor.getColumnIndex(ValueHolder.CONN_BASE_URL));
+        count = cursor.getCount();
+        if(count>0) {
+            while (cursor.moveToNext()) {
+                return cursor.getString(cursor.getColumnIndex(ValueHolder.CONN_BASE_URL));
+            }
+        }else {
+            pref = SharedPref.getInstance(context);
+            domain = pref.getBaseURL();
+            
         }
-
-        pref = SharedPref.getInstance(context);
-        String domain = pref.getBaseURL();
-
         return domain;
-
     }
 
     public String getActiveConnectionName(Context context){

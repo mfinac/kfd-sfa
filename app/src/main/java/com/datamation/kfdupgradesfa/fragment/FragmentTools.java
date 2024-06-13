@@ -99,6 +99,7 @@ import com.datamation.kfdupgradesfa.upload.UploadDailyRepLocations;
 import com.datamation.kfdupgradesfa.utils.NetworkUtil;
 import com.datamation.kfdupgradesfa.utils.UtilityContainer;
 import com.datamation.kfdupgradesfa.view.ActivityHome;
+import com.datamation.kfdupgradesfa.view.DebtorDetailsActivity;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -386,65 +387,33 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
     }
 
     private void syncDialog(final Context context) {
-        MaterialDialog materialDialog = new MaterialDialog.Builder(getActivity())
+        MaterialDialog materialDialog = new MaterialDialog.Builder(context)
                 .content("Are you sure, Do you want to Upload Data?")
-                .positiveColor(ContextCompat.getColor(getActivity(), R.color.material_alert_positive_button))
+                .positiveColor(ContextCompat.getColor(context, R.color.material_alert_positive_button))
                 .positiveText("Yes")
-                .negativeColor(ContextCompat.getColor(getActivity(), R.color.material_alert_negative_button))
+                .negativeColor(ContextCompat.getColor(context, R.color.material_alert_negative_button))
                 .negativeText("No, Exit")
                 .callback(new MaterialDialog.ButtonCallback() {
                     @SuppressLint("LongLogTag")
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        boolean connectionStatus = NetworkUtil.isNetworkAvailable(context);
-                        if (connectionStatus == true) {
-//                            CustomerController customerDS = new CustomerController(getActivity());
 
-//                           final ArrayList<Order> ordHedList = new OrderController(context).getAllUnSyncOrdHed();//1
-                            final ArrayList<OrderHed> ordHedList = new OrderController(context).getAllUnSyncOrdHedNew();//1
-
-                            ArrayList<RecHed> receiptlist = new ReceiptController(getActivity()).getAllUnsyncedReceiptHed();
-                            final ArrayList<NonPrdHed> npHedList = new DayNPrdHedController(getActivity()).getUnSyncedData();
-                            ArrayList<RepGpsLoc> repGpsLoc = new RepGPSLocationController(context).getUnSyncedGPSLocData();
-
-//                    /* If records available for upload then */
-                            if (receiptlist.size() <= 0 && ordHedList.size() <= 0 && repGpsLoc.size() <= 0 && npHedList.size() <= 0)
-                            //  if ( ordHedList.size() <= 0 && npHedList.size() <= 0  && attendList.size()<= 0 && cusAttendList.size()<= 0 && exHedList.size()<=0 && newCustomersList.size()<=0 && updExistingDebtors.size()<=0)
+                        if (NetworkUtil.isNetworkAvailable(context))
+                        {
+                            if (NetworkUtil.isNotPoorConnection(context))
                             {
-                                Toast.makeText(getActivity(), "No Records to upload !", Toast.LENGTH_LONG).show();
-                            } else {
-
-                                try {
-                                    new UploadPreSales(getActivity(), FragmentTools.this, TaskTypeUpload.UPLOAD_ORDER).execute(ordHedList);
-                                    Log.v(">>8>>", "UploadPreSales execute finish");
-                                } catch (Exception e) {
-                                    Log.e("***", "onPositive: ", e);
-                                }
-
-                                try {
-                                    new UploadReceipt(getActivity(), FragmentTools.this, TaskTypeUpload.UPLOAD_RECEIPT).execute(receiptlist);
-                                    Log.v(">>8>>", "Upload receipt execute finish");
-                                } catch (Exception e) {
-                                    Log.v("Exception in sync receipt", e.toString());
-                                }
-                                try {
-                                    new UploadNonProd(getActivity(), FragmentTools.this, TaskTypeUpload.UPLOAD_NONPROD).execute(npHedList);
-                                    Log.v(">>8>>", "Upload nonproductive execute finish");
-                                } catch (Exception e) {
-                                    Log.v("Exception in sync nonproductive", e.toString());
-                                    Log.e("***", "onPositive: ", e);
-                                }
-
-                                try {
-                               //     new UploadDailyRepLocations(getActivity(), FragmentTools.this, repGpsLoc).execute();
-                                    Log.v(">>8>>", "Upload daily rep location execute finish");
-                                } catch (Exception e) {
-                                    Log.v("Exception in sync rep location", e.toString());
-                                }
+                                uploadRecords();
                             }
-                        } else
-                            Toast.makeText(context, "No Internet Connection", Toast.LENGTH_LONG).show();
+                            else
+                            {
+                                networkWarning("Unable to upload due to poor network", "Poor network", context);
+                            }
+                        }
+                        else
+                        {
+                            networkWarning("Unable to upload due to no internet", "No internet", context);
+                        }
                     }
 
                     @Override
@@ -456,6 +425,54 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                 .build();
         materialDialog.setCanceledOnTouchOutside(false);
         materialDialog.show();
+    }
+
+    @SuppressLint("LongLogTag")
+    private void uploadRecords()
+    {
+        try
+        {
+            final ArrayList<OrderHed> ordHedList = new OrderController(context).getAllUnSyncOrdHedNew();
+            ArrayList<RecHed> receiptlist = new ReceiptController(getActivity()).getAllUnsyncedReceiptHed();
+            final ArrayList<NonPrdHed> npHedList = new DayNPrdHedController(getActivity()).getUnSyncedData();
+            ArrayList<RepGpsLoc> repGpsLoc = new RepGPSLocationController(context).getUnSyncedGPSLocData();
+
+            if (receiptlist.size() <= 0 && ordHedList.size() <= 0 && repGpsLoc.size() <= 0 && npHedList.size() <= 0)
+            {
+                Toast.makeText(getActivity(), "No Records to upload !", Toast.LENGTH_LONG).show();
+            } else {
+
+                try {
+                    new UploadPreSales(getActivity(), FragmentTools.this, TaskTypeUpload.UPLOAD_ORDER).execute(ordHedList);
+                    Log.v(">>8>>", "UploadPreSales execute finish");
+                } catch (Exception e) {
+                    Log.e("***", "onPositive: ", e);
+                }
+
+                try {
+                    new UploadReceipt(getActivity(), FragmentTools.this, TaskTypeUpload.UPLOAD_RECEIPT).execute(receiptlist);
+                    Log.v(">>8>>", "Upload receipt execute finish");
+                } catch (Exception e) {
+                    Log.v("Exception in sync receipt", e.toString());
+                }
+                try {
+                    new UploadNonProd(getActivity(), FragmentTools.this, TaskTypeUpload.UPLOAD_NONPROD).execute(npHedList);
+                    Log.v(">>8>>", "Upload nonproductive execute finish");
+                } catch (Exception e) {
+                    Log.v("Exception in sync nonproductive", e.toString());
+                    Log.e("***", "onPositive: ", e);
+                }
+
+                try {
+                    Log.v(">>8>>", "Upload daily rep location execute finish");
+                } catch (Exception e) {
+                    Log.v("Exception in sync rep location", e.toString());
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void mDevelopingMessage(String message, String title) {
@@ -1491,6 +1508,30 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
         });
 
         sDialog.show();
+    }
+
+    public void networkWarning(String message, String title, Context context){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setCancelable(false);
+
+        alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, int id) {
+                dialog.cancel();
+                navigateToNext();
+            }
+        });
+
+        AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    private void navigateToNext()
+    {
+        Intent intnt = new Intent(getActivity(), ActivityHome.class);
+        startActivity(intnt);
+        getActivity().finish();
     }
 
 

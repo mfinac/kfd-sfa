@@ -289,9 +289,106 @@
             android:topRightRadius="10dp"
             tools:ignore="MissingConstraints">
 
+<!--            <LinearLayout-->
+<!--                android:layout_width="0dp"-->
+
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@+id/et_search"-->
+<!--                android:layout_marginTop="2dp"-->
+<!--                android:layout_marginBottom="2dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:orientation="vertical">-->
+
+
+<!--                <TableRow-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_margin="3dp"-->
+<!--                    android:longClickable="true"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:weightSum="4">-->
+
+<!--                    <com.datamation.kfdupgradesfa.utils.CustomFont-->
+<!--                        android:id="@+id/row_itemcode"-->
+<!--                        android:layout_width="110dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center_vertical"-->
+<!--                        android:layout_marginLeft="1dip"-->
+<!--                        android:layout_marginRight="1dip"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="PRODUCT"-->
+<!--                        android:textAppearance="?android:attr/textAppearanceSmall"-->
+<!--                        android:textColor="@color/unselected"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <com.datamation.kfdupgradesfa.utils.CustomFont-->
+<!--                        android:id="@+id/row_pack"-->
+<!--                        android:layout_width="100dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center_vertical"-->
+<!--                        android:layout_marginLeft="1dip"-->
+<!--                        android:layout_marginRight="1dip"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="PACK"-->
+<!--                        android:textAppearance="?android:attr/textAppearanceSmall"-->
+<!--                        android:textColor="@color/unselected"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:visibility="gone" />-->
+
+<!--                    <com.datamation.kfdupgradesfa.utils.CustomFont-->
+<!--                        android:id="@+id/row_qoh"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center_vertical"-->
+<!--                        android:layout_marginLeft="1dip"-->
+<!--                        android:layout_marginRight="15dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="QOH"-->
+<!--                        android:textAppearance="?android:attr/textAppearanceSmall"-->
+<!--                        android:textColor="@color/unselected"-->
+<!--                        android:textSize="16sp" />-->
+
+<!--                    <com.datamation.kfdupgradesfa.utils.CustomFont-->
+<!--                        android:id="@+id/row_price"-->
+<!--                        android:layout_width="100dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center_vertical"-->
+<!--                        android:layout_marginLeft="1dip"-->
+<!--                        android:layout_marginRight="1dip"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="PRICE"-->
+<!--                        android:textAppearance="?android:attr/textAppearanceSmall"-->
+<!--                        android:textColor="@color/unselected"-->
+<!--                        android:textSize="16sp" />-->
+
+
+<!--                    <com.datamation.kfdupgradesfa.utils.CustomFont-->
+<!--                        android:id="@+id/row_qty"-->
+<!--                        android:layout_width="100dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center_vertical"-->
+<!--                        android:layout_marginLeft="1dip"-->
+<!--                        android:layout_marginRight="1dip"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="QUANTITY"-->
+<!--                        android:textAppearance="?android:attr/textAppearanceSmall"-->
+<!--                        android:textColor="@color/unselected"-->
+<!--                        android:textSize="16sp" />-->
+
+<!--                </TableRow>-->
+
+<!--            </LinearLayout>-->
+
+
             <LinearLayout
                 android:layout_width="0dp"
-
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/et_search"
                 android:layout_marginTop="2dp"
@@ -306,16 +403,16 @@
                     android:layout_margin="3dp"
                     android:longClickable="true"
                     android:orientation="horizontal"
-                    android:weightSum="4">
+                    android:weightSum="5">
 
                     <com.datamation.kfdupgradesfa.utils.CustomFont
                         android:id="@+id/row_itemcode"
-                        android:layout_width="110dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="1dip"
                         android:layout_marginRight="1dip"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:gravity="center"
                         android:text="PRODUCT"
                         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -328,8 +425,6 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="1dip"
-                        android:layout_marginRight="1dip"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="PACK"
@@ -344,8 +439,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="1dip"
-                        android:layout_marginRight="15dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="QOH"
@@ -355,11 +448,9 @@
 
                     <com.datamation.kfdupgradesfa.utils.CustomFont
                         android:id="@+id/row_price"
-                        android:layout_width="100dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="1dip"
-                        android:layout_marginRight="1dip"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="PRICE"
@@ -370,12 +461,10 @@
 
                     <com.datamation.kfdupgradesfa.utils.CustomFont
                         android:id="@+id/row_qty"
-                        android:layout_width="100dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="1dip"
-                        android:layout_marginRight="1dip"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:gravity="center"
                         android:text="QUANTITY"
                         android:textAppearance="?android:attr/textAppearanceSmall"

@@ -1,183 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_expense_np_details_header_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:visibility="visible">
+    android:layout_height="50dp"
+    android:visibility="visible"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/lnProductStripe"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/custom_textbox"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:weightSum="2">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ad_container"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:paddingBottom="5dp"
-            android:paddingRight="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="79dp">
-
-
-            <ImageButton
-                android:id="@+id/btnSubtract"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/icon_minus"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/et_qty"
-                app:layout_constraintTop_toTopOf="@+id/row_price"
-                app:layout_constraintVertical_bias="0.32999998" />
-
-            <ImageButton
-                android:id="@+id/btnAddition"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/icon_plus"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/et_qty"
-                app:layout_constraintTop_toTopOf="@+id/btnSubtract"
-                app:layout_constraintVertical_bias="0.32999998" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <TextView
                 android:id="@+id/row_itemname"
-                android:layout_width="200dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2.25"
                 android:gravity="left|center"
                 android:text="Name"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/greenColor"
-                android:textSize="@dimen/font_size_intermed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="@dimen/font_size_intermed" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"/>
+
+            <TextView
+                android:id="@+id/row_pack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.25"
+                android:layout_centerHorizontal="true"
+                android:text="Pack"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/greenColor"
+                android:textSize="@dimen/font_size_intermed" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="10">
 
             <TextView
                 android:id="@+id/row_bonus"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
                 android:layout_marginStart="8dp"
                 android:gravity="left|center"
                 android:text="BONUS"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/greenColor"
                 android:textSize="@dimen/font_size_intermed"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/row_itemname" />
+                tools:ignore="NestedWeights" />
 
             <TextView
-                android:id="@+id/row_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="100dp"
-                android:text="Price"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/greenColor"
-                android:textSize="@dimen/font_size_intermed"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/row_pack"
-                app:layout_constraintTop_toBottomOf="@+id/row_itemname" />
-
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"/>
 
             <TextView
                 android:id="@+id/row_qoh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:layout_centerHorizontal="true"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="220dp"
                 android:text="QOH"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/greenColor"
-                android:textSize="@dimen/font_size_intermed"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/row_bonus"
-                app:layout_constraintTop_toBottomOf="@+id/row_itemname" />
+                android:textSize="@dimen/font_size_intermed"/>
 
             <TextView
-                android:id="@+id/row_pack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="220dp"
-                android:text="Pack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"/>
+
+            <TextView
+                android:id="@+id/row_price"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:text="Price"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/greenColor"
-                android:textSize="@dimen/font_size_intermed"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/row_bonus"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="@dimen/font_size_intermed" />
 
             <TextView
-                android:id="@+id/et_case"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="30dp"
-                android:inputType="number"
-                android:selectAllOnFocus="true"
-                android:text="C"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/et_qty"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/btnSubtract"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"/>
+
+            <ImageButton
+                android:id="@+id/btnSubtract"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:layout_centerVertical="true"
+                android:background="@drawable/icon_minus" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"/>
 
             <TextView
                 android:id="@+id/et_qty"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="60dp"
                 android:gravity="center_horizontal"
                 android:inputType="number"
                 android:selectAllOnFocus="true"
                 android:text="P"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/btnSubtract"
-                app:layout_constraintVertical_bias="0.333" />
+                android:textStyle="bold" />
 
-            <View
-                android:id="@+id/divider24"
-                android:layout_width="1dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="25dp"
-                android:background="@color/half_black"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/et_qty"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/et_case"
-                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"/>
 
+            <ImageButton
+                android:id="@+id/btnAddition"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:background="@drawable/icon_plus" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-
+</LinearLayout>

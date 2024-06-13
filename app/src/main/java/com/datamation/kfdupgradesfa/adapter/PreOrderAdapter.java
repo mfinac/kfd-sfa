@@ -60,15 +60,15 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
 
         try {
             if (product.getFPRODUCT_QOH().equals("0.0")) {
-                preOrders.ad_container.setBackgroundColor(Color.parseColor("#f0aa98"));
-                preOrders.lnStripe.setBackgroundColor(Color.parseColor("#4682B4"));
+               // preOrders.ad_container.setBackgroundColor(Color.parseColor("#f0aa98"));
+                preOrders.lnStripe.setBackgroundColor(Color.parseColor("#f0aa98"));
                 preOrders.itemBonus.setTextColor(Color.parseColor("#4682B4"));
                 preOrders.pack.setTextColor(Color.parseColor("#4682B4"));
                 preOrders.ItemName.setTextColor(Color.parseColor("#4682B4"));
                 preOrders.Price.setTextColor(Color.parseColor("#4682B4"));
                 preOrders.HoQ.setTextColor(Color.parseColor("#4682B4"));
                 preOrders.lblQty.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.lblCase.setTextColor(Color.parseColor("#4682B4"));
+             //   preOrders.lblCase.setTextColor(Color.parseColor("#4682B4"));
             } else {
                 preOrders.itemBonus.setTextColor(Color.parseColor("#4682B4"));
                 preOrders.pack.setTextColor(Color.parseColor("#4682B4"));
@@ -76,7 +76,7 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                 preOrders.Price.setTextColor(Color.parseColor("#4682B4"));
                 preOrders.HoQ.setTextColor(Color.parseColor("#4682B4"));
                 preOrders.lblQty.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.lblCase.setTextColor(Color.parseColor("#4682B4"));
+              //  preOrders.lblCase.setTextColor(Color.parseColor("#4682B4"));
             }
 
         } catch (NumberFormatException ne) {
@@ -89,7 +89,7 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
         preOrders.Price.setText(product.getFPRODUCT_PRICE());
         preOrders.HoQ.setText(product.getFPRODUCT_QOH());
         preOrders.lblQty.setText(product.getFPRODUCT_QTY());
-        preOrders.lblCase.setText("0");
+       // preOrders.lblCase.setText("0");
 
         /*Change colors*/
         if (Double.parseDouble(preOrders.lblQty.getText().toString()) > 0)
@@ -335,10 +335,10 @@ class PreOrders extends RecyclerView.ViewHolder {
         Price = itemView.findViewById(R.id.row_price);
         HoQ = itemView.findViewById(R.id.row_qoh);
         lblQty = itemView.findViewById(R.id.et_qty);
-        lblCase = itemView.findViewById(R.id.et_case);
+     //   lblCase = itemView.findViewById(R.id.et_case);
         btnPlus = itemView.findViewById(R.id.btnAddition);
         btnMinus = itemView.findViewById(R.id.btnSubtract);
-        ad_container = itemView.findViewById(R.id.ad_container);
+      //  ad_container = itemView.findViewById(R.id.ad_container);
     }
 
 }

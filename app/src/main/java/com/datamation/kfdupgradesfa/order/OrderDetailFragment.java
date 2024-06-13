@@ -129,7 +129,7 @@ public class OrderDetailFragment extends Fragment {
 
         lvProducts.setLongClickable(true);
         remove = (ImageView) view.findViewById(R.id.img_remove);
-        img_remove_Sup = (ImageView) view.findViewById(R.id.img_remove_Sup);
+        //img_remove_Sup = (ImageView) view.findViewById(R.id.img_remove_Sup);
         mainActivity = (OrderActivity) getActivity();
         tmpsoHed = new Order();
         new LoardingProductFromDB("","").execute();
@@ -247,9 +247,9 @@ public class OrderDetailFragment extends Fragment {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (supSearch.getText().length() > 0) {
-//                    supSearch.setText("");
-//                }
+                if (supSearch.getText().length() > 0) {
+                    supSearch.setText("");
+                }
                 if (itemSearch.getText().length() > 0) {
 
                     itemSearch.setText("");
@@ -259,15 +259,15 @@ public class OrderDetailFragment extends Fragment {
             }
         });
 
-        img_remove_Sup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (supSearch.getText().length() > 0)
-                {
-                    supSearch.setText("");
-                }
-            }
-        });
+//        img_remove_Sup.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (supSearch.getText().length() > 0)
+//                {
+//                    supSearch.setText("");
+//                }
+//            }
+//        });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override

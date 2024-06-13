@@ -65,7 +65,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
     implementation 'com.wdullaer:materialdatetimepicker:2.3.0'
     implementation files('libs/org.apache.http.legacy.jar')
-    implementation 'com.github.AnyChart:AnyChart-Android:0.0.3'
+    //implementation 'com.github.AnyChart:AnyChart-Android:0.0.3'
     implementation 'com.github.markushi:circlebutton:1.1'
     //    implementation 'com.squareup.picasso:picasso:2.4.0'
     implementation 'com.sothree.slidinguppanel:library:3.0.0'
@@ -74,7 +74,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'fm.jiecao:jiecaovideoplayer:3.0_preview'
     implementation files('libs/org.apache.http.legacy.jar')
-    implementation 'com.github.AnyChart:AnyChart-Android:0.0.3'
+    //implementation 'com.github.AnyChart:AnyChart-Android:0.0.3'
     implementation 'com.github.markushi:circlebutton:1.1'
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
     // compile 'com.afollestad.material-dialogs:color:2.7.0'

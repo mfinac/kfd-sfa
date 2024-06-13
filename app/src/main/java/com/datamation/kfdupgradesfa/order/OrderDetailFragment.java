@@ -98,7 +98,7 @@ public class OrderDetailFragment extends Fragment {
     private FloatingActionButton next;
     OrderResponseListener responseListener;
     ArrayList<Item> loadlist;
-    String debCode, strLoccode;
+    String debCode, strCostCode, strLocCode;
     ImageView remove, img_remove_Sup;
     ProgressDialog pDialog;
     String itemName;
@@ -119,8 +119,6 @@ public class OrderDetailFragment extends Fragment {
         totPieces = 0;
         mSharedPref = SharedPref.getInstance(getActivity());
         lvProducts = view.findViewById(R.id.lv_product_list);
-        //mithsu//
-
         supSearch = (AutoCompleteTextView) view.findViewById(R.id.search_supplier);
         itemSearch = (AutoCompleteTextView) view.findViewById(R.id.item_search);
         next = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -132,6 +130,9 @@ public class OrderDetailFragment extends Fragment {
         //img_remove_Sup = (ImageView) view.findViewById(R.id.img_remove_Sup);
         mainActivity = (OrderActivity) getActivity();
         tmpsoHed = new Order();
+        strLocCode = mSharedPref.getLocCode();
+        strCostCode = mSharedPref.getCostCode();
+        Log.d("COST_CODE_ON_CREATE", "COST_CODE" + strCostCode + " LOC_CODE " + strLocCode);
         new LoardingProductFromDB("","").execute();
         allItemList = new ArrayList<Product>();
 
@@ -139,14 +140,6 @@ public class OrderDetailFragment extends Fragment {
         mSharedPref.setDiscountClicked("0");
         clickCount = 0;
 
-
-       // mToggleTextbox();
-//
-//        if(mSharedPref.getHeaderNextClicked().equals("1")){
-//            preSalesResponseListener.moveBackToFragment(0);
-//        }
-
-        //&^&^& MMS-2022/02/01 %$%$//
         final ArrayList<Supplier> splist = new SupplierController(getActivity()).getAllSuppliers();
         final ArrayList<String> supNamesStr = new ArrayList<String>();
         for (Supplier supplier : splist) {
@@ -156,11 +149,8 @@ public class OrderDetailFragment extends Fragment {
         final ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, supNamesStr);
         dataAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         supSearch.setAdapter(dataAdapter3);
-        //&^&^& MMS-2022/02/01 %$%$//
 
         final ArrayList<String> itemNamesStr = new ArrayList<String>();
-
-
         supSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -176,8 +166,6 @@ public class OrderDetailFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
-                strLoccode = mSharedPref.getGlobalVal("KeyLoc");
-
 
                     if (editable.equals("")) {
 
@@ -187,12 +175,13 @@ public class OrderDetailFragment extends Fragment {
                         lvProducts.setAdapter(new PreOrderAdapter(getActivity(), prdList, refNo));
 
                     }
-
-                    else  {
+                    else
+                    {
                         String str = editable.toString();
                         String[] arrOfStr = str.split("-", 2);
+                        strLocCode = mSharedPref.getLocCode();
+                        strCostCode = mSharedPref.getCostCode();
                         new LoardingProductFromDB("",arrOfStr[0].trim()).execute();
-
                    }
                 lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
@@ -203,7 +192,6 @@ public class OrderDetailFragment extends Fragment {
         final ArrayAdapter<String> itemAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, itemNamesStr);
         itemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         itemSearch.setAdapter(itemAdapter);
-        //&^&^& MMS-2022/02/02 %$%$//
 
         itemSearch.addTextChangedListener(new TextWatcher() {
 
@@ -220,27 +208,25 @@ public class OrderDetailFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable itemquery) {
                 debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
-                strLoccode = mSharedPref.getGlobalVal("KeyLoc");
                 String supCode =supSearch.getText().toString();
 
                 if (supSearch.getText().length() > 0) {
-                    if (!itemquery.equals("")) {
-
+                    if (!itemquery.equals(""))
+                    {
                         String str = itemquery.toString();
                         String[] arrOfStr = supCode.split("-", 2);
+                        strLocCode = mSharedPref.getLocCode();
+                        strCostCode = mSharedPref.getCostCode();
                         new LoardingProductFromDB(str,arrOfStr[0].trim()).execute();
-
                     }
                 }
                 else if (!itemquery.equals(""))
                 {
-                        ArrayList<Product> prdItmList = filter(productList, itemquery, itemquery.length());
-                        lvProducts.setAdapter(new PreOrderAdapter(getActivity(), prdItmList, refNo));
+                    ArrayList<Product> prdItmList = filter(productList, itemquery, itemquery.length());
+                    lvProducts.setAdapter(new PreOrderAdapter(getActivity(), prdItmList, refNo));
                 }
 
                 lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-
-
             }
         });
 
@@ -254,20 +240,9 @@ public class OrderDetailFragment extends Fragment {
 
                     itemSearch.setText("");
                 }
-//                new LoardingProductFromDB().execute();
 
             }
         });
-
-//        img_remove_Sup.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (supSearch.getText().length() > 0)
-//                {
-//                    supSearch.setText("");
-//                }
-//            }
-//        });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,25 +260,25 @@ public class OrderDetailFragment extends Fragment {
 
     public void mToggleTextbox() {
         Log.d("Detail>>", ">>" + mSharedPref.getHeaderNextClicked());
-        if (mSharedPref.getOrderHeaderNextClicked().booleanValue()== true) {
+        if (mSharedPref.getOrderHeaderNextClicked())
+        {
             debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
 
-            strLoccode = mSharedPref.getGlobalVal("KeyLoc");
             if (mSharedPref.getIsQuantityAdded())
             {
                 preSalesResponseListener.moveNextToFragment(1);
             }
             else
             {
+                strCostCode = mSharedPref.getCostCode();
+                strLocCode = mSharedPref.getLocCode();
                 new LoardingProductFromDB("","").execute();
             }
-
-          // new LoardingProductFromDB().execute();
-
-        } else {
+        }
+        else
+        {
             Toast.makeText(getActivity(), "Please click arrow button to save header details...", Toast.LENGTH_LONG).show();
             preSalesResponseListener.moveBackToFragment(0);
-           // new LoardingProductFromDB().execute();
         }
     }
 
@@ -330,21 +305,63 @@ public class OrderDetailFragment extends Fragment {
         Log.d("order_detail", "clicked_count" + clickCount);
     }
 
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        strCostCode = mSharedPref.getCostCode();
+//        strLocCode = mSharedPref.getLocCode();
+//        Log.d("COST_CODE_LOC_CODE", "COST_CODE" + strCostCode + " LOC_CODE " + strLocCode);
+//        new LoardingProductFromDB("","").execute();
+//    }
 
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if(mSharedPref.getOrderHeaderNextClicked().booleanValue()==false){
-                preSalesResponseListener.moveBackToFragment(0);
-            } else if (mSharedPref.getOrderHeaderNextClicked().booleanValue()==true && mSharedPref.getDiscountClicked().equals("0"))
-            {
+//            if(!mSharedPref.getOrderHeaderNextClicked())
+//            {
+//                preSalesResponseListener.moveBackToFragment(0);
+//            }
+//            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+//            Log.d("order_detail", "clicked_count" + clickCount);
+//            Log.d("order_detail", "clicked_count" + clickCount);
 
-//
-                   }
+            OrderDetailFragment.this.mToggleTextbox();
+            final CustomProgressDialog pdialog;
 
-            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-            Log.d("order_detail", "clicked_count" + clickCount);
+            pdialog = new CustomProgressDialog(getActivity());
+            pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            pdialog.setMessage("Please wait...");
+            pdialog.show();
+
+            final int interval = 5000; // 5 Second
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
+                public void run() {
+                    new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("Item list loaded.")
+                            .setContentText("")
+                            .setConfirmText("OK")
+                            .showCancelButton(false)
+
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismiss();
+                                    if (pdialog.isShowing()) {
+                                        pdialog.dismiss();
+                                    }
+
+                                }
+                            })
+
+                            .show();
+                }
+            };
+
+            handler.postAtTime(runnable, System.currentTimeMillis() + interval);
+            handler.postDelayed(runnable, interval);
+
             Log.d("order_detail", "clicked_count" + clickCount);
         }
     }
@@ -381,37 +398,32 @@ public class OrderDetailFragment extends Fragment {
             sweetAlertDialog.setTitleText("Fetch Data Please Wait.");
             sweetAlertDialog.setCancelable(false);
 
-
         }
 
         @Override
         protected ArrayList<Product> doInBackground(Object... objects) {
             debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
 
-            strLoccode = mSharedPref.getGlobalVal("KeyLoc");
-            if (new OrderDetailController(getActivity()).tableHasRecords(refNo)) {
-                productList = new OrderDetailController(getActivity()).getAlreadyOrderedItems("", strLoccode, refNo, "TxnType ='21'", mSharedPref.getGlobalVal("KeyCost"));
-              //  pdialog.dismiss();
-            } else {
-                productList = new ItemController(getActivity()).getAllItemFor(itemName,supCode, strLoccode, debCode, mSharedPref.getGlobalVal("KeyCost"));
+            if (new OrderDetailController(getActivity()).tableHasRecords(refNo))
+            {
+                productList = new OrderDetailController(getActivity()).getAlreadyOrderedItems("", strLocCode, refNo, "TxnType ='21'", strCostCode);
+            }
+            else
+            {
+                productList = new ItemController(getActivity()).getAllItemFor(itemName,supCode, strLocCode, debCode, strCostCode);
                 Log.wtf("LocCode",toString());
-               // allItemList.clear();
-              //  allItemList = productList;
-
             }
              return productList;
         }
 
 
         @Override
-        protected void onPostExecute(ArrayList<Product> products) {
+        protected void onPostExecute(ArrayList<Product> products)
+        {
             super.onPostExecute(products);
 
             lvProducts.setAdapter(new PreOrderAdapter(getActivity(), products, refNo));
-
             lvProducts.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-
-
         }
 
     }

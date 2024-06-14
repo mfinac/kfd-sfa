@@ -318,7 +318,7 @@ public class ActivityHome extends AppCompatActivity {
 
 
                         } else if (actionBarSpinner.getSelectedItem().equals("DIALOG")) {
-                           // baseURL.setBASE_URL_URL("http://123.231.15.146:1030");// Live-Dialog
+                            //baseURL.setBASE_URL_URL("http://123.231.15.146:1030");// Live-Dialog
                             baseURL.setBASE_URL_URL("http://123.231.15.146:1031");//testing-dialog
                             baseURL.setBASE_URL_NAME("Dialog");
                             baseURL.setBASE_URL_STATUS("Active");

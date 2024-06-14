@@ -81,9 +81,6 @@ public class OrderActivity<extras> extends AppCompatActivity implements OrderRes
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
         viewPager.setPageMargin(pageMargin);
         slidingTabStrip.setViewPager(viewPager);
-
-
-//        viewPager.setPagingEnabled(false);
         viewPager.disableScroll(true);
 
         viewPager.setOnTouchListener(new View.OnTouchListener() {
@@ -122,14 +119,6 @@ public class OrderActivity<extras> extends AppCompatActivity implements OrderRes
 
         Intent dataIntent = getIntent();
         Debtor debtor = dataIntent.getParcelableExtra("outlet");
-
-//        if(From.equals("edit")) {
-//            status = true;
-//        }else if(From.equals("new")){
-//            status = false;
-//        }
-
-//        status = new OrderDetailController(getApplicationContext()).isAnyActiveOrders();
 
     }
 

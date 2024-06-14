@@ -169,7 +169,6 @@ public class OrderHeaderFragment extends Fragment {
         df.setTimeZone(tz);
         startTime  = df.format(new Date());
 
-
         currnentDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         deliveryDate.setText(simpleDateFormat.format(tomorrow));
         outStandingAmt.setText(String.format("%,.2f", new OutstandingController(getActivity()).getDebtorBalance(pref.getSelectedDebCode())));
@@ -180,8 +179,6 @@ public class OrderHeaderFragment extends Fragment {
         month = Scalendar.get(Calendar.MONTH);
         day = Scalendar.get(Calendar.DAY_OF_MONTH);
         context = getActivity();
-//
-      //  mSharedPref.setNextClick("0");
 
         try {
             lblPreRefno.setText("" + refNo);
@@ -205,18 +202,20 @@ public class OrderHeaderFragment extends Fragment {
 
         spCost.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                new SharedPref(getActivity()).setGlobalVal("KeyCost", spCost.getSelectedItem().toString().split("-")[0].trim());
-                new SharedPref(getActivity()).setGlobalVal("KeyLoc", new LocationsController(getActivity()).getRepLocation(spCost.getSelectedItem().toString().split("-")[0].trim()));
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                pref.setCostCode(spCost.getSelectedItem().toString().split("-")[0].trim());
+                pref.setLocCode(new LocationsController(getActivity()).getRepLocation(pref.getCostCode()));
 
-                Log.v("Cost center>>", spCost.getSelectedItem().toString());
-                Log.v("Loccode>>", new SharedPref(getActivity()).getGlobalVal("KeyLoc"));
+                Log.v("Cost center>>", pref.getCostCode());
+                Log.v("Loccode>>", pref.getLocCode());
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                new SharedPref(getActivity()).setGlobalVal("KeyCost", spCost.getSelectedItem().toString());
-                new SharedPref(getActivity()).setGlobalVal("KeyLoc", new LocationsController(getActivity()).getRepLocation(spCost.getSelectedItem().toString().split("-")[0].trim()));
+            public void onNothingSelected(AdapterView<?> adapterView)
+            {
+                pref.setCostCode(spCost.getSelectedItem().toString().split("-")[0].trim());
+                pref.setLocCode(new LocationsController(getActivity()).getRepLocation(pref.getCostCode()));
             }
         });
 
@@ -477,20 +476,18 @@ public class OrderHeaderFragment extends Fragment {
         }
     }
 
-    public void mRefreshHeader() {
-      //  Log.d("Header>>", ">>" + mSharedPref.getHeaderNextClicked());
-
+    public void mRefreshHeader()
+    {
         if (SharedPref.getInstance(getActivity()).getGlobalVal("PrekeyCustomer").equals("Y")) {
             ArrayList<OrderDetail> dets = new OrderDetailController(getActivity()).getSAForFreeIssueCalc("" + refNo);
             Log.d("Header>>", ">>detsize" + dets.size());
 
-            if (dets.size() > 0 && mSharedPref.getIsQuantityAdded()) {
+            if (dets.size() > 0 && mSharedPref.getIsQuantityAdded())
+            {
                 preSalesResponseListener.moveBackToFragment(1);
             }
 
-
             currnentDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-
             txtRemakrs.setEnabled(true);
             lblCustomerName.setText(new CustomerController(getActivity()).getCusNameByCode(pref.getSelectedDebCode()));
             lblPreRefno.setText("" + refNo);
@@ -498,17 +495,15 @@ public class OrderHeaderFragment extends Fragment {
             new SharedPref(getActivity()).setGlobalVal("KeyCost", spCost.getSelectedItem().toString().split("-")[0].trim());
             new SharedPref(getActivity()).setGlobalVal("KeyLoc", new LocationsController(getActivity()).getRepLocation(spCost.getSelectedItem().toString().split("-")[0].trim()));
 
-
             if (activity.selectedPreHed != null) {
 
             }else {
 
                 SaveSalesHeader();
             }
-
-        } else {
-         //   SaveSalesHeaderNew();
-           // Toast.makeText(getActivity(), "Select a customer to continue...", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
             txtRemakrs.setEnabled(false);
             txtManual.setEnabled(false);
         }
@@ -538,7 +533,6 @@ public class OrderHeaderFragment extends Fragment {
         Log.d("Header>>", ">>Headerresume");
 
     }
-
 
     private class MyReceiver extends BroadcastReceiver {
         @Override

@@ -665,12 +665,6 @@ public class SharedPref {
 
     }
 
-//    public void setConsoleDB(String console) {
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putString("Console_DB", console);
-//        editor.apply();
-//    }
-
     public String getConsoleDB() {
 //        return sharedPref.getString("Console_DB", "KFD_Test");
         return sharedPref.getString("Console_DB", "KFD_NEW");
@@ -779,5 +773,15 @@ public class SharedPref {
         return sharedPref.getString("selectedTitle", null);
     }
 
+    public void setLocCode(String costcd) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("LocCode", costcd.trim());
+        editor.apply();
+    }
 
+    public String getLocCode() {
+
+        return sharedPref.getString("LocCode", "");
+
+    }
 }

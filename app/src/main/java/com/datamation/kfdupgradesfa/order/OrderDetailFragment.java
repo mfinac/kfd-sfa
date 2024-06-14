@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -95,11 +96,11 @@ public class OrderDetailFragment extends Fragment {
     RecyclerView lvProducts;
     AutoCompleteTextView supSearch, itemSearch;
     MyReceiver rd;
-    private FloatingActionButton next;
+    private ImageButton next;
     OrderResponseListener responseListener;
     ArrayList<Item> loadlist;
     String debCode, strCostCode, strLocCode;
-    ImageView remove, img_remove_Sup;
+    ImageButton remove, img_remove_Sup;
     ProgressDialog pDialog;
     String itemName;
     String searchkey;
@@ -121,12 +122,12 @@ public class OrderDetailFragment extends Fragment {
         lvProducts = view.findViewById(R.id.lv_product_list);
         supSearch = (AutoCompleteTextView) view.findViewById(R.id.search_supplier);
         itemSearch = (AutoCompleteTextView) view.findViewById(R.id.item_search);
-        next = (FloatingActionButton) view.findViewById(R.id.fab);
+        next = (ImageButton) view.findViewById(R.id.fab);
         refNo = new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal));
         repCode = new SalRepController(getActivity()).getCurrentRepCode();
 
         lvProducts.setLongClickable(true);
-        remove = (ImageView) view.findViewById(R.id.img_remove);
+        remove = (ImageButton) view.findViewById(R.id.img_remove);
         //img_remove_Sup = (ImageView) view.findViewById(R.id.img_remove_Sup);
         mainActivity = (OrderActivity) getActivity();
         tmpsoHed = new Order();
@@ -343,7 +344,6 @@ public class OrderDetailFragment extends Fragment {
                             .setContentText("")
                             .setConfirmText("OK")
                             .showCancelButton(false)
-
                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sDialog) {
@@ -351,10 +351,8 @@ public class OrderDetailFragment extends Fragment {
                                     if (pdialog.isShowing()) {
                                         pdialog.dismiss();
                                     }
-
                                 }
                             })
-
                             .show();
                 }
             };

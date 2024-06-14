@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_expense_np_details_header_container"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:visibility="visible"
     android:orientation="vertical">
 
@@ -15,12 +15,12 @@
         android:background="@drawable/custom_textbox"
         android:orientation="vertical"
         android:padding="5dp"
-        android:weightSum="2">
+        android:weightSum="2.5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:orientation="horizontal"
             android:weightSum="3">
 
@@ -28,28 +28,16 @@
                 android:id="@+id/row_itemname"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2.25"
+                android:layout_weight="3"
                 android:gravity="left|center"
                 android:text="Name"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/greenColor"
                 android:textSize="@dimen/font_size_intermed" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"/>
-
-            <TextView
-                android:id="@+id/row_pack"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2.25"
-                android:layout_centerHorizontal="true"
-                android:text="Pack"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/greenColor"
-                android:textSize="@dimen/font_size_intermed" />
+<!--            <TextView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="0.5"/>-->
 
         </LinearLayout>
 
@@ -58,13 +46,13 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:weightSum="10">
+            android:weightSum="9.25">
 
             <TextView
                 android:id="@+id/row_bonus"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4"
+                android:layout_weight="3"
                 android:layout_marginStart="8dp"
                 android:gravity="left|center"
                 android:text="BONUS"
@@ -76,7 +64,23 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.25"/>
+
+            <TextView
+                android:id="@+id/row_pack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_centerHorizontal="true"
+                android:text="Pack"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/greenColor"
+                android:textSize="@dimen/font_size_intermed" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"/>
 
             <TextView
                 android:id="@+id/row_qoh"
@@ -92,7 +96,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.25"/>
 
             <TextView
                 android:id="@+id/row_price"
@@ -108,25 +112,26 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.25"/>
 
             <ImageButton
                 android:id="@+id/btnSubtract"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.6"
+                android:layout_weight="0.5"
                 android:layout_centerVertical="true"
                 android:background="@drawable/icon_minus" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.25"/>
 
             <TextView
                 android:id="@+id/et_qty"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.75"
                 android:layout_alignParentBottom="true"
                 android:gravity="center_horizontal"
                 android:inputType="number"
@@ -137,13 +142,13 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.25"/>
 
             <ImageButton
                 android:id="@+id/btnAddition"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.6"
+                android:layout_weight="0.5"
                 android:background="@drawable/icon_plus" />
 
         </LinearLayout>

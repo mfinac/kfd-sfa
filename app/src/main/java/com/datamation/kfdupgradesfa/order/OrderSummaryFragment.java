@@ -575,6 +575,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             ViewGroup.LayoutParams params = lvProducts_freeIssue.getLayoutParams();
             ArrayList<OrderDetail> orderFreeIssueItemList = null;
             orderFreeIssueItemList = new OrderDetailController(getActivity()).getAllItemsAddedInCurrentSale(RefNo, "FI", "FD");
+
             if (orderFreeIssueItemList.size() > 0) {
                 params.height = 200;
             } else {
@@ -707,6 +708,8 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             new OrderController(getActivity()).InactiveStatusUpdate(RefNo);
             new OrderDetailController(getActivity()).InactiveStatusUpdate(RefNo);
             new ReferenceNum(getActivity()).NumValueUpdate(getResources().getString(R.string.NumVal));
+            mSharedPref.setOrdertHeaderNextClicked(false);
+            mSharedPref.setIsQuantityAdded(false);
 
             Toast.makeText(getActivity(), "Locally Order saved successfully..!", Toast.LENGTH_LONG).show();
 
@@ -718,8 +721,8 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                     {
                         try {
                             Upload(new OrderController(getActivity()).getAllUnSyncOrdHedNew());
-                            mSharedPref.setOrdertHeaderNextClicked(false);
-                            mSharedPref.setIsQuantityAdded(false);
+//                            mSharedPref.setOrdertHeaderNextClicked(false);
+//                            mSharedPref.setIsQuantityAdded(false);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

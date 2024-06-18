@@ -627,9 +627,9 @@ public class SharedPref {
 
 
         /*****Live****/ // return sharedPref.getString("baseURL", "http://123.231.15.146:1030");//Dialog
-        /*****Live****/ //return sharedPref.getString("baseURL", "http://124.43.5.227:1030");//SLT
+        /*****Live****/ return sharedPref.getString("baseURL", "http://124.43.5.227:1030");//SLT
 
-        /******Test******/  return sharedPref.getString("baseURL", "http://124.43.5.227:1031");//tesing SLT
+        /******Test******/  //return sharedPref.getString("baseURL", "http://124.43.5.227:1031");//tesing SLT
 
        //  return sharedPref.getString("baseURL", "http://192.168.0.5:1035");
 

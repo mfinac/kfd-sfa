@@ -261,7 +261,8 @@ public class OrderDetailFragment extends Fragment {
 
     public void mToggleTextbox() {
         Log.d("Detail>>", ">>" + mSharedPref.getHeaderNextClicked());
-        if (mSharedPref.getOrderHeaderNextClicked())
+        boolean isNextClicked = mSharedPref.getOrderHeaderNextClicked();
+        if (isNextClicked)
         {
             debCode = new OrderController(getActivity()).getRefnoByDebcode(new ReferenceController(getActivity()).getCurrentRefNo(getResources().getString(R.string.NumVal)));
 
@@ -319,7 +320,9 @@ public class OrderDetailFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-//            if(!mSharedPref.getOrderHeaderNextClicked())
+//            boolean isNextClicked = mSharedPref.getOrderHeaderNextClicked();
+//
+//            if(!isNextClicked)
 //            {
 //                preSalesResponseListener.moveBackToFragment(0);
 //            }

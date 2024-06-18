@@ -499,7 +499,7 @@ public class OrderHeaderFragment extends Fragment {
 
             }else {
 
-                SaveSalesHeader();
+                //SaveSalesHeader();
             }
         }
         else
@@ -527,7 +527,8 @@ public class OrderHeaderFragment extends Fragment {
     public void onResume() {
         super.onResume();
         checkdate();
-        r = new OrderHeaderFragment.MyReceiver();
+        r = new MyReceiver();
+        OrderHeaderFragment.this.mRefreshHeader();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(r, new IntentFilter("TAG_PRE_HEADER"));
 
         Log.d("Header>>", ">>Headerresume");

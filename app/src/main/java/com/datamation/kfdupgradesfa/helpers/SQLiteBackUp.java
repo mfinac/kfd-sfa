@@ -42,7 +42,7 @@ public class SQLiteBackUp {
     public void importDB(String name) {
         try {
             File sd = new File(Environment.getExternalStoragePublicDirectory
-                    (Environment.DIRECTORY_DOCUMENTS), APP_NAME);
+                    (Environment.DIRECTORY_DOWNLOADS), APP_NAME);
             File data = Environment.getDataDirectory();
             if (sd.canWrite()) {
                 String currentDBPath = "//data//" + PACKAGE_NAME+ "//databases//" + DATABASE_NAME+"";
@@ -70,7 +70,7 @@ public class SQLiteBackUp {
     public void exportDB() {
         try {
             File folder = new File(Environment.getExternalStoragePublicDirectory
-                    (Environment.DIRECTORY_DOCUMENTS), APP_NAME);
+                    (Environment.DIRECTORY_DOWNLOADS), APP_NAME);
     //        File folder = new File(Environment.getExternalStorageDirectory() + "/" + APP_NAME);
             boolean success = true;
             if (!folder.exists()) {
@@ -84,7 +84,7 @@ public class SQLiteBackUp {
 //                File sd = new File(Environment.getExternalStoragePublicDirectory
 //                        (Environment.DIRECTORY_DOCUMENTS), APP_NAME);
                 File sd = new File(Environment.getExternalStoragePublicDirectory
-                        (Environment.DIRECTORY_DOCUMENTS), APP_NAME);
+                        (Environment.DIRECTORY_DOWNLOADS), APP_NAME);
                 File data = Environment.getDataDirectory();
 
                 if (sd.canWrite()) {
@@ -170,7 +170,7 @@ public class SQLiteBackUp {
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss");
         File sd = new File(Environment.getExternalStoragePublicDirectory
-                (Environment.DIRECTORY_DOCUMENTS), APP_NAME);
+                (Environment.DIRECTORY_DOWNLOADS), APP_NAME);
 
       //  String path = Environment.getExternalStorageDirectory() + "/"+APP_NAME;
 

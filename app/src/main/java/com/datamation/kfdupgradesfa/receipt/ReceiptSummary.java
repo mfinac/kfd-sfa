@@ -137,11 +137,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
         mainActivity = (ReceiptActivity) getActivity();
 
         resultListPreSale = new ArrayList<>();
-
-
-        //mithsu//
         RefNo = new ReferenceNum(getActivity()).getCurrentRefNo(getResources().getString(R.string.RecNumVal));
-        //mithsu//
         FetchData();
         outlet = new CustomerController(getActivity()).getSelectedCustomerByCode(mSharedPref.getSelectedDebCode());
 
@@ -154,12 +150,12 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
             }
         });
 
-        fabPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPauseReceipt();
-            }
-        });
+//        fabPause.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mPauseReceipt();
+//            }
+//        });
 
         fabSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +164,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
 
                 if (fddbnoteList.size() > 0) {
                     if (Double.parseDouble(mSharedPref.getGlobalVal("ReckeyRemnant")) <= 0)
-                        saveSummaryDialog(getActivity());
+                        saveSummaryDialog(getActivity(), false);
                     else
                         Toast.makeText(getActivity(), "Please allocate remaining amount..!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -186,7 +182,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
 
                 if (fddbnoteList.size() > 0) {
                     if (Double.parseDouble(mSharedPref.getGlobalVal("ReckeyRemnant")) <= 0)
-                        SaveAndUploadDialog(getActivity());
+                        saveSummaryDialog(getActivity(), true);
                     else
                         Toast.makeText(getActivity(), "Please allocate remaining amount..!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -205,7 +201,6 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-
         return view;
     }
 
@@ -223,57 +218,27 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
 
     }
 
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*--*-*-*-*-*-*-*-*-*-*-*-*/
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (item.getItemId() == R.id.action_pre_sales_save) {
-
-            if (Double.parseDouble(mSharedPref.getGlobalVal("ReckeyRemnant")) <= 0)
-                saveSummaryDialog(getActivity());
-            else
-                Toast.makeText(getActivity(), "Please allocate remaining amount..!", Toast.LENGTH_SHORT).show();
-
-        } else if (item.getItemId() == R.id.action_pre_sale_undo) {
-            undoEditingData(getActivity());
-        }
-        return super.onOptionsItemSelected(item);
-
-    }
-
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*Cancel order*-*-*-*-*-*-*--*-*-*--*-*-*-*-*-*-*-*-*-*-*-*/
-
-    private void undoEditingData(final Context context) {
-
+    private void undoEditingData(final Context context)
+    {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setMessage("Do you want to discard the receipt ?");
         alertDialogBuilder.setIcon(android.R.drawable.ic_dialog_alert);
         alertDialogBuilder.setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
-                //mithsu//
                 ReceiptHeader.b = true;
-                //mithsu//
 
                 ReceiptActivity activity = (ReceiptActivity) getActivity();
                 new OutstandingController(getActivity()).ClearFddbNoteData();
                 new ReceiptController(getActivity()).CancelReceiptS(RefNo);
                 new ReceiptDetController(getActivity()).restDataForMR(RefNo);
-                //activity.cusPosition = 0;
                 activity.selectedDebtor = null;
                 activity.selectedRecHed = null;
                 Toast.makeText(getActivity(), "Receipt discarded successfully..!", Toast.LENGTH_SHORT).show();
 
-
                 Intent intent = new Intent(getActivity(), DebtorDetailsActivity.class);
-                //    intent.putExtra("outlet", outlet);
                 startActivity(intent);
                 getActivity().finish();
-
-                //************************************************************************
-                //  UtilityContainer.ClearReceiptSharedPref(getActivity());
-                //  UtilityContainer.mLoadFragment(new ReceiptInvoice(), getActivity());
 
             }
         }).setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -286,24 +251,6 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
         alertD.show();
     }
 
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**/
-
-    public void mPauseReceipt() {
-//
-        if (!mSharedPref.getSelectedDebCode().equals("0") && mSharedPref.getGlobalVal("ReckeyHeader").equals("1")) {
-
-            //***************************************************************** need to undo comment after adding debtor list - 2021/12/02
-
-
-            //**************************************************************************
-        } else
-            Toast.makeText(activity, "Select Customer/Fill in header details before Pause", Toast.LENGTH_SHORT).show();
-//
-    }
-
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*Clear Shared preference-*-*-*-*-*-*--*-*-*--*-*-*-*-*-*-*-*-*-*-*-*/
-
-    /* Clear shared preference */
     public void ClearSharedPref() {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -318,32 +265,17 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
         editor.remove("ReckeyCusCode");
         editor.remove("receipAmtChanged");
         editor.commit();
-
     }
-
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**/
 
     public void FetchData() {
 
         lv_fddbnote.setAdapter(null);
         fddbnoteList = new OutstandingController(getActivity()).getAllRecords(SharedPref.getInstance(getActivity()).getSelectedDebCode(), true);
         lv_fddbnote.setAdapter(new ReceiptSummaryAdapter(getActivity(), fddbnoteList, true, RefNo));
-
     }
 
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**/
-
-    private String currentTime() {
-        Calendar cal = Calendar.getInstance();
-        cal.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(cal.getTime());
-    }
-
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-Save primary & secondary invoice-*-*-*-*-*-*-*--*-*-*--*-*-*-*-*-*-*/
-
-    private void saveSummaryDialog(final Context context) {
-
+    private void saveSummaryDialog(final Context context, boolean isUpload)
+    {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setMessage("Do you want to save the receipt ?");
         alertDialogBuilder.setIcon(android.R.drawable.ic_dialog_alert);
@@ -351,87 +283,8 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
 
             public void onClick(final DialogInterface dialog, int id) {
 
-                //mithsu//
-                ReceiptHeader.b = true;
-                //mithsu/
-
-                //TimeZone tz = TimeZone.getTimeZone("UTC +5:30");
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-                //df.setTimeZone(tz);
-                EndTime  = df.format(new Date());
-
-                ReceiptHed recHed = new ReceiptHed();
-                recHed.setFPRECHED_LATITUDE(gps.getLatitude() + "");
-                recHed.setFPRECHED_LONGITUDE(gps.getLongitude() + "");
-//                recHed.setFPRECHED_START_TIME(localSP.getString("Rec_Start_Time", ""));
-                recHed.setFPRECHED_START_TIME(new ReceiptController(context).getActiveRecHed().getFPRECHED_START_TIME());
-                recHed.setFPRECHED_END_TIME(EndTime);
-                recHed.setFPRECHED_ADDRESS("None");
-                recHed.setFPRECHED_COSTCODE(mSharedPref.getGlobalVal("PrekeyCost"));
-                recHed.setFPRECHED_STATUS("NOT SYNCED");
-                new ReceiptController(getActivity()).UpdateRecHed(recHed, RefNo);
-                final ReceiptActivity activity = (ReceiptActivity) getActivity();
-
-                ArrayList<ReceiptDet> RecList = new ArrayList<>();
-
-                for (FddbNote fddb : fddbnoteList) {
-
-                    ReceiptDet recDet = new ReceiptDet();
-                    recDet.setFPRECDET_REFNO(RefNo);
-                    recDet.setFPRECDET_BAMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                    recDet.setFPRECDET_AMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                    //    recDet.setFPRECDET_BAMT(fddb.getFDDBNOTE_ENTER_AMT());
-                    //  recDet.setFPRECDET_AMT(fddb.getFDDBNOTE_ENTER_AMT());
-                    recDet.setFPRECDET_ALOAMT(fddb.getFDDBNOTE_ENTER_AMT());
-                    recDet.setFPRECDET_SALEREFNO(fddb.getFDDBNOTE_REFNO());
-                    recDet.setFPRECDET_REPCODE(new SalRepController(getActivity()).getCurrentRepCode());
-                    recDet.setFPRECDET_DCURCODE("LKR");
-                    recDet.setFPRECDET_DCURRATE("1.0");
-                    recDet.setFPRECDET_DTXNDATE(fddb.getFDDBNOTE_TXN_DATE());
-                    recDet.setFPRECDET_DTXNTYPE(fddb.getFDDBNOTE_TXN_TYPE());
-                    recDet.setFPRECDET_TXNDATE(currentDate());
-                    recDet.setFPRECDET_TXNTYPE("21");
-                    recDet.setFPRECDET_REFNO1(fddb.getFDDBNOTE_REFNO());
-                    recDet.setFPRECDET_MANUREF("");
-                    recDet.setFPRECDET_OCURRATE("1.00");
-                    recDet.setFPRECDET_OVPAYAMT("0.00");
-                    recDet.setFPRECDET_OVPAYBAL("0.00");
-                    //   recDet.setFPRECDET_OVPAYAMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                    //   recDet.setFPRECDET_OVPAYBAL(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                    recDet.setFPRECDET_RECORDID("");
-                    recDet.setFPRECDET_TIMESTAMP("");
-                    recDet.setFPRECDET_ISDELETE("0");
-                    recDet.setFPRECDET_REMARK(fddb.getFDDBNOTE_ENT_REMARK());
-                    recDet.setFPRECDET_DEBCODE(SharedPref.getInstance(getActivity()).getSelectedDebCode());
-                    RecList.add(recDet);
-                }
-
-                new ReceiptDetController(getActivity()).createOrUpdateRecDetS(RecList);
-                new OutstandingController(getActivity()).UpdateFddbNoteBalance(fddbnoteList);
-                new ReceiptController(getActivity()).InactiveStatusUpdate(RefNo);
-
-                //new ReceiptPreviewAlertBox(getActivity()).PrintDetailsDialogbox(getActivity(), "Print preview", RefNo);
-
-                //  activity.cusPosition = 0;
-                activity.selectedDebtor = null;
-                activity.selectedRecHed = null;
-                activity.ReceivedAmt = 0.00;
-                new ReferenceNum(getActivity()).NumValueUpdate(getResources().getString(R.string.RecNumVal));
-
-                /*-*-*-*-*-*-*-*-*-*-*-Check if deadline passed-*-*-*-*-*-*-*-*-*-*-*/
-
-                Toast.makeText(getActivity(), "Receipt saved successfully..!", Toast.LENGTH_SHORT).show();
-                //    UtilityContainer.mLoadFragment(new ReceiptInvoice(), getActivity());
-
-
+                save(isUpload);
                 dialog.dismiss();
-                ClearSharedPref();/* Clear shared preference */
-
-                Intent intent = new Intent(getActivity(), DebtorDetailsActivity.class);
-                //  intent.putExtra("outlet", outlet);
-                startActivity(intent);
-                getActivity().finish();
-
             }
         }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -442,29 +295,132 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
         alertD.show();
     }
 
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*--*-*-*-*-*-*-*-*-*-*-*-*/
+    private void save(boolean isUpload)
+    {
+        ReceiptHeader.b = true;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+        EndTime  = df.format(new Date());
+
+        ReceiptHed recHed = new ReceiptHed();
+        recHed.setFPRECHED_LATITUDE(gps.getLatitude() + "");
+        recHed.setFPRECHED_LONGITUDE(gps.getLongitude() + "");
+        recHed.setFPRECHED_START_TIME(new ReceiptController(getActivity()).getActiveRecHed().getFPRECHED_START_TIME());
+        recHed.setFPRECHED_END_TIME(EndTime);
+        recHed.setFPRECHED_ADDRESS("None");
+        recHed.setFPRECHED_COSTCODE(mSharedPref.getGlobalVal("PrekeyCost"));
+        recHed.setFPRECHED_STATUS("NOT SYNCED");
+        new ReceiptController(getActivity()).UpdateRecHed(recHed, RefNo);
+        final ReceiptActivity activity = (ReceiptActivity) getActivity();
+
+        ArrayList<ReceiptDet> RecList = new ArrayList<>();
+
+        for (FddbNote fddb : fddbnoteList) {
+
+            ReceiptDet recDet = new ReceiptDet();
+            recDet.setFPRECDET_REFNO(RefNo);
+            recDet.setFPRECDET_BAMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
+            recDet.setFPRECDET_AMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
+            recDet.setFPRECDET_ALOAMT(fddb.getFDDBNOTE_ENTER_AMT());
+            recDet.setFPRECDET_SALEREFNO(fddb.getFDDBNOTE_REFNO());
+            recDet.setFPRECDET_REPCODE(new SalRepController(getActivity()).getCurrentRepCode());
+            recDet.setFPRECDET_DCURCODE("LKR");
+            recDet.setFPRECDET_DCURRATE("1.0");
+            recDet.setFPRECDET_DTXNDATE(fddb.getFDDBNOTE_TXN_DATE());
+            recDet.setFPRECDET_DTXNTYPE(fddb.getFDDBNOTE_TXN_TYPE());
+            recDet.setFPRECDET_TXNDATE(currentDate());
+            recDet.setFPRECDET_TXNTYPE("21");
+            recDet.setFPRECDET_REFNO1(fddb.getFDDBNOTE_REFNO());
+            recDet.setFPRECDET_MANUREF("");
+            recDet.setFPRECDET_OCURRATE("1.00");
+            recDet.setFPRECDET_OVPAYAMT("0.00");
+            recDet.setFPRECDET_OVPAYBAL("0.00");
+            recDet.setFPRECDET_RECORDID("");
+            recDet.setFPRECDET_TIMESTAMP("");
+            recDet.setFPRECDET_ISDELETE("0");
+            recDet.setFPRECDET_REMARK(fddb.getFDDBNOTE_ENT_REMARK());
+            recDet.setFPRECDET_DEBCODE(SharedPref.getInstance(getActivity()).getSelectedDebCode());
+            RecList.add(recDet);
+        }
+
+        if (new ReceiptDetController(getActivity()).createOrUpdateRecDetS(RecList)>0)
+        {
+            new OutstandingController(getActivity()).UpdateFddbNoteBalance(fddbnoteList);
+            new ReceiptController(getActivity()).InactiveStatusUpdate(RefNo);
+            new ReferenceNum(getActivity()).NumValueUpdate(getResources().getString(R.string.RecNumVal));
+
+            activity.selectedDebtor = null;
+            activity.selectedRecHed = null;
+            activity.ReceivedAmt = 0.00;
+
+            Toast.makeText(getActivity(), "Receipt saved successfully..!", Toast.LENGTH_SHORT).show();
+            ClearSharedPref();/* Clear shared preference */
+
+            if (isUpload)
+            {
+                if (NetworkUtil.isNetworkAvailable(getActivity()))
+                {
+                    if (NetworkUtil.isNotPoorConnection(getActivity()))
+                    {
+                        try
+                        {
+                            Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed());
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        networkWarning("Receipt saved locally. Please use tools upload due to poor network", "Poor network");
+                    }
+                }
+                else
+                {
+                    networkWarning("Receipt saved locally. Please use tools upload due to no internet", "No internet");
+                }
+            }
+            else
+            {
+                navigateToNext();
+            }
+        }
+        else
+        {
+            Toast.makeText(getActivity(), "Receipt Save Failed..", Toast.LENGTH_LONG).show();
+            navigateToNext();
+        }
+    }
+
+    private void navigateToNext()
+    {
+        Intent intent = new Intent(getActivity(), DebtorDetailsActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    public void networkWarning(String message, String title){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setCancelable(false);
+
+        alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, int id) {
+                dialog.cancel();
+                navigateToNext();
+            }
+        });
+
+        AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
 
     private String currentDate() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return dateFormat.format(date);
     }
-
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*--*-*-*-*-*-*-*-*-*-*-*-*/
-
-    public static boolean setBluetooth(boolean enable) {
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        boolean isEnabled = bluetoothAdapter.isEnabled();
-        if (enable && !isEnabled) {
-            return bluetoothAdapter.enable();
-        } else if (!enable && isEnabled) {
-            return bluetoothAdapter.disable();
-        }
-        return true;
-    }
-
-    /*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -475,7 +431,6 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
             throw new ClassCastException(activity.toString() + " must implement onButtonPressed");
         }
     }
-
 
     public void onPause() {
         super.onPause();
@@ -559,122 +514,11 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
 
     }
 
-
-
-
-    /*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
-
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             ReceiptSummary.this.mRefreshHeader();
         }
-    }
-
-
-
-    public void SaveAndUploadDialog(final Context context) {
-
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setMessage("Do you want to save the receipt ?");
-        alertDialogBuilder.setIcon(android.R.drawable.ic_dialog_alert);
-
-        alertDialogBuilder.setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
-            public void onClick(final DialogInterface dialog, int id) {
-
-
-                //mithsu//
-                ReceiptHeader.b = true;
-                //mithsu//
-
-                //TimeZone tz = TimeZone.getTimeZone("UTC +5:30");
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-                //df.setTimeZone(tz);
-                EndTime  = df.format(new Date());
-
-                ReceiptHed recHed = new ReceiptHed();
-                recHed.setFPRECHED_LATITUDE(gps.getLatitude() + "");
-                recHed.setFPRECHED_LONGITUDE(gps.getLongitude() + "");
-//                recHed.setFPRECHED_START_TIME(localSP.getString("Rec_Start_Time", ""));
-                recHed.setFPRECHED_START_TIME(new ReceiptController(context).getActiveRecHed().getFPRECHED_START_TIME());
-                recHed.setFPRECHED_END_TIME(EndTime);
-                recHed.setFPRECHED_ADDRESS("None");
-                recHed.setFPRECHED_COSTCODE(mSharedPref.getGlobalVal("PrekeyCost"));
-                recHed.setFPRECHED_STATUS("NOT SYNCED");
-
-                new ReceiptController(getActivity()).UpdateRecHed(recHed, RefNo);
-                final ReceiptActivity activity = (ReceiptActivity) getActivity();
-
-                ArrayList<ReceiptDet> RecList = new ArrayList<>();
-
-                for (FddbNote fddb : fddbnoteList) {
-
-                    ReceiptDet recDet = new ReceiptDet();
-                    recDet.setFPRECDET_REFNO(RefNo);
-                    recDet.setFPRECDET_BAMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                    recDet.setFPRECDET_AMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                    //    recDet.setFPRECDET_BAMT(fddb.getFDDBNOTE_ENTER_AMT());
-                    //  recDet.setFPRECDET_AMT(fddb.getFDDBNOTE_ENTER_AMT());
-                    recDet.setFPRECDET_ALOAMT(fddb.getFDDBNOTE_ENTER_AMT());
-                    recDet.setFPRECDET_SALEREFNO(fddb.getFDDBNOTE_REFNO());
-                    recDet.setFPRECDET_REPCODE(new SalRepController(getActivity()).getCurrentRepCode());
-                    recDet.setFPRECDET_DCURCODE("LKR");
-                    recDet.setFPRECDET_DCURRATE("1.0");
-                    recDet.setFPRECDET_DTXNDATE(fddb.getFDDBNOTE_TXN_DATE());
-                    recDet.setFPRECDET_DTXNTYPE(fddb.getFDDBNOTE_TXN_TYPE());
-                    recDet.setFPRECDET_TXNDATE(currentDate());
-                    recDet.setFPRECDET_TXNTYPE("21");
-                    recDet.setFPRECDET_REFNO1(fddb.getFDDBNOTE_REFNO());
-                    recDet.setFPRECDET_MANUREF("");
-                    recDet.setFPRECDET_OCURRATE("1.00");
-                    recDet.setFPRECDET_OVPAYAMT("0.00");
-                    recDet.setFPRECDET_OVPAYBAL("0.00");
-                    //   recDet.setFPRECDET_OVPAYAMT(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                    //   recDet.setFPRECDET_OVPAYBAL(String.valueOf(Double.parseDouble(fddb.getFDDBNOTE_TOT_BAL()) - Double.parseDouble(fddb.getFDDBNOTE_ENTER_AMT())));
-                    recDet.setFPRECDET_RECORDID("");
-                    recDet.setFPRECDET_TIMESTAMP("");
-                    recDet.setFPRECDET_ISDELETE("0");
-                    recDet.setFPRECDET_REMARK(fddb.getFDDBNOTE_ENT_REMARK());
-                    recDet.setFPRECDET_DEBCODE(SharedPref.getInstance(getActivity()).getSelectedDebCode());
-                    RecList.add(recDet);
-                }
-
-                new ReceiptDetController(getActivity()).createOrUpdateRecDetS(RecList);
-                new OutstandingController(getActivity()).UpdateFddbNoteBalance(fddbnoteList);
-                new ReceiptController(getActivity()).InactiveStatusUpdate(RefNo);
-                new ReferenceNum(getActivity()).NumValueUpdate(getResources().getString(R.string.RecNumVal));
-
-                activity.selectedDebtor = null;
-                activity.selectedRecHed = null;
-                activity.ReceivedAmt = 0.00;
-
-
-                /*-*-*-*-*-*-*-*-*-*-*-Check if deadline passed-*-*-*-*-*-*-*-*-*-*-*/
-
-                Toast.makeText(getActivity(), "Receipt saved successfully..!", Toast.LENGTH_SHORT).show();
-
-               // if (NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
-                    Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed());
-              //  }
-//                    dialog.dismiss();
-                ClearSharedPref();/* Clear shared preference */
-
-
-
-            }
-
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-
-        AlertDialog alertD = alertDialogBuilder.create();
-        alertD.show();
-
-
     }
 
     public void Upload(final ArrayList<RecHed> Receipt) {
@@ -683,99 +527,87 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
         dialog.setTitle("Uploading Receipt records");
         dialog.show();
 
+        if (Receipt.size() > 0) {
 
-        // new OrderController(getActivity()).updateIsActive(""+mSharedPref.generateOrderId(),"2");
-      //  if (NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
-            if (Receipt.size() > 0) {
+            for (final RecHed rec : Receipt) {
+                try {
+                    String content_type = "application/json";
+                    ApiInterface apiInterface = ApiCllient.getClient(getActivity()).create(ApiInterface.class);
+                    final Handler mHandler = new Handler(Looper.getMainLooper());
+                    JsonParser jsonParser = new JsonParser();
+                    String recJson = new Gson().toJson(rec);
+                    JsonObject objectFromString = jsonParser.parse(recJson).getAsJsonObject();
+                    JsonArray jsonArray = new JsonArray();
+                    jsonArray.add(objectFromString);
 
-                for (final RecHed rec : Receipt) {
-                    try {
-                        String content_type = "application/json";
-                        ApiInterface apiInterface = ApiCllient.getClient(getActivity()).create(ApiInterface.class);
-                        final Handler mHandler = new Handler(Looper.getMainLooper());
-                        JsonParser jsonParser = new JsonParser();
-                        String recJson = new Gson().toJson(rec);
-                        JsonObject objectFromString = jsonParser.parse(recJson).getAsJsonObject();
-                        JsonArray jsonArray = new JsonArray();
-                        jsonArray.add(objectFromString);
-// menaka
-                        try{
+                    try{
 
-                            FileWriter writer=new FileWriter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) +"/"+ "KFDUPD_Receipt_Json.txt");
-                            writer.write(jsonArray.toString());
-                            writer.close();
-                        }catch(Exception e){
-                            e.printStackTrace();
-                        }
+                        FileWriter writer=new FileWriter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) +"/"+ "KFDUPD_Receipt_Json.txt");
+                        writer.write(jsonArray.toString());
+                        writer.close();
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
 
+                    Call<Result> resultCall = apiInterface.uploadReceipt(objectFromString, content_type);
+                    resultCall.enqueue(new Callback<Result>() {
+                        @Override
+                        public void onResponse(Call<Result> call, Response<Result> response) {
 
+                            int status = response.code();
 
-                        Call<Result> resultCall = apiInterface.uploadReceipt(objectFromString, content_type);
-                        resultCall.enqueue(new Callback<Result>() {
-                            @Override
-                            public void onResponse(Call<Result> call, Response<Result> response) {
+                            if(response.isSuccessful()){
+                                response.body(); // have your all data
+                                boolean result =response.body().isResponse();
+                                Log.d( ">>response"+status,result+">>"+rec.getRefNo() );
+                                if(result){
+                                    mHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            rec.setIsSync("1");
+                                            rec.setIsActive("0");
+                                            new ReceiptController(getActivity()).updateIsSyncedReceipt(rec.getRefNo(), "0","1","SYNCED");
 
-                                int status = response.code();
+                                            Toast.makeText(getActivity(), "Receipt Upload successfully..!", Toast.LENGTH_LONG).show();
 
-                                if(response.isSuccessful()){
-                                    response.body(); // have your all data
-                                    boolean result =response.body().isResponse();
-                                    Log.d( ">>response"+status,result+">>"+rec.getRefNo() );
-                                    if(result){
-                                        mHandler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                rec.setIsSync("1");
-                                                rec.setIsActive("0");
-                                                new ReceiptController(getActivity()).updateIsSyncedReceipt(rec.getRefNo(), "0","1","SYNCED");
+                                            addRefNoResults(rec.getRefNo() + " --> Success\n", Receipt.size());
+                                            mSharedPref.setUpdateClicked(false);
+                                        }
+                                    });
+                                }else{
+                                    rec.setIsSync("0");
+                                    rec.setIsActive("1");
+                                    new ReceiptController(getActivity()).updateIsSyncedReceipt(rec.getRefNo(), "1","0","NOT SYNCED");
 
-                                                Toast.makeText(getActivity(), "Receipt Upload successfully..!", Toast.LENGTH_LONG).show();
-
-                                                addRefNoResults(rec.getRefNo() + " --> Success\n", Receipt.size());
-                                                mSharedPref.setUpdateClicked(false);
-                                            }
-                                        });
-                                    }else{
-                                        rec.setIsSync("0");
-                                        rec.setIsActive("1");
-                                        new ReceiptController(getActivity()).updateIsSyncedReceipt(rec.getRefNo(), "1","0","NOT SYNCED");
-
-                                        Toast.makeText(getActivity(), "Receipt Upload Failed.", Toast.LENGTH_LONG).show();
-                                        addRefNoResults(rec.getRefNo() + " --> Failed\n", Receipt.size());
-                                    }
-                                }else {
-                                    Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
-                                    Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
-                                    startActivity(intnt);
-                                    getActivity().finish();
-                                }// this will tell you why your api doesnt work most of time
-
-
-//
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<Result> call, Throwable t) {
-                                Toast.makeText(getActivity(), "Error response " + t.toString(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Receipt Upload Failed.", Toast.LENGTH_LONG).show();
+                                    addRefNoResults(rec.getRefNo() + " --> Failed\n", Receipt.size());
+                                }
+                            }else {
+                                Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
                                 Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
                                 startActivity(intnt);
                                 getActivity().finish();
                             }
+                        }
 
-                        });
+                        @Override
+                        public void onFailure(Call<Result> call, Throwable t) {
+                            Toast.makeText(getActivity(), "Error response " + t.toString(), Toast.LENGTH_LONG).show();
+                            Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
+                            startActivity(intnt);
+                            getActivity().finish();
+                        }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-            } else {
-                Toast.makeText(getActivity(), "No Records to upload !", android.widget.Toast.LENGTH_LONG).show();
             }
-//        } else
-//            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
 
+        } else {
+            Toast.makeText(getActivity(), "No Records to upload !", android.widget.Toast.LENGTH_LONG).show();
+        }
     }
 
 

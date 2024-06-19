@@ -112,8 +112,7 @@ public class NetworkUtil {
                     Log.wtf("Network Util Class", String.valueOf(roundedSpeed));
                     Toast.makeText(context,"Network Speed - "+ String.valueOf(roundedSpeed + "Mbps"),Toast.LENGTH_LONG).show();
 
-
-                    if (roundedSpeed > 5.00)
+                    if (roundedSpeed > 10.00)
                     {
                         return true;
                     }
@@ -124,11 +123,6 @@ public class NetworkUtil {
                 return false;
             }
         }
-
         return false;
     }
-
-
-
-
 }

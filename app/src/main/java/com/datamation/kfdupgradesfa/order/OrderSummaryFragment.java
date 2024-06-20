@@ -336,7 +336,8 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
         String itemCode = "";
 
 //        locCode = new CustomerController(getActivity()).getCurrentLocCode();
-        locCode = mSharedPref.getGlobalVal("KeyLoc");
+//        locCode = mSharedPref.getGlobalVal("KeyLoc");
+        locCode = mSharedPref.getLocCode();
         list = new OrderDetailController(getActivity()).getAllOrderDetails(RefNo);
 //        discList = new OrderDiscController(getActivity()).getAllOrderDiscs(RefNo);
 //

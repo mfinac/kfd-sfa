@@ -36,5 +36,6 @@
 
     <dimen name="fragment_tool_top_margin">50dp</dimen>
     <dimen name="fragment_tool_left_margin">75dp</dimen>
+    <dimen name="font_size_extra_small">10sp</dimen>
 
 </resources>

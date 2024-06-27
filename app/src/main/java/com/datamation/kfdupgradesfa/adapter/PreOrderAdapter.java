@@ -91,13 +91,13 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
         preOrders.lblQty.setText(product.getFPRODUCT_QTY());
        // preOrders.lblCase.setText("0");
 
-        /*Change colors*/
-        if (Double.parseDouble(preOrders.lblQty.getText().toString()) > 0)
-            preOrders.lnStripe.setBackground(context.getResources().getDrawable(R.drawable.custom_textbox_new));
-        else
-            preOrders.lnStripe.setBackground(context.getResources().getDrawable(R.drawable.custom_textbox));
-
-        /*-*-*-*-*-*-*--*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+//        /*Change colors*/
+//        if (Double.parseDouble(preOrders.lblQty.getText().toString()) > 0)
+//            preOrders.lnStripe.setBackground(context.getResources().getDrawable(R.drawable.custom_textbox_new));
+//        else
+//            preOrders.lnStripe.setBackground(context.getResources().getDrawable(R.drawable.custom_textbox));
+//
+//        /*-*-*-*-*-*-*--*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
 
         preOrders.itemView.setOnLongClickListener(new View.OnLongClickListener() {

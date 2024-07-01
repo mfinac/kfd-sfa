@@ -113,7 +113,7 @@ public class ItemController {
                                  +"   FROM Tblitem i inner JOIN TblItemLoc l on l.ItemCode=i.ItemCode "
                                  + "  left join TblItemPri p on i.ItemCode=p.ItemCode "
                                  + "  where l.LocCode='" + LocCode + "'  and p.Costcode='" + costcd + "' and i.SupCode like '%" + supCode + "%' and i.itemname like '%" + itemName + "%'"
-                                 +" order by l.qoh desc";
+                                 +" order by CAST(l.qoh AS integer) desc";
 
 
             cursor = dB.rawQuery(selectQuery, null);

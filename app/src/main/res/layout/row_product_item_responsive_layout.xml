@@ -14,30 +14,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
         android:weightSum="3">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.5"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/row_itemname"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="left|center"
-                android:text="Name"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/greenColor"
-                android:textSize="@dimen/font_size_intermed" />
-<!--            <TextView-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="0.5"/>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/row_itemname"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="left|center"
+                    android:text="Name"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/greenColor"
+                    android:textSize="@dimen/font_size_intermed" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -45,111 +51,118 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.5"
-            android:orientation="horizontal"
-            android:weightSum="9.25">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/row_bonus"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2.5"
-                android:layout_marginStart="8dp"
-                android:gravity="left|center"
-                android:text="BONUS"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/greenColor"
-                android:textSize="@dimen/font_size_extra_small"
-                tools:ignore="NestedWeights" />
+                android:orientation="horizontal"
+                android:weightSum="9.25">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"/>
+                <TextView
+                    android:id="@+id/row_bonus"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:gravity="left|center"
+                    android:text="BONUS"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/greenColor"
+                    android:textSize="@dimen/font_size_extra_small"
+                    tools:ignore="NestedWeights" />
 
-            <TextView
-                android:id="@+id/row_pack"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:layout_centerHorizontal="true"
-                android:text="Pack"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/greenColor"
-                android:textSize="@dimen/font_size_intermed" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"/>
+                <TextView
+                    android:id="@+id/row_pack"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:layout_centerHorizontal="true"
+                    android:text="Pack"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/greenColor"
+                    android:textSize="@dimen/font_size_intermed" />
 
-            <TextView
-                android:id="@+id/row_qoh"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5"
-                android:layout_centerHorizontal="true"
-                android:text="QOH"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/greenColor"
-                android:textSize="@dimen/font_size_intermed"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"/>
+                <TextView
+                    android:id="@+id/row_qoh"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:layout_centerHorizontal="true"
+                    android:gravity ="center"
+                    android:text="QOH"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/greenColor"
+                    android:textSize="@dimen/font_size_intermed"/>
 
-            <TextView
-                android:id="@+id/row_price"
-                android:layout_width="0dp"
-                android:layout_weight="1.5"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:text="Price"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/greenColor"
-                android:textSize="@dimen/font_size_intermed" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"/>
+                <TextView
+                    android:id="@+id/row_price"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="match_parent"
+                    android:gravity ="center"
+                    android:text="Price"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/greenColor"
+                    android:textSize="@dimen/font_size_intermed" />
 
-            <ImageButton
-                android:id="@+id/btnSubtract"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:layout_centerVertical="true"
-                android:background="@drawable/icon_minus" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"/>
+                <ImageButton
+                    android:id="@+id/btnSubtract"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity ="center"
+                    android:background="@drawable/icon_minus" />
 
-            <TextView
-                android:id="@+id/et_qty"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.75"
-                android:layout_alignParentBottom="true"
-                android:gravity="center_horizontal"
-                android:inputType="number"
-                android:selectAllOnFocus="true"
-                android:text="P"
-                android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"/>
+                <TextView
+                    android:id="@+id/et_qty"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.75"
+                    android:gravity ="center"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:text="P"
+                    android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/btnAddition"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:background="@drawable/icon_plus" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"/>
+
+                <ImageButton
+                    android:id="@+id/btnAddition"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/icon_plus"
+                    android:gravity ="center"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -604,5 +604,42 @@ public class DayNPrdHedController {
 
     }
 
+    public int IsSyncedOrder(String repCode) {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+
+        try {
+
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_NONPRDHED + " WHERE " + ValueHolder.NONPRDDET_IS_SYNCED + " = '0' and " + ValueHolder.REPCODE + " = '" + repCode + "' ";
+
+            cursor = dB.rawQuery(selectQuery, null);
+
+            ContentValues values = new ContentValues();
+
+            int cn = cursor.getCount();
+            count = cn;
+
+        } catch (Exception e) {
+
+            Log.v(TAG + " Exception", e.toString());
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+        return count;
+
+    }
+
 
 }

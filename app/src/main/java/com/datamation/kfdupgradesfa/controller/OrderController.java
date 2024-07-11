@@ -724,7 +724,7 @@ public class OrderController {
 
     }
 
-    public int IsSyncedOrder() {
+    public int IsSyncedOrder(String repCode) {
 
         int count = 0;
 
@@ -738,7 +738,7 @@ public class OrderController {
 
         try {
 
-            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDHED + " WHERE " + ValueHolder.IS_SYNC + " = '1' ";
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDHED + " WHERE " + ValueHolder.IS_SYNC + " = '1' and " + ValueHolder.REPCODE + " = '" + repCode + "'";
 
             cursor = dB.rawQuery(selectQuery, null);
 

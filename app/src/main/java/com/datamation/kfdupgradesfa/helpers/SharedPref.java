@@ -336,7 +336,6 @@ public class SharedPref {
         editor.putString("selected_out_route_code", "");
         editor.putString("selected_pril_code", "");
         editor.putString("UserType", "");
-        editor.putString("user_id", "");
 
         editor.putString("SyncDate", "");
 

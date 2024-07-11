@@ -105,7 +105,8 @@ public class RouteCustomerFragment extends Fragment {
 
                         try {
                             debtor = customerList.get(position);
-                            mSharedPref.clearPref();
+//                            mSharedPref.clearPref();
+                            mSharedPref.clearPrefWithoutSyncDate();
                             mSharedPref.setSelectedDebCode(debtor.getFDEBTOR_CODE());
                             mSharedPref.setSelectedDebName(debtor.getFDEBTOR_NAME());
                             mSharedPref.setSelectedDebRouteCode(new RouteDetController(getActivity()).getRouteCodeByDebCode(debtor.getFDEBTOR_CODE()));

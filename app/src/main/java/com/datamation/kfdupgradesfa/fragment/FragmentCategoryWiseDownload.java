@@ -253,9 +253,9 @@ public class FragmentCategoryWiseDownload extends Fragment {
                     if (isAllUploaded(getActivity())) {
                         try {
                             //mithsu//
-                            Integer ordHedListCount = new OrderController(getActivity()).getAllDayBeforeUnSyncOrdHed();
-                            Integer receiptlistCount = new ReceiptController(getActivity()).getAllDayBeforeUnSyncRecHedCount();
-                            Integer npHedListCount = new DayNPrdHedController(getActivity()).getAllDayBeforeUnSyncNonPrdCount();
+                            Integer ordHedListCount = new OrderController(getActivity()).getAllDayBeforeUnSyncOrdHed(new SalRepController(getActivity()).getCurrentRepCode());
+                            Integer receiptlistCount = new ReceiptController(getActivity()).getAllDayBeforeUnSyncRecHedCount(new SalRepController(getActivity()).getCurrentRepCode());
+                            Integer npHedListCount = new DayNPrdHedController(getActivity()).getAllDayBeforeUnSyncNonPrdCount(new SalRepController(getActivity()).getCurrentRepCode());
 
                             if (ordHedListCount > 0 || receiptlistCount > 0 || npHedListCount > 0) {
                                 Toast.makeText(getActivity(), "Please upload all transaction details", Toast.LENGTH_LONG).show();

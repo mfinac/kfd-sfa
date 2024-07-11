@@ -24,6 +24,7 @@ import com.datamation.kfdupgradesfa.api.ApiCllient;
 import com.datamation.kfdupgradesfa.api.ApiInterface;
 import com.datamation.kfdupgradesfa.controller.ReceiptController;
 import com.datamation.kfdupgradesfa.controller.ReceiptDetController;
+import com.datamation.kfdupgradesfa.controller.SalRepController;
 import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
 import com.datamation.kfdupgradesfa.helpers.NetworkFunctions;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
@@ -384,14 +385,9 @@ public class ReceiptFragment extends Fragment {
         }
     }
 
-
-
-
-
-
     public void prepareReceiptData() {
 
-        receiptHedList = new ReceiptController(getActivity()).getTodayReceipts();
+        receiptHedList = new ReceiptController(getActivity()).getTodayReceipts(new SalRepController(getActivity()).getCurrentRepCode());
 
         if (receiptHedList.size() == 0) {
             Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
@@ -400,7 +396,7 @@ public class ReceiptFragment extends Fragment {
             listReceiptDataChild = new HashMap<>();
 
             for (ReceiptHed rHed : receiptHedList) {
-                listReceiptDataChild.put(rHed, new ReceiptDetController(getActivity()).getTodayreceiptsDets(rHed.getFPRECHED_REFNO(), "", ""));
+                listReceiptDataChild.put(rHed, new ReceiptDetController(getActivity()).getTodayreceiptsDets(rHed.getFPRECHED_REFNO(), "", "",new SalRepController(getActivity()).getCurrentRepCode()));
             }
 
             listRecAdapter = new ExpandableReceiptListAdapter(getActivity(), receiptHedList, listReceiptDataChild);
@@ -412,7 +408,7 @@ public class ReceiptFragment extends Fragment {
 
     public void searchListData(String key) {
 
-        receiptHedList = new ReceiptController(getActivity()).getTodayReceiptsBySearch(key);
+        receiptHedList = new ReceiptController(getActivity()).getTodayReceiptsBySearch(key,new SalRepController(getActivity()).getCurrentRepCode());
 
         if (receiptHedList.size() == 0) {
             Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
@@ -421,7 +417,7 @@ public class ReceiptFragment extends Fragment {
             listReceiptDataChild = new HashMap<ReceiptHed, List<ReceiptDet>>();
 
             for (ReceiptHed rHed : receiptHedList) {
-                listReceiptDataChild.put(rHed, new ReceiptDetController(getActivity()).getTodayreceiptsDets(rHed.getFPRECHED_REFNO(), "", ""));
+                listReceiptDataChild.put(rHed, new ReceiptDetController(getActivity()).getTodayreceiptsDets(rHed.getFPRECHED_REFNO(), "", "",new SalRepController(getActivity()).getCurrentRepCode()));
             }
 
             listRecAdapter = new ExpandableReceiptListAdapter(getActivity(), receiptHedList, listReceiptDataChild);

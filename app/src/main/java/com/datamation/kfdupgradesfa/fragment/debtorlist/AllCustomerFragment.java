@@ -103,7 +103,8 @@ public class AllCustomerFragment extends Fragment {
                     try {
                         Intent intent = new Intent(getActivity(), DebtorDetailsActivity.class);
                         intent.putExtra("outlet", debtor);
-                        mSharedPref.clearPref();
+//                        mSharedPref.clearPref();
+                        mSharedPref.clearPrefWithoutSyncDate();
                         mSharedPref.setSelectedDebCode(debtor.getFDEBTOR_CODE());
                         mSharedPref.setSelectedDebName(debtor.getFDEBTOR_NAME());
                         mSharedPref.setSelectedDebRouteCode(new RouteDetController(getActivity()).getRouteCodeByDebCode(debtor.getFDEBTOR_CODE()));

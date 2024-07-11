@@ -664,7 +664,7 @@ public class ReceiptDetController {
 	}
 
 	//   *%*%*%*%*%*%*%%%*%*%* MMS 2022/02/11 *%*%%*%*%*%*%*%*%*//
-	public ArrayList<ReceiptDet> getTodayreceiptsDets(String refno, String from, String to) {
+	public ArrayList<ReceiptDet> getTodayreceiptsDets(String refno, String from, String to, String repCode) {
 
 
 		if (dB == null) {
@@ -678,9 +678,9 @@ public class ReceiptDetController {
 		String selectQuery = "";
 
 		if(from.equals("") && to.equals("")){
-			selectQuery = "select * from TblRecDetS WHERE "	+ ValueHolder.REFNO + "='" + refno + "' ";
+			selectQuery = "select * from TblRecDetS WHERE "	+ ValueHolder.REFNO + "='" + refno + "' and " + ValueHolder.REPCODE + " = '" + repCode + "' ";
 		}else{
-			selectQuery = "select * from TblRecDetS WHERE "	+ ValueHolder.REFNO + "='" + refno + "' "
+			selectQuery = "select * from TblRecDetS WHERE "	+ ValueHolder.REFNO + "='" + refno + "' and " + ValueHolder.REPCODE + " = '" + repCode + "' "
 					+ " and  txndate between '" + from + "' and '" + to + "'";
 		}
 

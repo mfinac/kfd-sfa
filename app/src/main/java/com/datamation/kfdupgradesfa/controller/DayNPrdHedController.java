@@ -497,7 +497,7 @@ public class DayNPrdHedController {
     }
 
 
-    public ArrayList<NonPrdHed> getUnSyncedData() {
+    public ArrayList<NonPrdHed> getUnSyncedData(String repCode) {
 
         if (dB == null) {
             open();
@@ -509,7 +509,7 @@ public class DayNPrdHedController {
 
         try {
 
-            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_NONPRDHED + " WHERE " + ValueHolder.NONPRDHED_IS_SYNCED + "='0'";
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_NONPRDHED + " WHERE " + ValueHolder.NONPRDHED_IS_SYNCED + "='0' and " + ValueHolder.REPCODE + " = '" + repCode + "'";
             Cursor cursor = dB.rawQuery(selectQuery, null);
 //            localSP = context.getSharedPreferences(SETTINGS, Context.MODE_WORLD_READABLE + Context.MODE_WORLD_WRITEABLE);
             localSP = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE + Context.MODE_PRIVATE);
@@ -551,7 +551,7 @@ public class DayNPrdHedController {
 
     }
 
-    public int getAllDayBeforeUnSyncNonPrdCount() {
+    public int getAllDayBeforeUnSyncNonPrdCount(String repCode) {
         if (dB == null) {
             open();
         } else if (!dB.isOpen()) {
@@ -560,7 +560,7 @@ public class DayNPrdHedController {
 
 
         @SuppressWarnings("static-access")
-        String selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where ISsync= 0";
+        String selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where ISsync= 0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 

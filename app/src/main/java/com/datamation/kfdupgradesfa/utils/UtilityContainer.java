@@ -403,7 +403,7 @@ public class UtilityContainer {
                     customerController.InsertOrReplaceDebtor(downloadedList);
                     new DownloadController(context).createOrUpdateDownload("" + downloadedList.size(), "" + totalRecords, "Debtor Info");
                     Log.d("InsertOrReplaceDebtor", "succes");
-                    SharedPref.getInstance(context).setIsFirstInstallation(true);
+//                    SharedPref.getInstance(context).setIsFirstInstallation(true);
 
                 } catch (JSONException | NumberFormatException e) {
 

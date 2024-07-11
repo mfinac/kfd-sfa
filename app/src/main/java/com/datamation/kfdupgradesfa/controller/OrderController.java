@@ -453,7 +453,7 @@ public class OrderController {
     }
 
     @SuppressWarnings("static-access")
-    public ArrayList<Order> getAllOrders() {
+    public ArrayList<Order> getAllOrders(String repCode) {
         if (dB == null) {
             open();
         } else if (!dB.isOpen()) {
@@ -464,7 +464,7 @@ public class OrderController {
 
         @SuppressWarnings("static-access")
 //        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where "+ ValueHolder.IS_ACTIVE + " <> '1' ORDER BY Id DESC";
-         String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where " + ValueHolder.IS_ACTIVE + " = '0'    ORDER BY Id DESC";
+         String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where " + ValueHolder.REPCODE + " = '" + repCode + "' and " + ValueHolder.IS_ACTIVE + " = '0' ORDER BY Id DESC";
         //  String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + "";
         Cursor cursor = dB.rawQuery(selectQuery, null);
 
@@ -724,7 +724,7 @@ public class OrderController {
 
     }
 
-    public int IsSyncedOrder(String refno) {
+    public int IsSyncedOrder() {
 
         int count = 0;
 
@@ -738,7 +738,7 @@ public class OrderController {
 
         try {
 
-            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDHED + " WHERE " + ValueHolder.REFNO + " = '" + refno + "' and " + ValueHolder.IS_SYNC + " = '1' ";
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDHED + " WHERE " + ValueHolder.IS_SYNC + " = '1' ";
 
             cursor = dB.rawQuery(selectQuery, null);
 
@@ -1019,7 +1019,7 @@ public class OrderController {
 //        return list;
 //    }
 
-    public ArrayList<OrderHed> getAllUnSyncOrdHedNew() {
+    public ArrayList<OrderHed> getAllUnSyncOrdHedNew(String repCode) {
         if (dB == null) {
             open();
         } else if (!dB.isOpen()) {
@@ -1035,7 +1035,7 @@ public class OrderController {
 
         @SuppressWarnings("static-access")
         String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where " + ValueHolder.IS_ACTIVE
-                + "='0' and " + ValueHolder.IS_SYNC + "='1'";
+                + "='0' and " + ValueHolder.IS_SYNC + "='1' and " + ValueHolder.REPCODE + " = '" + repCode + "'";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 
@@ -1122,7 +1122,7 @@ public class OrderController {
 
         @SuppressWarnings("static-access")
         String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where " + ValueHolder.IS_ACTIVE
-                + "='1' and " + ValueHolder.IS_SYNC + "='1' AND " + ValueHolder.REFNO + " = '" + RefNo + "'";
+                + "='0' and " + ValueHolder.IS_SYNC + "='1' AND " + ValueHolder.REFNO + " = '" + RefNo + "'";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 
@@ -1274,7 +1274,7 @@ public class OrderController {
 //    }
 
 
-    public int getAllDayBeforeUnSyncOrdHed() {
+    public int getAllDayBeforeUnSyncOrdHed(String repCode) {
         if (dB == null) {
             open();
         } else if (!dB.isOpen()) {
@@ -1282,7 +1282,7 @@ public class OrderController {
         }
 
 
-        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where IsSync=1 and IsActive=0";
+        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where IsSync=1 and IsActive=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 
@@ -1498,7 +1498,7 @@ public class OrderController {
 
     }
 
-    public ArrayList<Order> getAllOrdersBySearch(String key) {
+    public ArrayList<Order> getAllOrdersBySearch(String key, String repCode) {
         if (dB == null) {
             open();
         } else if (!dB.isOpen()) {
@@ -1508,7 +1508,7 @@ public class OrderController {
         ArrayList<Order> list = new ArrayList<Order>();
 
         @SuppressWarnings("static-access")
-        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where " + ValueHolder.IS_ACTIVE + " <> '1' and " + ValueHolder.TXNDATE + " LIKE '%" + key + "%' ORDER BY Id DESC";
+        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where " + ValueHolder.REPCODE + " = '" + repCode + "' and " + ValueHolder.IS_ACTIVE + " <> '1' and " + ValueHolder.TXNDATE + " LIKE '%" + key + "%' ORDER BY Id DESC";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 

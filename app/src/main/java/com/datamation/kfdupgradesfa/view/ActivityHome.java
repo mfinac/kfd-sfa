@@ -59,6 +59,7 @@ import com.datamation.kfdupgradesfa.controller.ReferenceDetailDownloader;
 import com.datamation.kfdupgradesfa.controller.ReferenceSettingController;
 import com.datamation.kfdupgradesfa.controller.RepGPSLocationController;
 import com.datamation.kfdupgradesfa.controller.RouteDetController;
+import com.datamation.kfdupgradesfa.controller.SalRepController;
 import com.datamation.kfdupgradesfa.controller.SupplierController;
 import com.datamation.kfdupgradesfa.controller.TownController;
 import com.datamation.kfdupgradesfa.controller.TypeController;
@@ -72,6 +73,7 @@ import com.datamation.kfdupgradesfa.model.Control;
 import com.datamation.kfdupgradesfa.model.Debtor;
 import com.datamation.kfdupgradesfa.model.NonPrdHed;
 import com.datamation.kfdupgradesfa.model.Order;
+import com.datamation.kfdupgradesfa.model.OrderHed;
 import com.datamation.kfdupgradesfa.model.ReceiptHed;
 import com.datamation.kfdupgradesfa.model.RepGPS;
 import com.datamation.kfdupgradesfa.model.apimodel.ReadJsonList;
@@ -234,7 +236,20 @@ public class ActivityHome extends AppCompatActivity {
                         UtilityContainer.mLoadFragment(new FragmentTools(), ActivityHome.this);
                         return true;
                     case R.id.navigation_logout:
-                        Logout();
+                        int npSize = new DayNPrdHedController(context).IsSyncedOrder(new SalRepController(context).getCurrentRepCode());
+                        int recSize = new ReceiptController(context).IsSyncedOrder(new SalRepController(context).getCurrentRepCode());
+                        int OrdSize = new OrderController(context).IsSyncedOrder(new SalRepController(context).getCurrentRepCode());
+
+                        if(npSize>0 || recSize>0 || OrdSize>0)
+                        {
+                            Toast.makeText(context, "Please upload all orders before the day end!!", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(context, "Latitude: " + latitude + ", Longitude: " + longitude, Toast.LENGTH_LONG).show();
+                            Logout();
+                        }
+
                         return true;
                 }
             } else {
@@ -648,9 +663,6 @@ public class ActivityHome extends AppCompatActivity {
                 sessionManager.Logout();
                 finish();
                 pref.setLoginStatus(false);
-                pref.setUserId("");
-                pref.setUserPwd("");
-                pref.setUserPrefix("");
                 pref.clearPref();
                 pref.setActiveStatus(false);
             }

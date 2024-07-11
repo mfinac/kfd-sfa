@@ -32,6 +32,7 @@ import com.datamation.kfdupgradesfa.api.ApiInterface;
 import com.datamation.kfdupgradesfa.controller.CustomerController;
 import com.datamation.kfdupgradesfa.controller.OrderController;
 import com.datamation.kfdupgradesfa.controller.OrderDetailController;
+import com.datamation.kfdupgradesfa.controller.SalRepController;
 import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
 import com.datamation.kfdupgradesfa.dialog.PreSalePrintPreviewAlertBox;
 import com.datamation.kfdupgradesfa.helpers.NetworkFunctions;
@@ -133,7 +134,7 @@ public class OrderFragment extends Fragment {
     private void showData() {
 
 
-        listDataHeader = new OrderController(getActivity()).getAllOrders();
+        listDataHeader = new OrderController(getActivity()).getAllOrders(new SalRepController(getActivity()).getCurrentRepCode());
 
         if (listDataHeader.size() == 0) {
             Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
@@ -142,7 +143,7 @@ public class OrderFragment extends Fragment {
             listDataChild = new HashMap<Order, List<OrderDetail>>();
 
             for (Order free : listDataHeader) {
-                listDataChild.put(free, new OrderDetailController(getActivity()).getAllOrderDets(free.getFORDHED_REFNO()));
+                listDataChild.put(free, new OrderDetailController(getActivity()).getAllOrderDets(free.getFORDHED_REFNO(),new SalRepController(getActivity()).getCurrentRepCode()));
             }
 
             listVanAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
@@ -521,7 +522,7 @@ public class OrderFragment extends Fragment {
                //     if (NetworkUtil.isNetworkAvailable(getActivity())) {
                         if (stats.getText().toString().equals("NOT SYNCED")) {
                             try {
-                                if (new OrderController(getActivity()).getAllUnSyncOrdHedNew().size() > 0) {
+                                if (new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode()).size() > 0) {
                                     //   Log.d(">>>3", ">>>3 ");
                                     for (final OrderHed c : orders) {
                                         try {
@@ -650,7 +651,8 @@ public class OrderFragment extends Fragment {
 //                    }
                     prepareListData();
 //                    listVanAdapter.notifyDataSetChanged();
-                    Toast.makeText(getActivity(), "Confirmed order successfully", Toast.LENGTH_LONG).show();
+
+                    //Toast.makeText(getActivity(), "Confirmed order successfully", Toast.LENGTH_LONG).show();
 
                 }
             });
@@ -670,9 +672,9 @@ public class OrderFragment extends Fragment {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
-                            ArrayList<OrderHed> orders = new OrderController(getActivity()).getAllUnSyncOrdHedNew();
+                            ArrayList<OrderHed> orders = new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode());
                             try {
-                                if (new OrderController(getActivity()).getAllUnSyncOrdHedNew().size() > 0) {
+                                if (new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode()).size() > 0) {
                                     //   Log.d(">>>3", ">>>3 ");
                                     for (final OrderHed c : orders) {
                                         try {
@@ -859,7 +861,7 @@ public class OrderFragment extends Fragment {
     //    modified by MMS - 2022/02/17 #$#$#$#$#$//
     public void prepareListData() {
         showData();
-        listDataHeader = new OrderController(getActivity()).getAllOrders();
+        listDataHeader = new OrderController(getActivity()).getAllOrders(new SalRepController(getActivity()).getCurrentRepCode());
 
         if (listDataHeader.size() == 0) {
             Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
@@ -868,7 +870,7 @@ public class OrderFragment extends Fragment {
             listDataChild = new HashMap<Order, List<OrderDetail>>();
 
             for (Order free : listDataHeader) {
-                listDataChild.put(free, new OrderDetailController(getActivity()).getAllOrderDets(free.getFORDHED_REFNO()));
+                listDataChild.put(free, new OrderDetailController(getActivity()).getAllOrderDets(free.getFORDHED_REFNO(), new SalRepController(getActivity()).getCurrentRepCode()));
             }
 
             listVanAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
@@ -879,7 +881,7 @@ public class OrderFragment extends Fragment {
 
     public void searchListData(String key) {
 
-        listDataHeader = new OrderController(getActivity()).getAllOrdersBySearch(key);
+        listDataHeader = new OrderController(getActivity()).getAllOrdersBySearch(key, new SalRepController(getActivity()).getCurrentRepCode());
 
         if (listDataHeader.size() == 0) {
             Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
@@ -888,7 +890,7 @@ public class OrderFragment extends Fragment {
             listDataChild = new HashMap<Order, List<OrderDetail>>();
 
             for (Order free : listDataHeader) {
-                listDataChild.put(free, new OrderDetailController(getActivity()).getAllOrderDets(free.getFORDHED_REFNO()));
+                listDataChild.put(free, new OrderDetailController(getActivity()).getAllOrderDets(free.getFORDHED_REFNO(), new SalRepController(getActivity()).getCurrentRepCode()));
             }
 
             listVanAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);

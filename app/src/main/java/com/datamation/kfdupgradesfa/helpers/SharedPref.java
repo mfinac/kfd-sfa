@@ -336,6 +336,19 @@ public class SharedPref {
         editor.putString("selected_out_route_code", "");
         editor.putString("selected_pril_code", "");
         editor.putString("UserType", "");
+
+        editor.putString("SyncDate", "");
+
+        editor.apply();
+    }
+
+    public void clearPrefWithoutSyncDate() {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("selected_out_id", "");
+        editor.putString("selected_out_name", "");
+        editor.putString("selected_out_route_code", "");
+        editor.putString("selected_pril_code", "");
+        editor.putString("UserType", "");
         editor.apply();
     }
 
@@ -629,7 +642,7 @@ public class SharedPref {
         /*****Live****/ //return sharedPref.getString("baseURL", "http://123.231.15.146:1030");//Dialog
         /*****Live****/ //return sharedPref.getString("baseURL", "http://124.43.5.227:1030");//SLT
 
-        /******Test******/  return sharedPref.getString("baseURL", "http://124.43.5.227:1031");//tesing SLT
+        /******Test******/  return sharedPref.getString("baseURL", "http://124.43.5.227:1031");//tesing SLT (TS+ KFD_Test_SFA)
 
        //  return sharedPref.getString("baseURL", "http://192.168.0.5:1035");
 

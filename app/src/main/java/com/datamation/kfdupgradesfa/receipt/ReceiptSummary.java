@@ -363,7 +363,7 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
                     {
                         try
                         {
-                            Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed());
+                            Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed(new SalRepController(getActivity()).getCurrentRepCode()));
                         }
                         catch (Exception e)
                         {

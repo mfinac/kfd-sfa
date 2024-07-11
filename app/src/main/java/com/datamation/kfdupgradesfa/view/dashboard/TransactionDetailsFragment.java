@@ -45,6 +45,7 @@ import com.datamation.kfdupgradesfa.controller.OrderDetailController;
 import com.datamation.kfdupgradesfa.controller.PreProductController;
 import com.datamation.kfdupgradesfa.controller.ReceiptController;
 import com.datamation.kfdupgradesfa.controller.ReceiptDetController;
+import com.datamation.kfdupgradesfa.controller.SalRepController;
 import com.datamation.kfdupgradesfa.controller.SalesReturnController;
 import com.datamation.kfdupgradesfa.controller.SalesReturnDetController;
 import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
@@ -558,7 +559,7 @@ public class TransactionDetailsFragment extends Fragment {
 
     public void prepareReceiptData(String from, String to) {
         if (from.equals("") || to.equals("")) {
-            receiptHedList = new ReceiptController(getActivity()).getTodayReceipts();
+            receiptHedList = new ReceiptController(getActivity()).getTodayReceipts(new SalRepController(getActivity()).getCurrentRepCode());
         } else {
             receiptHedList = new ReceiptController(getActivity()).getReceiptsByDate(from, to);
         }
@@ -571,7 +572,7 @@ public class TransactionDetailsFragment extends Fragment {
             listReceiptDataChild = new HashMap<ReceiptHed, List<ReceiptDet>>();
 
             for (ReceiptHed rHed : receiptHedList) {
-                listReceiptDataChild.put(rHed, new ReceiptDetController(getActivity()).getTodayreceiptsDets(rHed.getFPRECHED_REFNO(), from, to));
+                listReceiptDataChild.put(rHed, new ReceiptDetController(getActivity()).getTodayreceiptsDets(rHed.getFPRECHED_REFNO(), from, to, new SalRepController(getActivity()).getCurrentRepCode()));
             }
 
             listRecAdapter = new ExpandableReceiptListAdapter(getActivity(), receiptHedList, listReceiptDataChild);

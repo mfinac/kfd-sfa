@@ -610,7 +610,8 @@ public class DebtorDetailsActivity extends AppCompatActivity {
                             UtilityContainer.ClearReceiptSharedPref(getApplicationContext());
                             UtilityContainer.ClearCustomerSharedPref(getApplicationContext());
                             sharedPref.setGPSDebtor("");
-                            sharedPref.clearPref();
+//                            sharedPref.clearPref();
+                            sharedPref.clearPrefWithoutSyncDate();
                             Intent intent = new Intent(getApplicationContext(), CustomerListActivity.class);
                             startActivity(intent);
                             finish();

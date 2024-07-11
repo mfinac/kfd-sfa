@@ -230,9 +230,9 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                     if (NetworkUtil.isNetworkAvailable(getActivity())) {
                         SharedPref sharedPref = SharedPref.getInstance(context);
 
-                        Integer ordHedListCount = new OrderController(getActivity()).getAllDayBeforeUnSyncOrdHed();
-                        Integer receiptlistCount = new ReceiptController(getActivity()).getAllDayBeforeUnSyncRecHedCount();
-                        Integer npHedListCount = new DayNPrdHedController(getActivity()).getAllDayBeforeUnSyncNonPrdCount();
+                        Integer ordHedListCount = new OrderController(getActivity()).getAllDayBeforeUnSyncOrdHed(new SalRepController(getActivity()).getCurrentRepCode());
+                        Integer receiptlistCount = new ReceiptController(getActivity()).getAllDayBeforeUnSyncRecHedCount(new SalRepController(getActivity()).getCurrentRepCode());
+                        Integer npHedListCount = new DayNPrdHedController(getActivity()).getAllDayBeforeUnSyncNonPrdCount(new SalRepController(getActivity()).getCurrentRepCode());
 
                         if (ordHedListCount > 0 || receiptlistCount > 0 || npHedListCount > 0) {
                             Toast.makeText(getActivity(), "Please upload all transaction details", Toast.LENGTH_LONG).show();
@@ -432,9 +432,9 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
     {
         try
         {
-            final ArrayList<OrderHed> ordHedList = new OrderController(context).getAllUnSyncOrdHedNew();
-            ArrayList<RecHed> receiptlist = new ReceiptController(getActivity()).getAllUnsyncedReceiptHed();
-            final ArrayList<NonPrdHed> npHedList = new DayNPrdHedController(getActivity()).getUnSyncedData();
+            final ArrayList<OrderHed> ordHedList = new OrderController(context).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode());
+            ArrayList<RecHed> receiptlist = new ReceiptController(getActivity()).getAllUnsyncedReceiptHed(new SalRepController(getActivity()).getCurrentRepCode());
+            final ArrayList<NonPrdHed> npHedList = new DayNPrdHedController(getActivity()).getUnSyncedData(new SalRepController(getActivity()).getCurrentRepCode());
             ArrayList<RepGpsLoc> repGpsLoc = new RepGPSLocationController(context).getUnSyncedGPSLocData();
 
             if (receiptlist.size() <= 0 && ordHedList.size() <= 0 && repGpsLoc.size() <= 0 && npHedList.size() <= 0)
@@ -544,7 +544,7 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
         switch (taskType) {
             case UPLOAD_ORDER: {
                 DayNPrdHedController npHed = new DayNPrdHedController(getActivity());
-                final ArrayList<NonPrdHed> npHedList = npHed.getUnSyncedData();
+                final ArrayList<NonPrdHed> npHedList = npHed.getUnSyncedData(new SalRepController(getActivity()).getCurrentRepCode());
                 if (npHedList.size() > 0) {
                     Toast.makeText(getActivity(), "Nonproductive data upload completed..!", Toast.LENGTH_LONG).show();
                 }
@@ -555,7 +555,7 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
             break;
             case UPLOAD_NONPROD: {
 
-                ArrayList<RecHed> receiptlist = new ReceiptController(getActivity()).getAllUnsyncedReceiptHed();
+                ArrayList<RecHed> receiptlist = new ReceiptController(getActivity()).getAllUnsyncedReceiptHed(new SalRepController(getActivity()).getCurrentRepCode());
                 if (receiptlist.size() > 0) {
                     Toast.makeText(getActivity(), "Receipt data upload completed..!", Toast.LENGTH_LONG).show();
                 }
@@ -703,7 +703,7 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                     new OrderDetailController(context).AutoDataClearingOrderDetail();
 
                     Log.d(">>>>>***", "isinstaled: "+pref.getIsFirstInstallation());
-                    if (pref.getIsFirstInstallation().equals(false)) {
+//                    if (pref.getIsFirstInstallation().equals(false)) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -721,7 +721,7 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                             errors.add(e.toString());
                             throw e;
                         }
-                    }
+//                    }
 
                    /*****************company details**********************************************************************/
                     getActivity().runOnUiThread(new Runnable() {

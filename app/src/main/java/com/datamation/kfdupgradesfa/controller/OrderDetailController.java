@@ -452,7 +452,7 @@ public class OrderDetailController {
     }
 
     @SuppressLint("Range")
-    public ArrayList<OrderDetail> getAllOrderDets(String refno) {
+    public ArrayList<OrderDetail> getAllOrderDets(String refno, String repCode) {
 
         if (dB == null) {
             open();
@@ -462,8 +462,19 @@ public class OrderDetailController {
 
         ArrayList<OrderDetail> list = new ArrayList<OrderDetail>();
 
-        String selectQuery = "select * from " + ValueHolder.TABLE_ORDDET + " WHERE "
-                + ValueHolder.REFNO + "='" + refno + "' and " + ValueHolder.QTY + " <> '0'";
+//        String selectQuery = "select * from " + ValueHolder.TABLE_ORDDET + " WHERE "
+//                + ValueHolder.REFNO + "='" + refno + "' and "
+//                + ValueHolder.REPCODE + "='" + repCode + "' and "
+//                + ValueHolder.QTY + " <> '0'";
+
+        // wrote this join query coz ORDDET doesn't have a column named REPCODE
+        String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDDET + " od "
+                + "JOIN " + ValueHolder.TABLE_ORDHED + " oh "
+                + "ON od." + ValueHolder.REFNO + " = oh." + ValueHolder.REFNO + " "
+                + "WHERE od." + ValueHolder.REFNO + " = '" + refno + "' "
+                + "AND oh." + ValueHolder.REPCODE + " = '" + repCode + "' "
+                + "AND od." + ValueHolder.QTY + " <> '0'";
+
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 

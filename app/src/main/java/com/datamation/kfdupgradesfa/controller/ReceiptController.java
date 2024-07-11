@@ -1242,7 +1242,7 @@ public class ReceiptController {
         return list;
     }
 
-    public ArrayList<RecHed> getAllUnsyncedReceiptHed() {
+    public ArrayList<RecHed> getAllUnsyncedReceiptHed(String repCode) {
         if (dB == null) {
             open();
         } else if (!dB.isOpen()) {
@@ -1255,7 +1255,7 @@ public class ReceiptController {
         try {
             selectQuery = "select * from " + ValueHolder.TABLE_FPRECHEDS + " Where "
                     + ValueHolder.FPRECHED_ISACTIVE + "='0' and " + ValueHolder.FPRECHED_ISSYNCED + "='0' and "
-                    + ValueHolder.FPRECHED_ISDELETE + "='0'";
+                    + ValueHolder.FPRECHED_ISDELETE + "='0' and " + ValueHolder.REPCODE + " = '" + repCode + "'";
 
             Cursor cursor = dB.rawQuery(selectQuery, null);
 
@@ -1317,7 +1317,7 @@ public class ReceiptController {
         return list;
     }
 
-    public int getAllDayBeforeUnSyncRecHedCount() {
+    public int getAllDayBeforeUnSyncRecHedCount(String repCode) {
         if (dB == null) {
             open();
         } else if (!dB.isOpen()) {
@@ -1326,7 +1326,7 @@ public class ReceiptController {
 
 
         @SuppressWarnings("static-access")
-        String selectQuery = "select * from " + ValueHolder.TABLE_FPRECHEDS + " Where IsSynced = 0";
+        String selectQuery = "select * from " + ValueHolder.TABLE_FPRECHEDS + " Where IsSynced = 0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 
@@ -1425,7 +1425,7 @@ public class ReceiptController {
     }
 
     //   *%*%*%*%*%*%*%%%*%*%* MMS 2022/02/11 *%*%%*%*%*%*%*%*%*//
-    public ArrayList<ReceiptHed> getTodayReceipts() {
+    public ArrayList<ReceiptHed> getTodayReceipts(String repCode) {
 
         int curYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date()));
         int curMonth = Integer.parseInt(new SimpleDateFormat("MM").format(new Date()));
@@ -1441,7 +1441,7 @@ public class ReceiptController {
 
         try {
             String selectQuery = "select DebCode, RefNo, isSynced, TxnDate, TotalAmt,PayType,Status from TblRecHedS "
-                    + "  where  isActive = '" + "0" + "'" +
+                    + "  where  isActive = '" + "0" + "' and " + ValueHolder.REPCODE + " = '" + repCode + "'" +
 //                    + "  where txndate = '" + curYear + "-" + String.format("%02d", curMonth) + "-" + String.format("%02d", curDate) + "' and isActive = '" + "0" + "'" +
                     "ORDER BY Id DESC";
 
@@ -1478,7 +1478,7 @@ public class ReceiptController {
     }
 
     //   *%*%*%*%*%*%*%%%*%*%* MMS 2022/05/19 *%*%%*%*%*%*%*%*%*//
-    public ArrayList<ReceiptHed> getTodayReceiptsBySearch(String key) {
+    public ArrayList<ReceiptHed> getTodayReceiptsBySearch(String key, String repCode) {
 
         int curYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date()));
         int curMonth = Integer.parseInt(new SimpleDateFormat("MM").format(new Date()));
@@ -1494,7 +1494,7 @@ public class ReceiptController {
 
         try {
             String selectQuery = "select DebCode, RefNo, isSynced, TxnDate, TotalAmt,PayType from TblRecHedS "
-                    + "  where txndate = '" + curYear + "-" + String.format("%02d", curMonth) + "-" + String.format("%02d", curDate) + "' and isActive = '" + "0" + "' AND RefNo LIKE '%" + key + "%' ORDER BY Id DESC";
+                    + "  where txndate = '" + curYear + "-" + String.format("%02d", curMonth) + "-" + String.format("%02d", curDate) + "' and isActive = '" + "0" + "' AND " + ValueHolder.REPCODE + " = '" + repCode + "' AND RefNo LIKE '%" + key + "%' ORDER BY Id DESC";
 
             cursor = dB.rawQuery(selectQuery, null);
 
@@ -1749,6 +1749,43 @@ public class ReceiptController {
         }
 
         return list;
+
+    }
+
+    public int IsSyncedOrder(String repCode) {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+
+        try {
+
+            String selectQuery = "SELECT * FROM TblRecHedS WHERE " + ValueHolder.FPRECHED_ISSYNCED + " = '0' and " + ValueHolder.REPCODE + " = '" + repCode + "' ";
+
+            cursor = dB.rawQuery(selectQuery, null);
+
+            ContentValues values = new ContentValues();
+
+            int cn = cursor.getCount();
+            count = cn;
+
+        } catch (Exception e) {
+
+            Log.v(TAG + " Exception", e.toString());
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+        return count;
 
     }
 

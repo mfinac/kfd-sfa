@@ -721,7 +721,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                     if (NetworkUtil.isNotPoorConnection(getActivity()))
                     {
                         try {
-                            Upload(new OrderController(getActivity()).getAllUnSyncOrdHedNew());
+                            Upload(new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode()));
 //                            mSharedPref.setOrdertHeaderNextClicked(false);
 //                            mSharedPref.setIsQuantityAdded(false);
                         } catch (InterruptedException e) {

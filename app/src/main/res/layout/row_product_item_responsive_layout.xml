@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_expense_np_details_header_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/item_tray_item_height"
     android:visibility="visible"
     android:orientation="vertical"
     android:background="@drawable/custom_textbox_new">
@@ -41,7 +41,7 @@
                     android:text="Name"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/greenColor"
-                    android:textSize="@dimen/font_size_intermed" />
+                    android:textSize="@dimen/font_size_item_title" />
 
             </LinearLayout>
 
@@ -68,7 +68,7 @@
                     android:text="BONUS"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/greenColor"
-                    android:textSize="@dimen/font_size_extra_small"
+                    android:textSize="@dimen/font_size_item_sub_title"
                     tools:ignore="NestedWeights" />
 
                 <TextView

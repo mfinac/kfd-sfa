@@ -62,20 +62,20 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
             if (product.getFPRODUCT_QOH().equals("0.0")) {
                // preOrders.ad_container.setBackgroundColor(Color.parseColor("#f0aa98"));
                 preOrders.lnStripe.setBackgroundColor(Color.parseColor("#f0aa98"));
-                preOrders.itemBonus.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.pack.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.ItemName.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.Price.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.HoQ.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.lblQty.setTextColor(Color.parseColor("#4682B4"));
-             //   preOrders.lblCase.setTextColor(Color.parseColor("#4682B4"));
+                preOrders.itemBonus.setTextColor(Color.parseColor("#ff070a08"));
+                preOrders.pack.setTextColor(Color.parseColor("#ff070a08"));
+                preOrders.ItemName.setTextColor(Color.parseColor("#ff070a08"));
+                preOrders.Price.setTextColor(Color.parseColor("#ff070a08"));
+                preOrders.HoQ.setTextColor(Color.parseColor("#ff070a08"));
+                preOrders.lblQty.setTextColor(Color.parseColor("#ff070a08"));
+             //   preOrders.lblCase.setTextColor(Color.parseColor("#ff070a08"));
             } else {
-                preOrders.itemBonus.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.pack.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.ItemName.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.Price.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.HoQ.setTextColor(Color.parseColor("#4682B4"));
-                preOrders.lblQty.setTextColor(Color.parseColor("#4682B4"));
+                preOrders.itemBonus.setTextColor(Color.parseColor("#ff070a08"));
+                preOrders.pack.setTextColor(Color.parseColor("#ff070a08"));
+                preOrders.ItemName.setTextColor(Color.parseColor("#ff070a08"));
+                preOrders.Price.setTextColor(Color.parseColor("#ff070a08"));
+                preOrders.HoQ.setTextColor(Color.parseColor("#ff070a08"));
+                preOrders.lblQty.setTextColor(Color.parseColor("#ff070a08"));
               //  preOrders.lblCase.setTextColor(Color.parseColor("#4682B4"));
             }
 

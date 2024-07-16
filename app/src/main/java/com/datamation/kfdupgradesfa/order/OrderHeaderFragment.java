@@ -172,9 +172,11 @@ public class OrderHeaderFragment extends Fragment {
         currnentDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         deliveryDate.setText(simpleDateFormat.format(tomorrow));
         outStandingAmt.setText(String.format("%,.2f", new OutstandingController(getActivity()).getDebtorBalance(pref.getSelectedDebCode())));
-        txtRemakrs.setEnabled(true);
-        txtManual.setEnabled(true);
+//        txtRemakrs.setEnabled(true);
+//        txtManual.setEnabled(true);
         //select Delivery Date
+        txtManual.getText().toString();
+        txtRemakrs.getText().toString();
         year = Scalendar.get(Calendar.YEAR);
         month = Scalendar.get(Calendar.MONTH);
         day = Scalendar.get(Calendar.DAY_OF_MONTH);
@@ -504,8 +506,8 @@ public class OrderHeaderFragment extends Fragment {
         }
         else
         {
-            txtRemakrs.setEnabled(false);
-            txtManual.setEnabled(false);
+//            txtRemakrs.setEnabled(false);
+//            txtManual.setEnabled(false);
         }
     }
 

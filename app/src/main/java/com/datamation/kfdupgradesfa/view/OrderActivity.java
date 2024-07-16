@@ -63,7 +63,7 @@ public class OrderActivity<extras> extends AppCompatActivity implements OrderRes
         pref = SharedPref.getInstance(context);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("SALES ORDER (APP VERSION-"+getVersionCode()+") "+new BaseUrlController(context).getActiveConnectionName(context));
+        setTitle("SALES ORDER ("+getVersionCode()+") "+new BaseUrlController(context).getActiveConnectionName(context));
 
 
         PagerSlidingTabStrip slidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.presale_tab_strip);

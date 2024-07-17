@@ -174,7 +174,7 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                 int qty = Integer.parseInt(preOrders.lblQty.getText().toString());
                 mSharedPref.setHeaderNextClicked("1");
                 preOrders.lnStripe.setBackground(context.getResources()
-                        .getDrawable(R.drawable.custom_textbox_new));
+                        .getDrawable(R.drawable.custom_textbox_new_item_tray));
 
                 if (qty < (Double.parseDouble(preOrders.HoQ.getText().toString()))) {
                     qty = qty + 1;
@@ -286,7 +286,7 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                         //*Change colors*//**//*
                         if (Integer.parseInt(preOrders.lblQty.getText().toString()) > 0) {
                             preOrders.lnStripe.setBackground(context.getResources()
-                                    .getDrawable(R.drawable.custom_textbox_new));
+                                    .getDrawable(R.drawable.custom_textbox_new_item_tray));
                         } else {
                             preOrders.lnStripe.setBackground(context.getResources()
                                     .getDrawable(R.drawable.custom_textbox));
@@ -301,7 +301,7 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                 keypad.loadValue(Double.parseDouble(product.getFPRODUCT_QTY()));
                 if (Integer.parseInt(preOrders.lblQty.getText().toString()) > 0) {
                     preOrders.lnStripe.setBackground(context.getResources()
-                            .getDrawable(R.drawable.custom_textbox_new));
+                            .getDrawable(R.drawable.custom_textbox_new_item_tray));
                 } else {
                     preOrders.lnStripe.setBackground(context.getResources()
                             .getDrawable(R.drawable.custom_textbox));

@@ -70,6 +70,7 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                 preOrders.lblQty.setTextColor(Color.parseColor("#ff070a08"));
              //   preOrders.lblCase.setTextColor(Color.parseColor("#ff070a08"));
             } else {
+                preOrders.lnStripe.setBackgroundColor(Color.parseColor("#f5f0f0"));
                 preOrders.itemBonus.setTextColor(Color.parseColor("#ff070a08"));
                 preOrders.pack.setTextColor(Color.parseColor("#ff070a08"));
                 preOrders.ItemName.setTextColor(Color.parseColor("#ff070a08"));
@@ -134,6 +135,8 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
             public void onClick(View v) {
                 new SharedPref(context).setDiscountClicked("0");
                 int qty = Integer.parseInt(preOrders.lblQty.getText().toString());
+                String QOH = product.getFPRODUCT_QOH();
+
                 qty = qty - 1;
                 if (qty >= 0) {
                     preOrders.lblQty.setText(qty + "");
@@ -160,8 +163,13 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                     mSharedPref.setIsQuantityAdded(false);
                 }
                 /*Change colors*/
-                if (qty == 0)
+                if(qty == 0 && QOH.equals("0.0")){
+                    preOrders.lnStripe.setBackgroundColor(Color.parseColor("#f0aa98"));
+                } else if (qty == 0) {
                     preOrders.lnStripe.setBackground(context.getResources().getDrawable(R.drawable.custom_textbox));
+                }
+
+
             }
         });
 
@@ -173,10 +181,10 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
                 new SharedPref(context).setDiscountClicked("0");
                 int qty = Integer.parseInt(preOrders.lblQty.getText().toString());
                 mSharedPref.setHeaderNextClicked("1");
-                preOrders.lnStripe.setBackground(context.getResources()
-                        .getDrawable(R.drawable.custom_textbox_new_item_tray));
-
                 if (qty < (Double.parseDouble(preOrders.HoQ.getText().toString()))) {
+                    preOrders.lnStripe.setBackground(context.getResources()
+                            .getDrawable(R.drawable.custom_textbox_new_item_tray));
+
                     qty = qty + 1;
 //                    String mQoh = new DecimalFormat("#.##").format(Double.parseDouble(product.getFPRODUCT_PRICE()) * qty);
 //                    preOrders.Price.setText(mQoh+"");

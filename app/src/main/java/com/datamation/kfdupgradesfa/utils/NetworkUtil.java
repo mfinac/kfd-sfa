@@ -90,7 +90,8 @@ public class NetworkUtil {
 
         // Get the active network
         Network network = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+        {
             network = connectivityManager.getActiveNetwork();
         }
 
@@ -112,7 +113,7 @@ public class NetworkUtil {
                     Log.wtf("Network Util Class", String.valueOf(roundedSpeed));
                     Toast.makeText(context,"Network Speed - "+ String.valueOf(roundedSpeed + "Mbps"),Toast.LENGTH_LONG).show();
 
-                    if (roundedSpeed > 10.00)
+                    if (roundedSpeed >= 7.00)
                     {
                         return true;
                     }

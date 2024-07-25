@@ -7,7 +7,7 @@
     <dimen name="body_size">15sp</dimen>
     <dimen name="font_for_all">16sp</dimen>
 
-    <dimen name="font_for_all_sizes">18dip</dimen>
+    <dimen name="font_for_all_sizes">16dip</dimen>
 
     <dimen name="tour_spinner_height">40dp</dimen>
     <dimen name="tour_spinner_text_size">13sp</dimen>
@@ -38,8 +38,8 @@
     <dimen name="fragment_tool_left_margin">75dp</dimen>
     <dimen name="font_size_extra_small">11sp</dimen>
 
-    <dimen name="item_tray_item_height">90dp</dimen>
-    <dimen name="font_size_item_title">14sp</dimen>
-    <dimen name="font_size_item_sub_title">13sp</dimen>
+    <dimen name="item_tray_item_height">60dp</dimen>
+    <dimen name="font_size_item_title">12sp</dimen>
+    <dimen name="font_size_item_sub_title">11sp</dimen>
 
 </resources>

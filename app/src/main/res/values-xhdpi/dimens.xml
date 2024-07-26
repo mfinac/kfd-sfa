@@ -38,8 +38,8 @@
     <dimen name="fragment_tool_left_margin">75dp</dimen>
     <dimen name="font_size_extra_small">11sp</dimen>
 
-    <dimen name="item_tray_item_height">60dp</dimen>
-    <dimen name="font_size_item_title">12sp</dimen>
-    <dimen name="font_size_item_sub_title">11sp</dimen>
+    <dimen name="item_tray_item_height">67dp</dimen>
+    <dimen name="font_size_item_title">11sp</dimen>
+    <dimen name="font_size_item_sub_title">10sp</dimen>
 
 </resources>

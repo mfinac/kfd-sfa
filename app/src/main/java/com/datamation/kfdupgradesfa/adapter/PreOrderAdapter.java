@@ -318,6 +318,12 @@ public class PreOrderAdapter extends RecyclerView.Adapter<PreOrders> {
             }
         });
 
+        if (Integer.parseInt(preOrders.lblQty.getText().toString()) > 0) {
+            preOrders.lnStripe.setBackground(context.getResources().getDrawable(R.drawable.custom_textbox_new_item_tray));
+        } else {
+            preOrders.lnStripe.setBackground(context.getResources().getDrawable(R.drawable.custom_textbox));
+        }
+
 
     }
 

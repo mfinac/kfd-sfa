@@ -38,7 +38,8 @@
     <dimen name="fragment_tool_left_margin">75dp</dimen>
     <dimen name="font_size_extra_small">11sp</dimen>
 
-    <dimen name="item_tray_item_height">67dp</dimen>
+<!--    <dimen name="item_tray_item_height">67dp</dimen> 67dp is ok for Samsung mobiles, but not for ZTE -->
+    <dimen name="item_tray_item_height">70dp</dimen>
     <dimen name="font_size_item_title">11sp</dimen>
     <dimen name="font_size_item_sub_title">10sp</dimen>
 

@@ -1,5 +1,6 @@
 package com.datamation.kfdupgradesfa.controller;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -1779,6 +1780,111 @@ public class ReceiptController {
 
             Log.v(TAG + " Exception", e.toString());
 
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+        return count;
+
+    }
+
+    @SuppressLint("Range")
+    public RecHed getActiveReceiptHed() {
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+
+        String selectQuery;
+        RecHed mapper = new RecHed();
+        try {
+            selectQuery = "select * from " + ValueHolder.TABLE_FPRECHEDS + " Where "
+                    + ValueHolder.FPRECHED_ISACTIVE + "='1' and " + ValueHolder.FPRECHED_ISSYNCED + "='0'";
+
+            Cursor cursor = dB.rawQuery(selectQuery, null);
+
+            while (cursor.moveToNext()) {
+
+                mapper.setRefNo(cursor.getString(cursor.getColumnIndex(ValueHolder.REFNO)));
+
+            }
+            cursor.close();
+        } catch (Exception e) {
+
+            Log.v(TAG + " Exception", e.toString());
+
+        } finally {
+            dB.close();
+        }
+
+        return mapper;
+    }
+
+    @SuppressWarnings("static-access")
+    public int deleteActiveReceiptHed(String refno) {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+        try {
+
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_FPRECHEDS + " WHERE " + ValueHolder.REFNO
+                    + " = '" + refno + "'";
+            cursor = dB.rawQuery(selectQuery, null);
+            int cn = cursor.getCount();
+
+            if (cn > 0) {
+                count = dB.delete(ValueHolder.TABLE_FPRECHEDS, ValueHolder.REFNO + " ='" + refno + "'", null);
+                Log.v("Success", count + "");
+            }
+
+        } catch (Exception e) {
+            Log.v(TAG + " Exception", e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+        return count;
+
+    }
+
+    @SuppressWarnings("static-access")
+    public int deleteActiveReceiptDet(String refno) {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+        try {
+
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_FPRECDETS + " WHERE " + ValueHolder.REFNO
+                    + " = '" + refno + "'";
+            cursor = dB.rawQuery(selectQuery, null);
+            int cn = cursor.getCount();
+
+            if (cn > 0) {
+                count = dB.delete(ValueHolder.TABLE_FPRECDETS, ValueHolder.REFNO + " ='" + refno + "'", null);
+                Log.v("Success", count + "");
+            }
+
+        } catch (Exception e) {
+            Log.v(TAG + " Exception", e.toString());
         } finally {
             if (cursor != null) {
                 cursor.close();

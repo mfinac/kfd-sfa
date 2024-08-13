@@ -83,6 +83,7 @@ import com.datamation.kfdupgradesfa.helpers.SharedPref;
 import com.datamation.kfdupgradesfa.helpers.UploadTaskListener;
 import com.datamation.kfdupgradesfa.model.Control;
 import com.datamation.kfdupgradesfa.model.NonPrdHed;
+import com.datamation.kfdupgradesfa.model.Order;
 import com.datamation.kfdupgradesfa.model.OrderHed;
 import com.datamation.kfdupgradesfa.model.RecHed;
 import com.datamation.kfdupgradesfa.model.ReceiptHed;
@@ -403,7 +404,14 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                         {
                             if (NetworkUtil.isNotPoorConnection(context))
                             {
-                                uploadRecords();
+                                if (isAnyActiveTransactions())
+                                {
+                                    showActiveTransAlert("You have partially saved transactions. Do you want to discard them?", "Partial Data");
+                                }
+                                else
+                                {
+                                    uploadRecords();
+                                }
                             }
                             else
                             {
@@ -425,6 +433,23 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                 .build();
         materialDialog.setCanceledOnTouchOutside(false);
         materialDialog.show();
+    }
+
+    @SuppressLint("LongLogTag")
+    private boolean isAnyActiveTransactions()
+    {
+        Order activeOrder = new OrderController(context).getActiveOrdHed();
+        RecHed activeReceipt = new ReceiptController(context).getActiveReceiptHed();
+        NonPrdHed activeNP = new DayNPrdHedController(context).getActiveNP();
+
+        if (activeOrder.getFORDHED_REFNO() != null || activeReceipt.getRefNo() != null || activeNP.getRefNo() != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     @SuppressLint("LongLogTag")
@@ -475,20 +500,61 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
         }
     }
 
-    public void mDevelopingMessage(String message, String title) {
+    public void showActiveTransAlert(String message, String title) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setTitle(title);
         alertDialogBuilder.setIcon(R.drawable.info);
-        alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
+                discardActiveTransactions();
                 dialog.cancel();
+            }
+            })
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
             }
         });
         AlertDialog alertD = alertDialogBuilder.create();
         alertD.show();
         alertD.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+    }
+
+    private void discardActiveTransactions()
+    {
+        Order activeOrder = new OrderController(context).getActiveOrdHed();
+        RecHed activeReceipt = new ReceiptController(context).getActiveReceiptHed();
+        NonPrdHed activeNP = new DayNPrdHedController(context).getActiveNP();
+
+        if (activeOrder.getFORDHED_REFNO() != null){
+            if(new OrderController(context).deleteActiveOrderHed(activeOrder.getFORDHED_REFNO())>0)
+            {
+                new OrderController(context).deleteActiveOrderDet(activeOrder.getFORDHED_REFNO());
+                Toast.makeText(context, "Active Order discard successfully", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (activeReceipt.getRefNo() != null)
+        {
+            if(new ReceiptController(context).deleteActiveReceiptHed(activeReceipt.getRefNo())>0)
+            {
+                new ReceiptController(context).deleteActiveReceiptDet(activeReceipt.getRefNo());
+                Toast.makeText(context, "Active Receipt discard successfully", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (activeNP.getRefNo() != null)
+        {
+            if(new DayNPrdHedController(context).deleteActiveNPHed(activeNP.getRefNo())>0)
+            {
+                new DayNPrdHedController(context).deleteActiveNPDet(activeNP.getRefNo());
+                Toast.makeText(context, "Active NP discard successfully", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void syncMasterDataDialog(final Context context) {

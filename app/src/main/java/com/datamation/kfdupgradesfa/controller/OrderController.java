@@ -1728,4 +1728,102 @@ public class OrderController {
 
     }
 
+    public Order getActiveOrdHed() {
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+
+        @SuppressWarnings("static-access")
+        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where " + ValueHolder.IS_ACTIVE
+                + "='1' and " + ValueHolder.IS_SYNC + "='0'";
+
+        Cursor cursor = dB.rawQuery(selectQuery, null);
+
+
+        Order presale = new Order();
+
+        while (cursor.moveToNext()) {
+
+            presale.setFORDHED_REFNO(cursor.getString(cursor.getColumnIndex(ValueHolder.REFNO)));
+        }
+
+        return presale;
+
+    }
+
+
+    @SuppressWarnings("static-access")
+    public int deleteActiveOrderHed(String refno) {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+        try {
+
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDHED + " WHERE " + ValueHolder.REFNO
+                    + " = '" + refno + "'";
+            cursor = dB.rawQuery(selectQuery, null);
+            int cn = cursor.getCount();
+
+            if (cn > 0) {
+                count = dB.delete(ValueHolder.TABLE_ORDHED, ValueHolder.REFNO + " ='" + refno + "'", null);
+                Log.v("Success", count + "");
+            }
+
+        } catch (Exception e) {
+            Log.v(TAG + " Exception", e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+        return count;
+
+    }
+
+    @SuppressWarnings("static-access")
+    public int deleteActiveOrderDet(String refno) {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+        try {
+
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDDET + " WHERE " + ValueHolder.REFNO
+                    + " = '" + refno + "'";
+            cursor = dB.rawQuery(selectQuery, null);
+            int cn = cursor.getCount();
+
+            if (cn > 0) {
+                count = dB.delete(ValueHolder.TABLE_ORDDET, ValueHolder.REFNO + " ='" + refno + "'", null);
+                Log.v("Success", count + "");
+            }
+
+        } catch (Exception e) {
+            Log.v(TAG + " Exception", e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+        return count;
+
+    }
+
 }

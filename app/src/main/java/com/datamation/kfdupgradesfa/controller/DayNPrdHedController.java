@@ -1,5 +1,6 @@
 package com.datamation.kfdupgradesfa.controller;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import com.datamation.kfdupgradesfa.helpers.SharedPref;
 import com.datamation.kfdupgradesfa.helpers.ValueHolder;
 import com.datamation.kfdupgradesfa.model.DayNPrdHed;
 import com.datamation.kfdupgradesfa.model.NonPrdHed;
+import com.datamation.kfdupgradesfa.model.ReceiptHed;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -631,6 +633,110 @@ public class DayNPrdHedController {
 
             Log.v(TAG + " Exception", e.toString());
 
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+        return count;
+
+    }
+
+    @SuppressLint("Range")
+    public NonPrdHed getActiveNP() {
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+
+        String selectQuery;
+        NonPrdHed nonPrdHed = new NonPrdHed();
+        try {
+            selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where "
+                    + ValueHolder.NONPRDHED_IS_SYNCED + "='0' and " + ValueHolder.NONPRDHED_IS_ACTIVE + "='1'";
+
+            Cursor cursor = dB.rawQuery(selectQuery, null);
+
+            while (cursor.moveToNext()) {
+
+                nonPrdHed.setRefNo(cursor.getString(cursor.getColumnIndex(ValueHolder.NONPRDHED_REFNO)));
+
+            }
+            cursor.close();
+        } catch (Exception e) {
+
+            Log.v(TAG + " Exception", e.toString());
+
+        } finally {
+            dB.close();
+        }
+
+        return nonPrdHed;
+    }
+
+    public int deleteActiveNPHed(String refno) {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+        try {
+
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_NONPRDHED + " WHERE " + ValueHolder.REFNO
+                    + " = '" + refno + "'";
+            cursor = dB.rawQuery(selectQuery, null);
+            int cn = cursor.getCount();
+
+            if (cn > 0) {
+                count = dB.delete(ValueHolder.TABLE_NONPRDHED, ValueHolder.REFNO + " ='" + refno + "'", null);
+                Log.v("Success", count + "");
+            }
+
+        } catch (Exception e) {
+            Log.v(TAG + " Exception", e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+        return count;
+
+    }
+
+    @SuppressWarnings("static-access")
+    public int deleteActiveNPDet(String refno) {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+        try {
+
+            String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_NONPRDDET + " WHERE " + ValueHolder.REFNO
+                    + " = '" + refno + "'";
+            cursor = dB.rawQuery(selectQuery, null);
+            int cn = cursor.getCount();
+
+            if (cn > 0) {
+                count = dB.delete(ValueHolder.TABLE_NONPRDDET, ValueHolder.REFNO + " ='" + refno + "'", null);
+                Log.v("Success", count + "");
+            }
+
+        } catch (Exception e) {
+            Log.v(TAG + " Exception", e.toString());
         } finally {
             if (cursor != null) {
                 cursor.close();

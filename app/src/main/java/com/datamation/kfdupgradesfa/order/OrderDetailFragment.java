@@ -11,7 +11,9 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.StatFs;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -57,9 +59,11 @@ import com.datamation.kfdupgradesfa.model.Product;
 import com.datamation.kfdupgradesfa.model.Supplier;
 import com.datamation.kfdupgradesfa.reports.PreSalesReportAdapter;
 import com.datamation.kfdupgradesfa.utils.CustomViewPager;
+import com.datamation.kfdupgradesfa.view.DebtorDetailsActivity;
 import com.datamation.kfdupgradesfa.view.OrderActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -302,8 +306,37 @@ public class OrderDetailFragment extends Fragment {
     public void onResume() {
         super.onResume();
         rd = new MyReceiver();
-        OrderDetailFragment.this.mToggleTextbox();
+        //OrderDetailFragment.this.mToggleTextbox();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(rd, new IntentFilter("TAG_PRE_DETAILS"));
+
+        long freeSpace = getAvailableInternalMemorySize()/(1024*1024);
+        Log.wtf("FREE MEMORY:1", "SIZE-" + freeSpace + "MB");
+
+        if (freeSpace >= 1536L)
+        {
+            OrderDetailFragment.this.mToggleTextbox();
+        }
+        else
+        {
+            String msg = "Not enough memory to load the items.\n" +
+                    "Only "+ freeSpace + "MB available.\n " +
+                    "Needs minimum 1.5GB.";
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+//                        .setTitleText("Not enough memory (" + freeSpace + " MB" + " from "+ totalSpace + "MB) to load Items.")
+                    .setTitleText(msg)
+                    .setContentText("")
+                    .setConfirmText("OK")
+                    .showCancelButton(false)
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismiss();
+                            Intent intent1 = new Intent(getActivity(), DebtorDetailsActivity.class);
+                            startActivity(intent1);
+                        }
+                    })
+                    .show();
+        }
         Log.d("order_detail", "clicked_count" + clickCount);
     }
 
@@ -320,49 +353,103 @@ public class OrderDetailFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-//            boolean isNextClicked = mSharedPref.getOrderHeaderNextClicked();
+//            OrderDetailFragment.this.mToggleTextbox();
+//            final CustomProgressDialog pdialog;
 //
-//            if(!isNextClicked)
-//            {
-//                preSalesResponseListener.moveBackToFragment(0);
-//            }
-//            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+//            pdialog = new CustomProgressDialog(getActivity());
+//            pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//            pdialog.setMessage("Please wait...");
+//            pdialog.show();
+//
+//            final int interval = 5000; // 5 Second
+//            Handler handler = new Handler();
+//            Runnable runnable = new Runnable() {
+//                public void run() {
+//                    new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+//                            .setTitleText("Item list loaded.")
+//                            .setContentText("")
+//                            .setConfirmText("OK")
+//                            .showCancelButton(false)
+//                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                                @Override
+//                                public void onClick(SweetAlertDialog sDialog) {
+//                                    sDialog.dismiss();
+//                                    if (pdialog.isShowing()) {
+//                                        pdialog.dismiss();
+//                                    }
+//                                }
+//                            })
+//                            .show();
+//                }
+//            };
+//
+//            handler.postAtTime(runnable, System.currentTimeMillis() + interval);
+//            handler.postDelayed(runnable, interval);
+//
 //            Log.d("order_detail", "clicked_count" + clickCount);
-//            Log.d("order_detail", "clicked_count" + clickCount);
 
-            OrderDetailFragment.this.mToggleTextbox();
-            final CustomProgressDialog pdialog;
+            long freeSpace = getAvailableInternalMemorySize()/(1024*1024);
+            Log.wtf("FREE MEMORY:1", "SIZE-" + freeSpace + "MB");
 
-            pdialog = new CustomProgressDialog(getActivity());
-            pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            pdialog.setMessage("Please wait...");
-            pdialog.show();
+            if (freeSpace >= 1536L)
+            {
+                OrderDetailFragment.this.mToggleTextbox();
+                final CustomProgressDialog pdialog;
 
-            final int interval = 5000; // 5 Second
-            Handler handler = new Handler();
-            Runnable runnable = new Runnable() {
-                public void run() {
-                    new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
-                            .setTitleText("Item list loaded.")
-                            .setContentText("")
-                            .setConfirmText("OK")
-                            .showCancelButton(false)
-                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sDialog) {
-                                    sDialog.dismiss();
-                                    if (pdialog.isShowing()) {
-                                        pdialog.dismiss();
+                pdialog = new CustomProgressDialog(getActivity());
+                pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                pdialog.setMessage("Please wait...");
+                pdialog.show();
+
+                final int interval = 5000; // 5 Second
+                Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    public void run() {
+                        new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Item list loaded.")
+                                .setContentText("")
+                                .setConfirmText("OK")
+                                .showCancelButton(false)
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.dismiss();
+                                        if (pdialog.isShowing()) {
+                                            pdialog.dismiss();
+                                        }
                                     }
-                                }
-                            })
-                            .show();
-                }
-            };
+                                })
+                                .show();
+                    }
+                };
 
-            handler.postAtTime(runnable, System.currentTimeMillis() + interval);
-            handler.postDelayed(runnable, interval);
+                handler.postAtTime(runnable, System.currentTimeMillis() + interval);
+                handler.postDelayed(runnable, interval);
 
+                Log.d("order_detail", "clicked_count" + clickCount);
+            }
+            else
+            {
+                String msg = "Not enough memory to load the items.\n" +
+                        "Only "+ freeSpace + "MB available.\n " +
+                        "Needs minimum 1.5GB.";
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+//                        .setTitleText("Not enough memory (" + freeSpace + " MB" + " from "+ totalSpace + "MB) to load Items.")
+                        .setTitleText(msg)
+                        .setContentText("")
+                        .setConfirmText("OK")
+                        .showCancelButton(false)
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                                Intent intent1 = new Intent(getActivity(), DebtorDetailsActivity.class);
+                                startActivity(intent1);
+                            }
+                        })
+                        .show();
+            }
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(rd, new IntentFilter("TAG_PRE_DETAILS"));
             Log.d("order_detail", "clicked_count" + clickCount);
         }
     }
@@ -608,6 +695,23 @@ public class OrderDetailFragment extends Fragment {
             }
         }
         return true;
+    }
+
+    public static long getAvailableInternalMemorySize() {
+        File path = Environment.getDataDirectory(); // Get the internal storage directory
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize;
+        long availableBlocks;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            blockSize = stat.getBlockSizeLong();
+            availableBlocks = stat.getAvailableBlocksLong();
+        } else {
+            blockSize = stat.getBlockSize();
+            availableBlocks = stat.getAvailableBlocks();
+        }
+
+        return availableBlocks * blockSize;
     }
 
 }

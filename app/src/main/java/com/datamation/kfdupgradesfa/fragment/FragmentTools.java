@@ -47,6 +47,7 @@ import com.datamation.kfdupgradesfa.controller.BrandController;
 import com.datamation.kfdupgradesfa.controller.CompanyDetailsController;
 import com.datamation.kfdupgradesfa.controller.CostController;
 import com.datamation.kfdupgradesfa.controller.CustomerController;
+import com.datamation.kfdupgradesfa.controller.DayNPrdDetController;
 import com.datamation.kfdupgradesfa.controller.DayNPrdHedController;
 import com.datamation.kfdupgradesfa.controller.DownloadController;
 import com.datamation.kfdupgradesfa.controller.FInvhedL3Controller;
@@ -64,8 +65,10 @@ import com.datamation.kfdupgradesfa.controller.LocationsController;
 import com.datamation.kfdupgradesfa.controller.OrderController;
 import com.datamation.kfdupgradesfa.controller.OrderDetailController;
 import com.datamation.kfdupgradesfa.controller.OutstandingController;
+import com.datamation.kfdupgradesfa.controller.PreProductController;
 import com.datamation.kfdupgradesfa.controller.ReasonController;
 import com.datamation.kfdupgradesfa.controller.ReceiptController;
+import com.datamation.kfdupgradesfa.controller.ReceiptDetController;
 import com.datamation.kfdupgradesfa.controller.ReferenceDetailDownloader;
 import com.datamation.kfdupgradesfa.controller.ReferenceSettingController;
 import com.datamation.kfdupgradesfa.controller.RepDebtorController;
@@ -134,6 +137,7 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     ApiInterface apiInterface;
     ArrayList<Control> downloadList;
+    SharedPref mSharedPref;
 
     boolean isAnyActiveImages = false;
     boolean isAnyActiveVideos = false;
@@ -235,9 +239,16 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                         Integer receiptlistCount = new ReceiptController(getActivity()).getAllDayBeforeUnSyncRecHedCount(new SalRepController(getActivity()).getCurrentRepCode());
                         Integer npHedListCount = new DayNPrdHedController(getActivity()).getAllDayBeforeUnSyncNonPrdCount(new SalRepController(getActivity()).getCurrentRepCode());
 
-                        if (ordHedListCount > 0 || receiptlistCount > 0 || npHedListCount > 0) {
+                        if (isAnyActiveTransactions())
+                        {
+                            Toast.makeText(getActivity(), "Please discard or complete all partially saved data", Toast.LENGTH_LONG).show();
+                        }
+                        else if (ordHedListCount > 0 || receiptlistCount > 0 || npHedListCount > 0)
+                        {
                             Toast.makeText(getActivity(), "Please upload all transaction details", Toast.LENGTH_LONG).show();
-                        } else {
+                        }
+                        else
+                        {
                             syncMasterDataDialog(getActivity());
                         }
 
@@ -531,29 +542,31 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
         NonPrdHed activeNP = new DayNPrdHedController(context).getActiveNP();
 
         if (activeOrder.getFORDHED_REFNO() != null){
-            if(new OrderController(context).deleteActiveOrderHed(activeOrder.getFORDHED_REFNO())>0)
-            {
-                new OrderController(context).deleteActiveOrderDet(activeOrder.getFORDHED_REFNO());
-                Toast.makeText(context, "Active Order discard successfully", Toast.LENGTH_LONG).show();
-            }
+//            if(new OrderController(context).deleteActiveOrderHed(activeOrder.getFORDHED_REFNO())>0)
+//            {
+//                new OrderController(context).deleteActiveOrderDet(activeOrder.getFORDHED_REFNO());
+//            }
+            discardOrderData(activeOrder.getFORDHED_REFNO());
         }
 
         if (activeReceipt.getRefNo() != null)
         {
-            if(new ReceiptController(context).deleteActiveReceiptHed(activeReceipt.getRefNo())>0)
-            {
-                new ReceiptController(context).deleteActiveReceiptDet(activeReceipt.getRefNo());
-                Toast.makeText(context, "Active Receipt discard successfully", Toast.LENGTH_LONG).show();
-            }
+//            if(new ReceiptController(context).deleteActiveReceiptHed(activeReceipt.getRefNo())>0)
+//            {
+//                new ReceiptController(context).deleteActiveReceiptDet(activeReceipt.getRefNo());
+//                Toast.makeText(context, "Active Receipt discard successfully", Toast.LENGTH_LONG).show();
+//            }
+            discardRecData(activeReceipt.getRefNo());
         }
 
         if (activeNP.getRefNo() != null)
         {
-            if(new DayNPrdHedController(context).deleteActiveNPHed(activeNP.getRefNo())>0)
-            {
-                new DayNPrdHedController(context).deleteActiveNPDet(activeNP.getRefNo());
-                Toast.makeText(context, "Active NP discard successfully", Toast.LENGTH_LONG).show();
-            }
+//            if(new DayNPrdHedController(context).deleteActiveNPHed(activeNP.getRefNo())>0)
+//            {
+//                new DayNPrdHedController(context).deleteActiveNPDet(activeNP.getRefNo());
+//                Toast.makeText(context, "Active NP discard successfully", Toast.LENGTH_LONG).show();
+//            }
+            discardNPData(activeNP.getRefNo());
         }
     }
 
@@ -1600,5 +1613,43 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
         getActivity().finish();
     }
 
+    public void discardOrderData(String RefNo)
+    {
+        mSharedPref = new SharedPref(context);
+        int result = new OrderController(getActivity()).restData(RefNo);
 
+        if (result > 0) {
+            new OrderDetailController(getActivity()).restData(RefNo);
+            new PreProductController(getActivity()).mClearTables();
+            mSharedPref.setDiscountClicked("0");
+            mSharedPref.setOrdertHeaderNextClicked(false);
+            mSharedPref.setIsQuantityAdded(false);
+            mSharedPref.setOrdertHeaderNextClicked(false);
+            Toast.makeText(context, "Active Order discard successfully", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void discardRecData(String RefNo)
+    {
+        new OutstandingController(getActivity()).ClearFddbNoteData();
+        new ReceiptController(getActivity()).CancelReceiptS(RefNo);
+        new ReceiptDetController(getActivity()).restDataForMR(RefNo);
+
+        Toast.makeText(getActivity(), "Active Receipt discard successfully", Toast.LENGTH_LONG).show();
+    }
+
+    public void discardNPData(String RefNo)
+    {
+        try {
+            new DayNPrdHedController(getActivity()).undoOrdHedByID(RefNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            new DayNPrdDetController(getActivity()).OrdDetByRefno(RefNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(getActivity(), "Active NP discard successfully", Toast.LENGTH_LONG).show();
+    }
 }

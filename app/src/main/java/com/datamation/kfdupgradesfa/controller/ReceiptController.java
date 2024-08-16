@@ -1327,7 +1327,7 @@ public class ReceiptController {
 
 
         @SuppressWarnings("static-access")
-        String selectQuery = "select * from " + ValueHolder.TABLE_FPRECHEDS + " Where IsSynced=1 and IsActive=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
+        String selectQuery = "select * from " + ValueHolder.TABLE_FPRECHEDS + " Where IsSynced=0 and IsActive=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 

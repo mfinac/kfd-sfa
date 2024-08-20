@@ -235,6 +235,8 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                     if (NetworkUtil.isNetworkAvailable(getActivity())) {
                         SharedPref sharedPref = SharedPref.getInstance(context);
 
+                        //not uploaded status -
+                        // order isSync = '1', receipt isSync = '0', np isSync = '0'
                         Integer ordHedListCount = new OrderController(getActivity()).getAllDayBeforeUnSyncOrdHed(new SalRepController(getActivity()).getCurrentRepCode());
                         Integer receiptlistCount = new ReceiptController(getActivity()).getAllDayBeforeUnSyncRecHedCount(new SalRepController(getActivity()).getCurrentRepCode());
                         Integer npHedListCount = new DayNPrdHedController(getActivity()).getAllDayBeforeUnSyncNonPrdCount(new SalRepController(getActivity()).getCurrentRepCode());

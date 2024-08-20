@@ -562,7 +562,9 @@ public class DayNPrdHedController {
 
 
         @SuppressWarnings("static-access")
-        String selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where ISsync=1 and ISActive=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
+        //String selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where ISsync=1 and ISActive=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
+                //IsActive status not updaing or using (ISsync = '0' means not uploaded)
+        String selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where ISsync=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
 

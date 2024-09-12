@@ -762,7 +762,8 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
       //  if (!NetworkUtil.isNetworkAvailable(getActivity()) && NetworkUtil.isNotPoorConnection(getActivity())) {
             if (orders.size() > 0) {
 
-                for (final OrderHed c : orders) {
+                for (final OrderHed c : orders)
+                {
                     try {
                         String content_type = "application/json";
                         ApiInterface apiInterface = ApiCllient.getClient(getActivity()).create(ApiInterface.class);
@@ -781,35 +782,44 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                                 int status = response.code();
 
                                 if (response.isSuccessful()) {
-                                    response.body(); // have your all data
+                                    //response.body(); // have your all data
                                     boolean result = response.body().isResponse();
                                     Log.d(">>response" + status, result + ">>" + c.getRefNo());
                                     if (result) {
                                         mHandler.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "SYNCED", "0");
+                                                if(new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "SYNCED", "0")>0)
+                                                {
+                                                    Toast.makeText(getActivity(), "Order Upload successfully..!", Toast.LENGTH_LONG).show();
+                                                    addRefNoResults(c.getRefNo() + " --> Success\n", orders.size());
+                                                }
                                                 //  new OrderController(getActivity()).updateIsActive(c.getRefNo(), "0");
 //                                                new OrderController(getActivity()).up(c.getFORDHED_REFNO(), "2");
 
-                                                Toast.makeText(getActivity(), "Order Upload successfully..!", Toast.LENGTH_LONG).show();
-
-                                                addRefNoResults(c.getRefNo() + " --> Success\n", orders.size());
+//                                                Toast.makeText(getActivity(), "Order Upload successfully..!", Toast.LENGTH_LONG).show();
+//
+//                                                addRefNoResults(c.getRefNo() + " --> Success\n", orders.size());
                                             }
                                         });
                                     } else {
                                         c.setIsSync("1");
                                         c.setIsActive("0");
-                                        new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "NOT SYNCED", "0");
+                                        if (new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "NOT SYNCED", "0")>0)
+                                        {
+                                            Toast.makeText(getActivity(), "Order Upload Failed.", Toast.LENGTH_LONG).show();
+                                            addRefNoResults(c.getRefNo() + " --> Failed\n", orders.size());
+                                        }
                                         // new OrderController(getActivity()).updateIsActive(c.getRefNo(), "0");
-                                        Toast.makeText(getActivity(), "Order Upload Failed.", Toast.LENGTH_LONG).show();
-                                        addRefNoResults(c.getRefNo() + " --> Failed\n", orders.size());
+//                                        Toast.makeText(getActivity(), "Order Upload Failed.", Toast.LENGTH_LONG).show();
+//                                        addRefNoResults(c.getRefNo() + " --> Failed\n", orders.size());
                                     }
                                 } else {
                                     Toast.makeText(context, " Invalid response when order upload", Toast.LENGTH_LONG).show();
-                                    Intent intnt = new Intent(context, DebtorDetailsActivity.class);
-                                    startActivity(intnt);
-                                    getActivity().finish();
+//                                    Intent intnt = new Intent(context, DebtorDetailsActivity.class);
+//                                    startActivity(intnt);
+//                                    getActivity().finish();
+                                    navigateToNext();
                                 }// this will tell you why your api doesnt work most of time
 
 
@@ -818,10 +828,10 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                             @Override
                             public void onFailure(Call<Result> call, Throwable t) {
                                 Toast.makeText(getActivity(), "Error response " + t.toString(), Toast.LENGTH_LONG).show();
-                                Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
-                                startActivity(intnt);
-                                getActivity().finish();
-
+//                                Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
+//                                startActivity(intnt);
+//                                getActivity().finish();
+                                navigateToNext();
                             }
 
                         });
@@ -829,6 +839,7 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
                 }
 
             } else {
@@ -864,9 +875,10 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
 
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
-                Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
-                startActivity(intnt);
-                getActivity().finish();
+//                Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
+//                startActivity(intnt);
+//                getActivity().finish();
+                navigateToNext();
             }
         });
         AlertDialog alertD = alertDialogBuilder.create();

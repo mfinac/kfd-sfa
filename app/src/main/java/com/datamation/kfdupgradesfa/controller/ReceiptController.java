@@ -1325,14 +1325,23 @@ public class ReceiptController {
             open();
         }
 
+        int count = 0;
+        Cursor cursor = null;
+        try {
+            String selectQuery = "select * from " + ValueHolder.TABLE_FPRECHEDS + " Where IsSynced=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
+            cursor = dB.rawQuery(selectQuery, null);
 
-        @SuppressWarnings("static-access")
-        String selectQuery = "select * from " + ValueHolder.TABLE_FPRECHEDS + " Where IsSynced=0 and IsActive=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
+            count = cursor.getCount();
 
-        Cursor cursor = dB.rawQuery(selectQuery, null);
+        } catch (Exception e) {
+            Log.v(TAG, e.toString());
 
-        Integer count = cursor.getCount();
-
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
 
         return count;
     }

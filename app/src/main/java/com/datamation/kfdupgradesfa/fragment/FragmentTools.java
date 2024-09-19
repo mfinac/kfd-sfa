@@ -231,40 +231,12 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
             case R.id.imgSync:
                 imgSync.startAnimation(animScale);
                 Log.d("Validate Secondary Sync", ">>Mac>> " + pref.getMacAddress().trim() + " >>URL>> " + pref.getBaseURL() + " >>DB>> " + pref.getDistDB());
-                try {
-                    if (NetworkUtil.isNetworkAvailable(getActivity())) {
-                        SharedPref sharedPref = SharedPref.getInstance(context);
-
-                        //not uploaded status -
-                        // order isSync = '1', receipt isSync = '0', np isSync = '0'
-                        Integer ordHedListCount = new OrderController(getActivity()).getAllDayBeforeUnSyncOrdHed(new SalRepController(getActivity()).getCurrentRepCode());
-                        Integer receiptlistCount = new ReceiptController(getActivity()).getAllDayBeforeUnSyncRecHedCount(new SalRepController(getActivity()).getCurrentRepCode());
-                        Integer npHedListCount = new DayNPrdHedController(getActivity()).getAllDayBeforeUnSyncNonPrdCount(new SalRepController(getActivity()).getCurrentRepCode());
-
-                        if (isAnyActiveTransactions())
-                        {
-                            Toast.makeText(getActivity(), "Please discard or complete all partially saved data", Toast.LENGTH_LONG).show();
-                        }
-                        else if (ordHedListCount > 0 || receiptlistCount > 0 || npHedListCount > 0)
-                        {
-                            Toast.makeText(getActivity(), "Please upload all transaction details", Toast.LENGTH_LONG).show();
-                        }
-                        else
-                        {
-                            syncMasterDataDialog(getActivity());
-                        }
-
-                    } else {
-                        Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    Log.e(">>>> Secondary Sync", e.toString());
-                }
+                secondarySync();
                 break;
 
             case R.id.imgUpload:
                 imgUpload.startAnimation(animScale);
-                syncDialog(getActivity());
+                uploadDialog(getActivity());
                 break;
 
             case R.id.imgDownload:
@@ -400,7 +372,7 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
             return false;
     }
 
-    private void syncDialog(final Context context) {
+    private void uploadDialog(final Context context) {
         MaterialDialog materialDialog = new MaterialDialog.Builder(context)
                 .content("Are you sure, Do you want to Upload Data?")
                 .positiveColor(ContextCompat.getColor(context, R.color.material_alert_positive_button))
@@ -456,6 +428,25 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
         NonPrdHed activeNP = new DayNPrdHedController(context).getActiveNP();
 
         if (activeOrder.getFORDHED_REFNO() != null || activeReceipt.getRefNo() != null || activeNP.getRefNo() != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @SuppressLint("LongLogTag")
+    private boolean isAnyUploadPendingTransactions()
+    {
+        //not uploaded status -
+        // order isSync = '1', receipt isSync = '0', np isSync = '0'
+        int ordHedListCount = new OrderController(getActivity()).getAllDayBeforeUnSyncOrdHed(new SalRepController(getActivity()).getCurrentRepCode());
+        int receiptlistCount = new ReceiptController(getActivity()).getAllDayBeforeUnSyncRecHedCount(new SalRepController(getActivity()).getCurrentRepCode());
+        int npHedListCount = new DayNPrdHedController(getActivity()).getAllDayBeforeUnSyncNonPrdCount(new SalRepController(getActivity()).getCurrentRepCode());
+
+        if (ordHedListCount > 0 || receiptlistCount > 0 || npHedListCount > 0)
         {
             return true;
         }
@@ -1653,5 +1644,32 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
             e.printStackTrace();
         }
         Toast.makeText(getActivity(), "Active NP discard successfully", Toast.LENGTH_LONG).show();
+    }
+
+    private void secondarySync()
+    {
+        try {
+            if (NetworkUtil.isNetworkAvailable(getActivity()))
+            {
+                if (isAnyActiveTransactions())
+                {
+                    Toast.makeText(getActivity(), "Please discard or complete all partially saved data", Toast.LENGTH_LONG).show();
+                }
+                else if (isAnyUploadPendingTransactions())
+                {
+                    Toast.makeText(getActivity(), "Please upload all transactions", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    syncMasterDataDialog(getActivity());
+                }
+            }
+            else
+            {
+                Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Log.e(">>>> Secondary Sync", e.toString());
+        }
     }
 }

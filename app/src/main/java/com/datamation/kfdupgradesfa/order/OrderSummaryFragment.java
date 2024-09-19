@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -62,6 +63,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -706,7 +710,9 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             outlet = new CustomerController(getActivity()).getSelectedCustomerByCode(mSharedPref.getSelectedDebCode());
 
             new PreProductController(getActivity()).mClearTables();
-            new OrderController(getActivity()).InactiveStatusUpdate(RefNo);
+            // only   and start time updated, then change the method name ---
+            new OrderController(getActivity()).endTimeSoUpdate(RefNo);
+            // ------------------------------------------------------
             new OrderDetailController(getActivity()).InactiveStatusUpdate(RefNo);
             new ReferenceNum(getActivity()).NumValueUpdate(getResources().getString(R.string.NumVal));
             mSharedPref.setOrdertHeaderNextClicked(false);
@@ -718,20 +724,21 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             {
                 if (NetworkUtil.isNetworkAvailable(getActivity()))
                 {
-                    if (NetworkUtil.isNotPoorConnection(getActivity()))
-                    {
-                        try {
-                            Upload(new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode()));
-//                            mSharedPref.setOrdertHeaderNextClicked(false);
-//                            mSharedPref.setIsQuantityAdded(false);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    else
-                    {
-                        networkWarning("Order saved locally. Please use tools upload due to poor network", "Poor network");
-                    }
+                    new GetUploadSpeed().execute("https://mobitel.lk");
+//                    if (NetworkUtil.isNotPoorConnection(getActivity()))
+//                    {
+//                        try {
+//                            Upload(new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode()));
+////                            mSharedPref.setOrdertHeaderNextClicked(false);
+////                            mSharedPref.setIsQuantityAdded(false);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    else
+//                    {
+//                        networkWarning("Order saved locally. Please use tools upload due to poor network", "Poor network");
+//                    }
                 }
                 else
                 {
@@ -789,7 +796,8 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                                         mHandler.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if(new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "SYNCED", "0")>0)
+//                                                if(new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "SYNCED", "0")>0)
+                                                if (new OrderController(getActivity()).updateIsSyncedWithStatus(c.getRefNo(), "0", "SYNCED")>0)
                                                 {
                                                     Toast.makeText(getActivity(), "Order Upload successfully..!", Toast.LENGTH_LONG).show();
                                                     addRefNoResults(c.getRefNo() + " --> Success\n", orders.size());
@@ -805,7 +813,8 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
                                     } else {
                                         c.setIsSync("1");
                                         c.setIsActive("0");
-                                        if (new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "NOT SYNCED", "0")>0)
+//                                        if (new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "NOT SYNCED", "0")>0)
+                                        if (new OrderController(getActivity()).updateIsSyncedWithStatus(c.getRefNo(), "1", "NOT SYNCED")>0)
                                         {
                                             Toast.makeText(getActivity(), "Order Upload Failed.", Toast.LENGTH_LONG).show();
                                             addRefNoResults(c.getRefNo() + " --> Failed\n", orders.size());
@@ -981,6 +990,84 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
 
         AlertDialog alertD = alertDialogBuilder.create();
         alertD.show();
+    }
+
+    private class GetUploadSpeed extends AsyncTask<String, Void, Double> {
+
+        @Override
+        protected Double doInBackground(String... params) {
+            String uploadUrl = params[0];
+            try {
+                // Generate a small dummy data to upload
+                byte[] data = new byte[1024]; // 1 KB of data
+
+                // Start time
+                long startTime = System.currentTimeMillis();
+
+                // Open connection to the upload URL
+                URL url = new URL(uploadUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/octet-stream");
+
+                // Upload the data
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(data);
+                outputStream.flush();
+                outputStream.close();
+
+                // Get response code
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // End time
+                    long endTime = System.currentTimeMillis();
+
+                    // Calculate upload time in seconds
+                    double uploadTime = (endTime - startTime) / 1000.0;
+
+                    // Calculate upload speed in KBps
+                    double uploadSpeedKBps = 1024 / uploadTime;
+
+                    // Convert KBps to Mbps
+                    double uploadSpeedMbps = (uploadSpeedKBps * 8) / 1024;
+
+                    return uploadSpeedMbps;
+                } else {
+                    return null;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Double result) {
+            if (result != null) {
+                //Toast.makeText(MainActivity.this, "Upload Speed: " + result + " Mbps", Toast.LENGTH_LONG).show();
+
+                Log.wtf("Upload speed: ", "" + result + " MBps");
+                Toast.makeText(getActivity(), "Upload speed: "+ result + " MBps", Toast.LENGTH_LONG).show();
+                if (result > 5.0)
+                {
+                    // upload
+                    try {
+                        Upload(new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode()));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                {
+                    networkWarning("Order saved locally. Please use tools upload due to poor network", "Poor network");
+                }
+            } else {
+                Toast.makeText(getActivity(), "Failed to measure upload speed", Toast.LENGTH_LONG).show();
+                navigateToNext();
+            }
+        }
     }
 
 }

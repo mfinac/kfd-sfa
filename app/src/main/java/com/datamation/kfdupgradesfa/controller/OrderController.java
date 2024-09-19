@@ -185,7 +185,7 @@ public class OrderController {
     }
 
     @SuppressWarnings("static-access")
-    public int InactiveStatusUpdate(String refno) {
+    public int endTimeSoUpdate(String refno) {
 
         int count = 0;
         String UploadDate = "";
@@ -1281,13 +1281,23 @@ public class OrderController {
             open();
         }
 
+        int count = 0;
+        Cursor cursor = null;
+        try {
+            String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where IsSync=1 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
+            cursor = dB.rawQuery(selectQuery, null);
 
-        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where IsSync=1 and IsActive=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
+            count = cursor.getCount();
 
-        Cursor cursor = dB.rawQuery(selectQuery, null);
+        } catch (Exception e) {
+            Log.v(TAG, e.toString());
 
-        Integer count = cursor.getCount();
-
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
 
         return count;
     }
@@ -1820,6 +1830,63 @@ public class OrderController {
             if (cursor != null) {
                 cursor.close();
             }
+            dB.close();
+        }
+        return count;
+
+    }
+
+    public int updateIsSyncedWithStatus(String refno, String res, String stat) {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ValueHolder.IS_SYNC, res);
+            values.put(ValueHolder.STATUS, stat);
+
+            count = dB.update(ValueHolder.TABLE_ORDHED, values, ValueHolder.REFNO + " =?", new String[]{refno});
+
+        } catch (Exception e) {
+
+            Log.v(TAG + " Exception", e.toString());
+
+        } finally {
+            dB.close();
+        }
+        return count;
+
+    }
+
+    public int updateIsActiveOrdHed(String refno) {
+
+        int count = 0;
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+        Cursor cursor = null;
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ValueHolder.IS_ACTIVE, "0");
+
+            count = dB.update(ValueHolder.TABLE_ORDHED, values, ValueHolder.REFNO + " =?", new String[]{refno});
+
+        } catch (Exception e) {
+
+            Log.v(TAG + " Exception", e.toString());
+
+        } finally {
             dB.close();
         }
         return count;

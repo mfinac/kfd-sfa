@@ -80,6 +80,7 @@ import com.datamation.kfdupgradesfa.controller.SupplierController;
 import com.datamation.kfdupgradesfa.controller.TownController;
 import com.datamation.kfdupgradesfa.controller.TypeController;
 import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
+import com.datamation.kfdupgradesfa.dialog.CustomProgressDialogUpdated;
 import com.datamation.kfdupgradesfa.dialog.StockInquiryDialog;
 import com.datamation.kfdupgradesfa.helpers.NetworkFunctions;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
@@ -106,6 +107,9 @@ import com.datamation.kfdupgradesfa.view.ActivityHome;
 import com.datamation.kfdupgradesfa.view.DebtorDetailsActivity;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -387,21 +391,22 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
 
                         if (NetworkUtil.isNetworkAvailable(context))
                         {
-                            if (NetworkUtil.isNotPoorConnection(context))
-                            {
-                                if (isAnyActiveTransactions())
-                                {
-                                    showActiveTransAlert("You have partially saved transactions. Do you want to discard them?", "Partial Data");
-                                }
-                                else
-                                {
-                                    uploadRecords();
-                                }
-                            }
-                            else
-                            {
-                                networkWarning("Unable to upload due to poor network", "Poor network", context);
-                            }
+//                            if (NetworkUtil.isNotPoorConnection(context))
+//                            {
+//                                if (isAnyActiveTransactions())
+//                                {
+//                                    showActiveTransAlert("You have partially saved transactions. Do you want to discard them?", "Partial Data");
+//                                }
+//                                else
+//                                {
+//                                    uploadRecords();
+//                                }
+//                            }
+//                            else
+//                            {
+//                                networkWarning("Unable to upload due to poor network", "Poor network", context);
+//                            }
+                            new GetUploadSpeed().execute("https://mobitel.lk");
                         }
                         else
                         {
@@ -1670,6 +1675,116 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
         else
         {
             return false;
+        }
+    }
+
+    private class GetUploadSpeed extends AsyncTask<String, Void, Double> {
+
+        CustomProgressDialogUpdated pdialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pdialog = new CustomProgressDialogUpdated(getActivity(), "Upload Speed fetching...", "Upload Speed fetched");
+            pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            pdialog.setInitMessage();
+            pdialog.show();
+
+        }
+
+        public GetUploadSpeed() {
+            this.pdialog = new CustomProgressDialogUpdated(getActivity(), "Upload Speed fetching...", "Upload Speed fetched");
+        }
+
+        @Override
+        protected Double doInBackground(String... params) {
+            String uploadUrl = params[0];
+            try {
+                // Generate a small dummy data to upload
+                byte[] data = new byte[1024]; // 1 KB of data
+
+                // Start time
+                long startTime = System.currentTimeMillis();
+
+                // Open connection to the upload URL
+                URL url = new URL(uploadUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/octet-stream");
+
+                // Upload the data
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(data);
+                outputStream.flush();
+                outputStream.close();
+
+                // Get response code
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // End time
+                    long endTime = System.currentTimeMillis();
+
+                    // Calculate upload time in seconds
+                    double uploadTime = (endTime - startTime) / 1000.0;
+
+                    // Calculate upload speed in KBps
+                    double uploadSpeedKBps = 1024 / uploadTime;
+
+                    // Convert KBps to Mbps
+                    double uploadSpeedMbps = (uploadSpeedKBps * 8) / 1024;
+
+                    return uploadSpeedMbps;
+                } else {
+                    return null;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Double result) {
+            if (result != null)
+            {
+                Log.wtf("Upload speed: ", "" + result + " MBps");
+                Toast.makeText(getActivity(), "Upload speed: "+ result + " MBps", Toast.LENGTH_LONG).show();
+                pdialog.setExitMessage();
+
+                if (result > 5.0)
+                {
+                    try {
+                        if (pdialog.isShowing()) {
+                            pdialog.dismiss();
+                        }
+
+                        if (isAnyActiveTransactions())
+                        {
+                            showActiveTransAlert("You have partially saved transactions. Do you want to discard them?", "Partial Data");
+                        }
+                        else
+                        {
+                            uploadRecords();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                else
+                {
+                    if (pdialog.isShowing()) {
+                        pdialog.dismiss();
+                    }
+                    networkWarning("Unable to upload due to poor network", "Poor network", context);
+                }
+            } else {
+                Toast.makeText(getActivity(), "Failed to measure upload speed", Toast.LENGTH_LONG).show();
+                navigateToNext();
+            }
         }
     }
 }

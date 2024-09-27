@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +42,9 @@ import com.datamation.kfdupgradesfa.controller.CustomerController;
 import com.datamation.kfdupgradesfa.controller.DayNPrdDetController;
 import com.datamation.kfdupgradesfa.controller.DayNPrdHedController;
 import com.datamation.kfdupgradesfa.controller.ReasonController;
+import com.datamation.kfdupgradesfa.controller.ReceiptController;
 import com.datamation.kfdupgradesfa.controller.SalRepController;
+import com.datamation.kfdupgradesfa.dialog.CustomProgressDialogUpdated;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
 import com.datamation.kfdupgradesfa.model.Customer;
 import com.datamation.kfdupgradesfa.model.DayNPrdDet;
@@ -53,6 +56,9 @@ import com.datamation.kfdupgradesfa.view.NonProductiveActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -552,5 +558,4 @@ public class NonProductiveDetail extends Fragment {
         this.thisActivity = activity;
         super.onAttach(activity);
     }
-
 }

@@ -439,7 +439,7 @@ public class OrderHeaderFragment extends Fragment {
             hed.setFORDHED_CUR_CODE("LKR");
             hed.setFORDHED_CUR_RATE("1.00");
             hed.setFORDHED_IS_ACTIVE("1");
-            hed.setFORDHED_IS_SYNCED("0");
+            hed.setFORDHED_IS_SYNCED("");
             hed.setFORDHED_LOC_CODE("");
             hed.setFORDHED_CUSADD1(cus.getCusAdd1());
             hed.setFORDHED_CUSADD2(cus.getCusAdd2());

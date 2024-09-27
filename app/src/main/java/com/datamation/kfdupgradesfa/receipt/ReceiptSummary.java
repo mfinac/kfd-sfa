@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
@@ -49,6 +51,7 @@ import com.datamation.kfdupgradesfa.controller.PreProductController;
 import com.datamation.kfdupgradesfa.controller.ReceiptController;
 import com.datamation.kfdupgradesfa.controller.ReceiptDetController;
 import com.datamation.kfdupgradesfa.controller.SalRepController;
+import com.datamation.kfdupgradesfa.dialog.CustomProgressDialogUpdated;
 import com.datamation.kfdupgradesfa.fragment.FragmentTools;
 import com.datamation.kfdupgradesfa.helpers.ReceiptResponseListener;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
@@ -61,8 +64,10 @@ import com.datamation.kfdupgradesfa.model.RecHed;
 import com.datamation.kfdupgradesfa.model.ReceiptDet;
 import com.datamation.kfdupgradesfa.model.ReceiptHed;
 import com.datamation.kfdupgradesfa.model.apimodel.Result;
+import com.datamation.kfdupgradesfa.order.OrderSummaryFragment;
 import com.datamation.kfdupgradesfa.settings.ReferenceNum;
 import com.datamation.kfdupgradesfa.utils.GPSTracker;
+import com.datamation.kfdupgradesfa.utils.GetMacAddress;
 import com.datamation.kfdupgradesfa.utils.NetworkUtil;
 import com.datamation.kfdupgradesfa.utils.UtilityContainer;
 import com.datamation.kfdupgradesfa.view.DebtorDetailsActivity;
@@ -76,6 +81,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.FileWriter;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -359,21 +367,22 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
             {
                 if (NetworkUtil.isNetworkAvailable(getActivity()))
                 {
-                    if (NetworkUtil.isNotPoorConnection(getActivity()))
-                    {
-                        try
-                        {
-                            Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed(new SalRepController(getActivity()).getCurrentRepCode()));
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                    else
-                    {
-                        networkWarning("Receipt saved locally. Please use tools upload due to poor network", "Poor network");
-                    }
+                    new GetUploadSpeed().execute("https://mobitel.lk");
+//                    if (NetworkUtil.isNotPoorConnection(getActivity()))
+//                    {
+//                        try
+//                        {
+//                            Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed(new SalRepController(getActivity()).getCurrentRepCode()));
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    else
+//                    {
+//                        networkWarning("Receipt saved locally. Please use tools upload due to poor network", "Poor network");
+//                    }
                 }
                 else
                 {
@@ -642,5 +651,109 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
         alertD.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
+    private class GetUploadSpeed extends AsyncTask<String, Void, Double> {
+
+        CustomProgressDialogUpdated pdialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pdialog = new CustomProgressDialogUpdated(getActivity(), "Upload Speed fetching...", "Upload Speed fetched");
+            pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            pdialog.setInitMessage();
+            pdialog.show();
+
+        }
+
+        public GetUploadSpeed() {
+            this.pdialog = new CustomProgressDialogUpdated(getActivity(), "Upload Speed fetching...", "Upload Speed fetched");
+        }
+
+        @Override
+        protected Double doInBackground(String... params) {
+            String uploadUrl = params[0];
+            try {
+                // Generate a small dummy data to upload
+                byte[] data = new byte[1024]; // 1 KB of data
+
+                // Start time
+                long startTime = System.currentTimeMillis();
+
+                // Open connection to the upload URL
+                URL url = new URL(uploadUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/octet-stream");
+
+                // Upload the data
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(data);
+                outputStream.flush();
+                outputStream.close();
+
+                // Get response code
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // End time
+                    long endTime = System.currentTimeMillis();
+
+                    // Calculate upload time in seconds
+                    double uploadTime = (endTime - startTime) / 1000.0;
+
+                    // Calculate upload speed in KBps
+                    double uploadSpeedKBps = 1024 / uploadTime;
+
+                    // Convert KBps to Mbps
+                    double uploadSpeedMbps = (uploadSpeedKBps * 8) / 1024;
+
+                    return uploadSpeedMbps;
+                } else {
+                    return null;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Double result) {
+            if (result != null)
+            {
+                Log.wtf("Upload speed: ", "" + result + " MBps");
+                Toast.makeText(getActivity(), "Upload speed: "+ result + " MBps", Toast.LENGTH_LONG).show();
+                pdialog.setExitMessage();
+
+//                if (pdialog.isShowing()) {
+//                    pdialog.dismiss();
+//                }
+                if (result > 5.0)
+                {
+                    try {
+                        if (pdialog.isShowing()) {
+                            pdialog.dismiss();
+                        }
+                        Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed(new SalRepController(getActivity()).getCurrentRepCode()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                else
+                {
+                    if (pdialog.isShowing()) {
+                        pdialog.dismiss();
+                    }
+                    networkWarning("Receipt saved locally. Please use tools upload due to poor network", "Poor network");
+                }
+            } else {
+                Toast.makeText(getActivity(), "Failed to measure upload speed", Toast.LENGTH_LONG).show();
+                navigateToNext();
+            }
+        }
+    }
 
 }

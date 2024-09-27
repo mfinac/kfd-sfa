@@ -80,6 +80,7 @@ import com.datamation.kfdupgradesfa.controller.SupplierController;
 import com.datamation.kfdupgradesfa.controller.TownController;
 import com.datamation.kfdupgradesfa.controller.TypeController;
 import com.datamation.kfdupgradesfa.dialog.CustomProgressDialog;
+import com.datamation.kfdupgradesfa.dialog.CustomProgressDialogUpdated;
 import com.datamation.kfdupgradesfa.dialog.StockInquiryDialog;
 import com.datamation.kfdupgradesfa.helpers.NetworkFunctions;
 import com.datamation.kfdupgradesfa.helpers.SharedPref;
@@ -106,6 +107,9 @@ import com.datamation.kfdupgradesfa.view.ActivityHome;
 import com.datamation.kfdupgradesfa.view.DebtorDetailsActivity;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -231,40 +235,12 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
             case R.id.imgSync:
                 imgSync.startAnimation(animScale);
                 Log.d("Validate Secondary Sync", ">>Mac>> " + pref.getMacAddress().trim() + " >>URL>> " + pref.getBaseURL() + " >>DB>> " + pref.getDistDB());
-                try {
-                    if (NetworkUtil.isNetworkAvailable(getActivity())) {
-                        SharedPref sharedPref = SharedPref.getInstance(context);
-
-                        //not uploaded status -
-                        // order isSync = '1', receipt isSync = '0', np isSync = '0'
-                        Integer ordHedListCount = new OrderController(getActivity()).getAllDayBeforeUnSyncOrdHed(new SalRepController(getActivity()).getCurrentRepCode());
-                        Integer receiptlistCount = new ReceiptController(getActivity()).getAllDayBeforeUnSyncRecHedCount(new SalRepController(getActivity()).getCurrentRepCode());
-                        Integer npHedListCount = new DayNPrdHedController(getActivity()).getAllDayBeforeUnSyncNonPrdCount(new SalRepController(getActivity()).getCurrentRepCode());
-
-                        if (isAnyActiveTransactions())
-                        {
-                            Toast.makeText(getActivity(), "Please discard or complete all partially saved data", Toast.LENGTH_LONG).show();
-                        }
-                        else if (ordHedListCount > 0 || receiptlistCount > 0 || npHedListCount > 0)
-                        {
-                            Toast.makeText(getActivity(), "Please upload all transaction details", Toast.LENGTH_LONG).show();
-                        }
-                        else
-                        {
-                            syncMasterDataDialog(getActivity());
-                        }
-
-                    } else {
-                        Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    Log.e(">>>> Secondary Sync", e.toString());
-                }
+                secondSync();
                 break;
 
             case R.id.imgUpload:
                 imgUpload.startAnimation(animScale);
-                syncDialog(getActivity());
+                uploadDialog(getActivity());
                 break;
 
             case R.id.imgDownload:
@@ -400,7 +376,7 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
             return false;
     }
 
-    private void syncDialog(final Context context) {
+    private void uploadDialog(final Context context) {
         MaterialDialog materialDialog = new MaterialDialog.Builder(context)
                 .content("Are you sure, Do you want to Upload Data?")
                 .positiveColor(ContextCompat.getColor(context, R.color.material_alert_positive_button))
@@ -415,21 +391,22 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
 
                         if (NetworkUtil.isNetworkAvailable(context))
                         {
-                            if (NetworkUtil.isNotPoorConnection(context))
-                            {
-                                if (isAnyActiveTransactions())
-                                {
-                                    showActiveTransAlert("You have partially saved transactions. Do you want to discard them?", "Partial Data");
-                                }
-                                else
-                                {
-                                    uploadRecords();
-                                }
-                            }
-                            else
-                            {
-                                networkWarning("Unable to upload due to poor network", "Poor network", context);
-                            }
+//                            if (NetworkUtil.isNotPoorConnection(context))
+//                            {
+//                                if (isAnyActiveTransactions())
+//                                {
+//                                    showActiveTransAlert("You have partially saved transactions. Do you want to discard them?", "Partial Data");
+//                                }
+//                                else
+//                                {
+//                                    uploadRecords();
+//                                }
+//                            }
+//                            else
+//                            {
+//                                networkWarning("Unable to upload due to poor network", "Poor network", context);
+//                            }
+                            new GetUploadSpeed().execute("https://mobitel.lk");
                         }
                         else
                         {
@@ -1653,5 +1630,161 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
             e.printStackTrace();
         }
         Toast.makeText(getActivity(), "Active NP discard successfully", Toast.LENGTH_LONG).show();
+    }
+
+    private void secondSync()
+    {
+        try {
+            if (NetworkUtil.isNetworkAvailable(getActivity()))
+            {
+                if (isAnyActiveTransactions())
+                {
+                    Toast.makeText(getActivity(), "Please discard or complete all partially saved data", Toast.LENGTH_LONG).show();
+                }
+                else if (isAnyUploadPendingTransactions())
+                {
+                    Toast.makeText(getActivity(), "Please upload all transactions", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    syncMasterDataDialog(getActivity());
+                }
+            }
+            else
+            {
+                Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Log.e(">>>> Secondary Sync", e.toString());
+        }
+    }
+
+    @SuppressLint("LongLogTag")
+    private boolean isAnyUploadPendingTransactions()
+    {
+        //not uploaded status -
+        // order isSync = '1', receipt isSync = '0', np isSync = '0'
+        int ordHedListCount = new OrderController(getActivity()).getAllDayBeforeUnSyncOrdHed(new SalRepController(getActivity()).getCurrentRepCode());
+        int receiptlistCount = new ReceiptController(getActivity()).getAllDayBeforeUnSyncRecHedCount(new SalRepController(getActivity()).getCurrentRepCode());
+        int npHedListCount = new DayNPrdHedController(getActivity()).getAllDayBeforeUnSyncNonPrdCount(new SalRepController(getActivity()).getCurrentRepCode());
+
+        if (ordHedListCount > 0 || receiptlistCount > 0 || npHedListCount > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private class GetUploadSpeed extends AsyncTask<String, Void, Double> {
+
+        CustomProgressDialogUpdated pdialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pdialog = new CustomProgressDialogUpdated(getActivity(), "Upload Speed fetching...", "Upload Speed fetched");
+            pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            pdialog.setInitMessage();
+            pdialog.show();
+
+        }
+
+        public GetUploadSpeed() {
+            this.pdialog = new CustomProgressDialogUpdated(getActivity(), "Upload Speed fetching...", "Upload Speed fetched");
+        }
+
+        @Override
+        protected Double doInBackground(String... params) {
+            String uploadUrl = params[0];
+            try {
+                // Generate a small dummy data to upload
+                byte[] data = new byte[1024]; // 1 KB of data
+
+                // Start time
+                long startTime = System.currentTimeMillis();
+
+                // Open connection to the upload URL
+                URL url = new URL(uploadUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/octet-stream");
+
+                // Upload the data
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(data);
+                outputStream.flush();
+                outputStream.close();
+
+                // Get response code
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // End time
+                    long endTime = System.currentTimeMillis();
+
+                    // Calculate upload time in seconds
+                    double uploadTime = (endTime - startTime) / 1000.0;
+
+                    // Calculate upload speed in KBps
+                    double uploadSpeedKBps = 1024 / uploadTime;
+
+                    // Convert KBps to Mbps
+                    double uploadSpeedMbps = (uploadSpeedKBps * 8) / 1024;
+
+                    return uploadSpeedMbps;
+                } else {
+                    return null;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Double result) {
+            if (result != null)
+            {
+                Log.wtf("Upload speed: ", "" + result + " MBps");
+                Toast.makeText(getActivity(), "Upload speed: "+ result + " MBps", Toast.LENGTH_LONG).show();
+                pdialog.setExitMessage();
+
+                if (result > 5.0)
+                {
+                    try {
+                        if (pdialog.isShowing()) {
+                            pdialog.dismiss();
+                        }
+
+                        if (isAnyActiveTransactions())
+                        {
+                            showActiveTransAlert("You have partially saved transactions. Do you want to discard them?", "Partial Data");
+                        }
+                        else
+                        {
+                            uploadRecords();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                else
+                {
+                    if (pdialog.isShowing()) {
+                        pdialog.dismiss();
+                    }
+                    networkWarning("Unable to upload due to poor network", "Poor network", context);
+                }
+            } else {
+                Toast.makeText(getActivity(), "Failed to measure upload speed", Toast.LENGTH_LONG).show();
+                navigateToNext();
+            }
+        }
     }
 }

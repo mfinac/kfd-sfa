@@ -560,16 +560,23 @@ public class DayNPrdHedController {
             open();
         }
 
+        int count = 0;
+        Cursor cursor = null;
+        try {
+            String selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where ISsync=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
+            cursor = dB.rawQuery(selectQuery, null);
 
-        @SuppressWarnings("static-access")
-        //String selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where ISsync=1 and ISActive=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
-                //IsActive status not updaing or using (ISsync = '0' means not uploaded)
-        String selectQuery = "select * from " + ValueHolder.TABLE_NONPRDHED + " Where ISsync=0 and " + ValueHolder.REPCODE + " = '" + repCode + "'";
+            count = cursor.getCount();
 
-        Cursor cursor = dB.rawQuery(selectQuery, null);
+        } catch (Exception e) {
+            Log.v(TAG, e.toString());
 
-        Integer count = cursor.getCount();
-
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
 
         return count;
     }

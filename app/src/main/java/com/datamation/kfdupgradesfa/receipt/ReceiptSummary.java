@@ -367,17 +367,17 @@ public class ReceiptSummary extends Fragment implements UploadTaskListener {
             {
                 if (NetworkUtil.isNetworkAvailable(getActivity()))
                 {
-                    new GetUploadSpeed().execute("https://mobitel.lk");
-//                    if (NetworkUtil.isNotPoorConnection(getActivity()))
-//                    {
-//                        try
-//                        {
-//                            Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed(new SalRepController(getActivity()).getCurrentRepCode()));
-//                        }
-//                        catch (Exception e)
-//                        {
-//                            e.printStackTrace();
-//                        }
+//                    new GetUploadSpeed().execute("https://mobitel.lk");
+////                    if (NetworkUtil.isNotPoorConnection(getActivity()))
+////                    {
+                    try
+                    {
+                        Upload(new ReceiptController(getActivity()).getAllUnsyncedReceiptHed(new SalRepController(getActivity()).getCurrentRepCode()));
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
 //                    }
 //                    else
 //                    {

@@ -728,15 +728,15 @@ public class OrderSummaryFragment extends Fragment implements UploadTaskListener
             {
                 if (NetworkUtil.isNetworkAvailable(getActivity()))
                 {
-//                    if (NetworkUtil.isNotPoorConnection(getActivity()))
-//                    {
-//                        new GetUploadSpeed().execute("https://mobitel.lk");
-//                    }
-//                    else
-//                    {
-//                        networkWarning("Order saved locally. Please use tools upload due to poor network", "Poor network");
-//                    }
-                    new GetUploadSpeed().execute("https://mobitel.lk");
+                    try
+                    {
+                        Upload(new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode()));
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    //new GetUploadSpeed().execute("https://mobitel.lk");
                 }
                 else
                 {

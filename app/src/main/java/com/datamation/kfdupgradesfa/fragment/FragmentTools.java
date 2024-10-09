@@ -391,6 +391,19 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
 
                         if (NetworkUtil.isNetworkAvailable(context))
                         {
+                            try {
+
+                                if (isAnyActiveTransactions())
+                                {
+                                    showActiveTransAlert("You have partially saved transactions. Do you want to discard them?", "Partial Data");
+                                }
+                                else
+                                {
+                                    uploadRecords();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 //                            if (NetworkUtil.isNotPoorConnection(context))
 //                            {
 //                                if (isAnyActiveTransactions())
@@ -406,7 +419,7 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
 //                            {
 //                                networkWarning("Unable to upload due to poor network", "Poor network", context);
 //                            }
-                            new GetUploadSpeed().execute("https://mobitel.lk");
+                            //new GetUploadSpeed().execute("https://mobitel.lk");
                         }
                         else
                         {

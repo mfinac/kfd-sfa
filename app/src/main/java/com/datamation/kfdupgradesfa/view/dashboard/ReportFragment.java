@@ -300,7 +300,7 @@ public class ReportFragment extends Fragment{
 
         if (listNPDataHeader.size()== 0)
         {
-            Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "No report to display", Toast.LENGTH_LONG).show();
             //noDataLayout.setVisibility(View.VISIBLE);
         }
         else
@@ -348,7 +348,7 @@ public class ReportFragment extends Fragment{
             targetVsActualAdapter = new TargetVsAchievementAdapter(getActivity(),targetVsActuals);
             reportDataListview.setAdapter(targetVsActualAdapter);
         }else{
-            Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "No report to display", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -359,7 +359,7 @@ public class ReportFragment extends Fragment{
             expenseReportAdapter = new ExpenseReportAdapter(getActivity(), expenseData);
             reportDataListview.setAdapter(expenseReportAdapter);
         }else{
-            Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "No report to display", Toast.LENGTH_LONG).show();
         }
 
 
@@ -371,7 +371,7 @@ public class ReportFragment extends Fragment{
             preSalesSummaryAdapter = new PreSalesReportAdapter(getActivity(), presaleData);
             reportDataListview.setAdapter(preSalesSummaryAdapter);
         }else{
-            Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "No report to display", Toast.LENGTH_LONG).show();
         }
 
 

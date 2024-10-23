@@ -61,92 +61,94 @@
 
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/order_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="95dp"
         android:background="@color/theme_color"
-        android:paddingBottom="10dp"
-        android:paddingRight="20dp"
-        android:paddingLeft="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="30dp">
-
+        android:orientation="horizontal"
+        android:weightSum="5.6">
 
         <TextView
             android:id="@+id/order_no"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="left"
+            android:layout_width="0dp"
+            android:layout_weight = "2"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:text="Order No"
             android:textColor="@color/button_text_color"
             android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/order_date"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/order_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_weight = "1"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:text="Date"
-            android:gravity="left"
             android:textColor="@color/button_text_color"
             android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/order_amt"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/order_no"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/order_amt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_weight = "1"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:text="Amount"
-            android:gravity="left"
             android:textColor="@color/button_text_color"
             android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/order_status"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/order_date"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/order_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_weight = "0.75"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:text="Status"
             android:textColor="@color/button_text_color"
             android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/order_action"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/order_amt"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight = "0.1"
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/order_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_weight = "0.75"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:text="Action"
             android:textColor="@color/button_text_color"
             android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/order_status"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/noDataView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility= "gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:background="@color/White"
+            android:text="No data to display"
+            android:textSize="16dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
 
     <ExpandableListView
         android:id="@+id/lvExp"

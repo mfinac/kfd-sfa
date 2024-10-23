@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -69,7 +70,7 @@ public class ReceiptFragment extends Fragment {
     SearchView search;
     ImageView refresh;
     private Handler mHandler;
-
+    LinearLayout noDataLayout;
 //    private PrimeThread p;
 
     @Override
@@ -78,6 +79,7 @@ public class ReceiptFragment extends Fragment {
         expListView = (ExpandableListView) view.findViewById(R.id.lvExp);
         refresh = (ImageView) view.findViewById(R.id.img_refresh);
         search = (SearchView) view.findViewById(R.id.search);
+        noDataLayout = (LinearLayout)view.findViewById(R.id.noDataView);
         networkFunctions = new NetworkFunctions(getActivity());
         mHandler = new Handler(Looper.getMainLooper());
 
@@ -390,9 +392,13 @@ public class ReceiptFragment extends Fragment {
         receiptHedList = new ReceiptController(getActivity()).getTodayReceipts(new SalRepController(getActivity()).getCurrentRepCode());
 
         if (receiptHedList.size() == 0) {
-            Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), "No receipt to display", Toast.LENGTH_LONG).show();
+            noDataLayout.setVisibility(View.VISIBLE);
+            expListView.setVisibility(View.GONE);
 
         } else {
+            noDataLayout.setVisibility(View.GONE);
+            expListView.setVisibility(View.VISIBLE);
             listReceiptDataChild = new HashMap<>();
 
             for (ReceiptHed rHed : receiptHedList) {
@@ -411,7 +417,7 @@ public class ReceiptFragment extends Fragment {
         receiptHedList = new ReceiptController(getActivity()).getTodayReceiptsBySearch(key,new SalRepController(getActivity()).getCurrentRepCode());
 
         if (receiptHedList.size() == 0) {
-            Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "No receipt to display", Toast.LENGTH_LONG).show();
 
         } else {
             listReceiptDataChild = new HashMap<ReceiptHed, List<ReceiptDet>>();

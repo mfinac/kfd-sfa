@@ -468,12 +468,16 @@ public class OrderDetailController {
 //                + ValueHolder.QTY + " <> '0'";
 
         // wrote this join query coz ORDDET doesn't have a column named REPCODE
-        String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDDET + " od "
-                + "JOIN " + ValueHolder.TABLE_ORDHED + " oh "
-                + "ON od." + ValueHolder.REFNO + " = oh." + ValueHolder.REFNO + " "
-                + "WHERE od." + ValueHolder.REFNO + " = '" + refno + "' "
-                + "AND oh." + ValueHolder.REPCODE + " = '" + repCode + "' "
-                + "AND od." + ValueHolder.QTY + " <> '0'";
+//        String selectQuery = "SELECT * FROM " + ValueHolder.TABLE_ORDDET + " od "
+//                + "JOIN " + ValueHolder.TABLE_ORDHED + " oh "
+//                + "ON od." + ValueHolder.REFNO + " = oh." + ValueHolder.REFNO + " "
+//                + "WHERE od." + ValueHolder.REFNO + " = '" + refno + "' "
+//                + "AND oh." + ValueHolder.REPCODE + " = '" + repCode + "' "
+//                + "AND od." + ValueHolder.QTY + " <> '0'";
+
+        String selectQuery = "SELECT od.*, oh.IsSync FROM TblOrddet od JOIN TblOrder oh ON od.RefNo = oh.RefNo WHERE od.RefNo = '" + refno + "' AND oh.RepCode = '" + repCode + "' AND od.Qty <> '0'";
+
+
 
 
         Cursor cursor = dB.rawQuery(selectQuery, null);
@@ -499,6 +503,7 @@ public class OrderDetailController {
                 ordDet.setFORDDET_TAX_COM_CODE(cursor.getString(cursor.getColumnIndex(ValueHolder.TAXCOMCODE)));
                 ordDet.setFORDDET_TYPE(cursor.getString(cursor.getColumnIndex(ValueHolder.TYPE)));
                 ordDet.setFORDDET_TXN_TYPE(cursor.getString(cursor.getColumnIndex(ValueHolder.TXNTYPE)));
+                ordDet.setFORDDET_IS_Synced(cursor.getString(cursor.getColumnIndex(ValueHolder.IS_SYNC)));
 
                 list.add(ordDet);
 

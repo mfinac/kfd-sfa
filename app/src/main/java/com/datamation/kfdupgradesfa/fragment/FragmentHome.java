@@ -40,13 +40,7 @@ public class FragmentHome extends Fragment {
     private DaySummaryFragment daySummaryFragment;
     private OrderFragment orderFragment;
     private ReceiptFragment receiptFragment;
-    private OutstandingDetailsFragment outstandingDetailsFragment;
-    private PaymentDetailsFragment paymentDetailsFragment;
-    private DeliveryDetailsFragment deliveryDetailsFragment;
-
     private MainDashboardFragment mainDashboardFragment;
-
-    private TransactionDetailsFragment transactionDetailsFragment;
     private ReportFragment otherDetailsFragment;
 
 
@@ -57,65 +51,6 @@ public class FragmentHome extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_home, container, false);
-        // ImageButton imgbtnCalendar = (ImageButton) view.findViewById(R.id.dashboard_toolbar_icon_calendar);
-
-//        calendarDatePickerDialog = new CalendarDatePickerDialog();
-//
-//        calendarDatePickerDialog.setOnDateSetListener(new CalendarDatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(CalendarDatePickerDialog calendarDatePickerDialog, int year, int month, int day) {
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.set(year, month, day);
-//
-//                thisDay = day;
-//
-//                long millis = calendar.getTimeInMillis();
-//
-////                new GetDashboardData(millis).execute();
-//                try {
-//                    setDashboardDetails(millis);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(getActivity(), "Error loading data. Please try again", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            }
-//        });
-
-//        imgbtnCalendar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (currentFragment != null) {
-//                    if (currentFragment instanceof MainDashboardFragment) {
-//                        ((MainDashboardFragment) currentFragment).showCalendar();
-//                    } else if (currentFragment instanceof DaySummaryFragment) {
-//                        ((DaySummaryFragment) currentFragment).showCalendar();
-//                    } else if (currentFragment instanceof InvoiceDetailsFragment) {
-//                        ((InvoiceDetailsFragment) currentFragment).showCalendar();
-//                    } else if (currentFragment instanceof PaymentDetailsFragment) {
-//                        ((PaymentDetailsFragment) currentFragment).showCalendar();
-//                    }
-//                }
-//            }
-//        });
-
-        // ImageButton imgbtnSync = (ImageButton) view.findViewById(R.id.dashboard_toolbar_icon_sync);
-//        imgbtnSync.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (currentFragment != null) {
-//                    if (currentFragment instanceof MainDashboardFragment) {
-//                        ((MainDashboardFragment) currentFragment).sync();
-//                    } else if (currentFragment instanceof DaySummaryFragment) {
-//                        ((DaySummaryFragment) currentFragment).refresh();
-//                    } else if (currentFragment instanceof InvoiceDetailsFragment) {
-//                        ((InvoiceDetailsFragment) currentFragment).refresh();
-//                    } else if (currentFragment instanceof PaymentDetailsFragment) {
-//                        ((PaymentDetailsFragment) currentFragment).refresh();
-//                    }
-//                }
-//            }
-//        });
 
         viewPager = (ViewPager) view.findViewById(R.id.dashboard_vp);
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.dashboard_tab_strip);
@@ -154,10 +89,6 @@ public class FragmentHome extends Fragment {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("TAG_RECEIPT"));
 
                 }
-
-//                if (position == 4) {
-//                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("TAG_TRANSACTION"));
-//                }
                 if (position == 4) {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("TAG_REPORT"));
                 }
@@ -177,7 +108,6 @@ public class FragmentHome extends Fragment {
     private class DashboardPagerAdapter extends FragmentPagerAdapter {
 
         private String[] titles = {"Main", "Summary", "Orders", "Receipt", "Reports"};
-//        private String[] titles = {"Main", "Summary", "Orders", "Receipt", "Transactions", "Reports"};
 
         public DashboardPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -202,12 +132,6 @@ public class FragmentHome extends Fragment {
                 case 3:
                     if (receiptFragment == null) receiptFragment = new ReceiptFragment();
                     return receiptFragment;
-
-//                case 4:
-//                    if (transactionDetailsFragment == null)
-//                        transactionDetailsFragment = new TransactionDetailsFragment();
-//                    return transactionDetailsFragment;
-
                 case 4:
                     if (otherDetailsFragment == null) otherDetailsFragment = new ReportFragment();
                     return otherDetailsFragment;

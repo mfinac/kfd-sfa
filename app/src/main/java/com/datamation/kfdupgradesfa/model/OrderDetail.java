@@ -39,9 +39,18 @@ public class OrderDetail implements Serializable {
     private String FORDDET_DISC_REF;
     private long orderId;
     private boolean FLAG;
+    private String FORDDET_IS_Synced;
 
     private String FORDDET_ITEMNAME;
     private String FORDDET_PACKSIZE;
+
+    public String getFORDDET_IS_Synced() {
+        return FORDDET_IS_Synced;
+    }
+
+    public void setFORDDET_IS_Synced(String FORDDET_IS_Synced) {
+        this.FORDDET_IS_Synced = FORDDET_IS_Synced;
+    }
 
     public long getOrderId() {
         return orderId;

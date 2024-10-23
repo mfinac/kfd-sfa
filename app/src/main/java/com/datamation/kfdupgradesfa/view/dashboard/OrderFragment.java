@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ import com.datamation.kfdupgradesfa.model.Order;
 import com.datamation.kfdupgradesfa.model.OrderDetail;
 import com.datamation.kfdupgradesfa.model.OrderHed;
 import com.datamation.kfdupgradesfa.model.apimodel.Result;
+import com.datamation.kfdupgradesfa.utils.NetworkUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -76,7 +78,8 @@ public class OrderFragment extends Fragment {
     SearchView search;
     ImageView refresh;
     private Handler mHandler;
-//    private PrimeThread p;
+    CustomProgressDialog myDialog;
+    LinearLayout noDataLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -84,10 +87,15 @@ public class OrderFragment extends Fragment {
         expListView = (ExpandableListView) view.findViewById(R.id.lvExp);
         refresh = (ImageView) view.findViewById(R.id.img_refresh);
         search = (SearchView) view.findViewById(R.id.search);
+        noDataLayout = (LinearLayout)view.findViewById(R.id.noDataView);
         networkFunctions = new NetworkFunctions(getActivity());
         mHandler = new Handler(Looper.getMainLooper());
-        prepareListData();
+        myDialog = new CustomProgressDialog(getActivity());
+        myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        myDialog.setMessage("Uploading / Refreshing...");
+        myDialog.show();
 
+        prepareListData();
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -114,15 +122,11 @@ public class OrderFragment extends Fragment {
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-//                p = new PrimeThread(new OrderController(getActivity()).getAllNotIssueOrders());
-//                p.start();
-
+            public void onClick(View view)
+            {
+                myDialog.show();
                 new OrderStatusRefreshResponse(new OrderController(getActivity()).getAllNotIssueOrders()).execute();
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
-                //prepareListData();
+                prepareListData();
             }
         });
 
@@ -131,149 +135,35 @@ public class OrderFragment extends Fragment {
 
     }
 
-    private void showData() {
-
-
-        listDataHeader = new OrderController(getActivity()).getAllOrders(new SalRepController(getActivity()).getCurrentRepCode());
-
-        if (listDataHeader.size() == 0) {
-            Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
-
-        } else {
-            listDataChild = new HashMap<Order, List<OrderDetail>>();
-
-            for (Order free : listDataHeader) {
-                listDataChild.put(free, new OrderDetailController(getActivity()).getAllOrderDets(free.getFORDHED_REFNO(),new SalRepController(getActivity()).getCurrentRepCode()));
-            }
-
-            listVanAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
-            expListView.setAdapter(listVanAdapter);
-            Toast.makeText(getActivity(), "List Refreshed", Toast.LENGTH_LONG).show();
-
-        }
-
-    }
-
+//    private void showData() {
 //
-//    class PrimeThread extends Thread {
 //
-//        CustomProgressDialog pdialog;
-//        ArrayList<Order> orderList;
+//        listDataHeader = new OrderController(getActivity()).getAllOrders(new SalRepController(getActivity()).getCurrentRepCode());
 //
-//        PrimeThread(ArrayList<Order> ordList) {
-//            this.pdialog = new CustomProgressDialog(getActivity());
-//            this.orderList = ordList;
+//        if (listDataHeader.size() == 0) {
+//            Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
 //
-//            pdialog = new CustomProgressDialog(getActivity());
-//            pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            pdialog.setMessage("Please while for a status update...");
-//            pdialog.show();
+//        } else {
+//            listDataChild = new HashMap<Order, List<OrderDetail>>();
+//
+//            for (Order free : listDataHeader) {
+//                listDataChild.put(free, new OrderDetailController(getActivity()).getAllOrderDets(free.getFORDHED_REFNO(),new SalRepController(getActivity()).getCurrentRepCode()));
+//            }
+//
+//            listVanAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+//            expListView.setAdapter(listVanAdapter);
+//            Toast.makeText(getActivity(), "List Refreshed", Toast.LENGTH_LONG).show();
+//
 //        }
 //
-//        public void run() {
-//
-//            Looper.prepare();
-//
-//            for (Order odr : orderList) {
-//                actionTakenList(odr.getFORDHED_STATUS(), odr);
-//                try {
-//                    runOnUiThread(new Runnable() {
-//
-//                        @Override
-//                        public void run() {
-//                            showData();
-//                        }
-//                    });
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            if (pdialog.isShowing()) {
-//                pdialog.dismiss();
-//
-//                p.stop();
-//            }
-//        }
 //    }
-//
 
     private void actionTakenList(String stats, final OrderHed c) {
 
-     //   if (NetworkUtil.isNetworkAvailable(getActivity())) {
+        if (NetworkUtil.isNetworkAvailable(getActivity())) {
             if (stats.equals("NOT SYNCED")) {
                 orderActionUpdateTask(c.getRefNo(), "NOT SYNCED");
-//                try {
-//                    if (new OrderController(getActivity()).getAllNotIssueOrders().size() > 0) {
-//                        try {
 //
-//                            JsonParser jsonParser = new JsonParser();
-//                            String orderJson = new Gson().toJson(c);
-//                            JsonObject objectFromString = jsonParser.parse(orderJson).getAsJsonObject();
-//                            JsonArray jsonArray = new JsonArray();
-//                            jsonArray.add(objectFromString);
-//                            Log.d(">>>Orderjson",">>>"+objectFromString);
-//                            String content_type = "application/json";
-//                            ApiInterface apiInterface = ApiCllient.getClient(getActivity()).create(ApiInterface.class);
-//
-//                            Call<Result> resultCall = apiInterface.uploadOrder(objectFromString, content_type);
-//                            resultCall.enqueue(new Callback<Result>() {
-//                                @Override
-//                                public void onResponse(Call<Result> call, Response<Result> response) {
-//                                    int status = response.code();
-//
-//                                    if(response.isSuccessful()){
-//                                        response.body(); // have your all data
-//                                        boolean result =response.body().isResponse();
-//                                        Log.d( ">>response"+status,result+">>"+c.getRefNo() );
-//                                        if(result){
-//                                            mHandler.post(new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//
-//                                                    c.setIsSync("1");
-//                                            new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "SYNCED","0");
-//
-//                                            listVanAdapter.notifyDataSetChanged();
-//
-//                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
-//                                                }
-//                                            });
-//                                        }else{
-//                                            Log.d(">>>Orderjson",">>>"+objectFromString);
-//                                            c.setIsSync("0");
-//                                            new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED","1");
-//                                            listVanAdapter.notifyDataSetChanged();
-//                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
-//                                        }
-//                                    }else {
-//                                        Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
-//                                    }// this will tell you why your api doesnt work most of time
-//
-//
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call<Result> call, Throwable t) {
-//                                    Toast.makeText(getActivity(), "Error response "+t.toString(), Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-////                        }
-//
-//                    } else {
-//                        orderActionUpdateTask(c.getRefNo(), "NOT SYNCED");
-//                      //  Toast.makeText(getActivity(), "No Records to upload !", Toast.LENGTH_LONG).show();
-//                    }
-//                } catch (Exception e) {
-//                    Log.e(">>>ERROR In EDIT", ">>>" + e.toString());
-//                    throw e;
-//                }
             } else if (stats.equals("SYNCED")) {
 
 //                new OrderStatusDownload(c.getFORDHED_REFNO(), "SYNCED").execute();
@@ -285,9 +175,9 @@ public class OrderFragment extends Fragment {
 //                new OrderStatusDownload(c.getFORDHED_REFNO(), "INVOICED").execute();
                 orderActionUpdateTask(c.getRefNo(), "INVOICED");
             }
-//        } else {
-//            Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
-//        }
+        } else {
+            Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -412,12 +302,12 @@ public class OrderFragment extends Fragment {
             TextView date = (TextView) convertView.findViewById(R.id.date);
             TextView deb = (TextView) convertView.findViewById(R.id.debcode);
             TextView tot = (TextView) convertView.findViewById(R.id.total);
-            final TextView stats = (TextView) convertView.findViewById(R.id.status);
+            final TextView status = (TextView) convertView.findViewById(R.id.status);
             TextView cnfrmstats = (TextView) convertView.findViewById(R.id.cnfrmstatus);
 //            ImageView type = (ImageView) convertView.findViewById(R.id.type);
-            TextView type = (TextView) convertView.findViewById(R.id.type);
-            type.setTextColor(Color.WHITE);
-            type.setBackground(getResources().getDrawable(R.drawable.bg_rejected));
+            TextView delete = (TextView) convertView.findViewById(R.id.type);
+            delete.setTextColor(Color.WHITE);
+            delete.setBackground(getResources().getDrawable(R.drawable.bg_rejected));
 
             ImageView orderDet = (ImageView) convertView.findViewById(R.id.showOrder);
             ImageView print = (ImageView) convertView.findViewById(R.id.print);
@@ -427,52 +317,39 @@ public class OrderFragment extends Fragment {
 
 
             if (headerTitle.getFORDHED_STATUS() != null && headerTitle.getFORDHED_STATUS().equals("DISPATCHED")) {
-                stats.setText("DISPATCHED");
-                stats.setTextColor(Color.WHITE);
+                status.setText("DISPATCHED");
+                status.setTextColor(Color.WHITE);
                 cnfrmstats.setText("Click to refersh");
-                stats.setBackground(getResources().getDrawable(R.drawable.bg_dispatch));
+                status.setBackground(getResources().getDrawable(R.drawable.bg_dispatch));
                 cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_negative));
             } else if (headerTitle.getFORDHED_STATUS() != null && headerTitle.getFORDHED_STATUS().equals("ISSUED")) {
-                stats.setText("ISSUED");
+                status.setText("ISSUED");
                 cnfrmstats.setText("               ");
-                stats.setBackground(getResources().getDrawable(R.drawable.bg_issued));
+                status.setBackground(getResources().getDrawable(R.drawable.bg_issued));
                 cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_negative));
             } else if (headerTitle.getFORDHED_STATUS() != null && headerTitle.getFORDHED_STATUS().equals("INVOICED")) {
-                stats.setText("INVOICED");
+                status.setText("INVOICED");
                 cnfrmstats.setVisibility(View.GONE);
-                stats.setTextColor(Color.WHITE);
-                stats.setBackground(getResources().getDrawable(R.drawable.bg_synced));//green
+                status.setTextColor(Color.WHITE);
+                status.setBackground(getResources().getDrawable(R.drawable.bg_synced));//green
                 cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_negative));
             }
-//            else if (headerTitle.getFORDHED_STATUS() != null && headerTitle.getFORDHED_STATUS().equals("APPROVED")) {
-//                stats.setText("APPROVED");
-//                cnfrmstats.setText("Click to refersh");
-//                stats.setBackground(getResources().getDrawable(R.drawable.bg_approval));
-//                cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_negative));
-//            }
-//            else if (headerTitle.getFORDHED_IS_SYNCED().equals("1") && headerTitle.getFORDHED_IS_ACTIVE().equals("2")) {
-//                listVanAdapter.notifyDataSetChanged();
-//                stats.setText("PENDING");
-//                cnfrmstats.setText("Click to refersh");
-//                stats.setBackground(getResources().getDrawable(R.drawable.bg_sync));
-//                cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_negative));
-//            }
             else if (headerTitle.getFORDHED_IS_SYNCED().equals("1") && headerTitle.getFORDHED_IS_ACTIVE().equals("0")) {
-                stats.setText("NOT SYNCED");
+                status.setText("NOT SYNCED");
                 cnfrmstats.setText("Click to confirm");
                // stats.setBackground(getResources().getDrawable(R.drawable.bg_positive));
                 cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_positive));
             } else if (headerTitle.getFORDHED_IS_SYNCED().equals("0") && headerTitle.getFORDHED_IS_ACTIVE().equals("0")&& headerTitle.getFORDHED_STATUS().equals("SYNCED")) {
-                stats.setText("SYNCED");
+                status.setText("SYNCED");
                 cnfrmstats.setText("Click to confirm");
-                new OrderController(getActivity()).updateIsSynced(headerTitle.getFORDHED_REFNO(), "0", "SYNCED","0");
-                stats.setBackground(getResources().getDrawable(R.drawable.bg_positive));
+                //new OrderController(getActivity()).updateIsSynced(headerTitle.getFORDHED_REFNO(), "0", "SYNCED","0");
+                status.setBackground(getResources().getDrawable(R.drawable.bg_positive));
                 cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_positive));
             }
             else {
-                stats.setText("NOT SYNCED");
+                status.setText("NOT SYNCED");
                 cnfrmstats.setText("Click to Confirm");
-                stats.setBackground(getResources().getDrawable(R.drawable.bg_negative));
+                status.setBackground(getResources().getDrawable(R.drawable.bg_negative));
                 cnfrmstats.setBackground(getResources().getDrawable(R.drawable.bg_negative));
             }
 
@@ -492,42 +369,35 @@ public class OrderFragment extends Fragment {
                 }
             });
 
-            type.setOnClickListener(new View.OnClickListener() {
+            delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (headerTitle.getFORDHED_IS_SYNCED().equals("0")) {
-                        int result = new OrderController(getActivity()).restData("" + headerTitle.getFORDHED_REFNO());
-                        if (result > 0) {
-                            new OrderDetailController(getActivity()).restData("" + headerTitle.getFORDHED_REFNO());
-                            //       new SharedPref(getActivity()).setOrderId(0);
-                            expListView.setAdapter((BaseExpandableListAdapter) null);
-                            prepareListData();
-                            Toast.makeText(getActivity(), "Order deleted successfully", Toast.LENGTH_LONG).show();
-                            //       new SharedPref(getActivity()).setEditOrderId(0);
-                        }
-                    } else {
+                    if (!headerTitle.getFORDHED_IS_SYNCED().equals("0"))
+                    {
+                        requestToDelete(headerTitle);
+                    }
+                    else
+                    {
                         Toast.makeText(getActivity(), "Cannot delete synced orders", Toast.LENGTH_LONG).show();
                     }
                 }
             });
 
-
-            stats.setOnClickListener(new View.OnClickListener() {
+            status.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    new OrderController(getActivity()).updateIsActive("" + headerTitle.getFORDHED_REFNO(), "2");
-//                    ArrayList<Order> orders = new OrderController(getActivity()).getAllUnSyncOrdHed();
+                    myDialog.show();
                     ArrayList<OrderHed> orders = new OrderController(getActivity()).getAllUnSyncOrdHedByRefNo(headerTitle.getFORDHED_REFNO());
-                    // Log.d(">>>2", ">>>2 ");
-               //     if (NetworkUtil.isNetworkAvailable(getActivity())) {
-                        if (stats.getText().toString().equals("NOT SYNCED")) {
+                    if (NetworkUtil.isNetworkAvailable(getActivity()))
+                    {
+                        if (status.getText().toString().equals("NOT SYNCED"))
+                        {
                             try {
-                                if (new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode()).size() > 0) {
-                                    //   Log.d(">>>3", ">>>3 ");
-                                    for (final OrderHed c : orders) {
+                                if (orders.size() > 0)
+                                {
+                                    for (final OrderHed c : orders)
+                                    {
                                         try {
-                                            //    Log.d(">>>4", ">>>4 ");
-                                            //  final Handler mHandler = new Handler(Looper.getMainLooper());
                                             JsonParser jsonParser = new JsonParser();
                                             String orderJson = new Gson().toJson(c);
                                             JsonObject objectFromString = jsonParser.parse(orderJson).getAsJsonObject();
@@ -542,76 +412,33 @@ public class OrderFragment extends Fragment {
 
                                                     int status = response.code();
 
-                                                    if(response.isSuccessful()){
-                                                        response.body(); // have your all data
+                                                    if(response.isSuccessful())
+                                                    {
                                                         boolean result =response.body().isResponse();
                                                         Log.d( ">>response"+status,result+">>"+c.getRefNo() );
-                                                        if(result){
+                                                        if(result)
+                                                        {
                                                             mHandler.post(new Runnable() {
                                                                 @Override
                                                                 public void run() {
                                                                     c.setIsSync("1");
-                                                                    new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "SYNCED","0");
+                                                                    new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "SYNCED","0");
                                                                     prepareListData();
-                                                                    listVanAdapter.notifyDataSetChanged();
-
-                                                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                                                    ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
                                                                 }
                                                             });
-                                                        }else{
-//                                                            c.setIsSync("0");
-                                                           new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED","1");
-                                                            requestReupload();
-                                                            listVanAdapter.notifyDataSetChanged();
-//                                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
-//                                                           listVanAdapter.notifyDataSetChanged();
+                                                        }
+                                                        else
+                                                        {
+                                                           new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "NOT SYNCED","0");
+                                                           requestReupload();
 
                                                         }
-                                                    }else {
-                                                        //Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
+                                                    }
+                                                    else
+                                                    {
                                                         new isCheckUploadedOrder(headerTitle.getFORDHED_REFNO(), "NOT SYNCED").execute();
                                                         Log.d( ">>error response"+status,response.errorBody().toString()+">>"+c.getRefNo() );
-                                                    }// this will tell you why your api doesnt work most of time
-
-
-
-//                                                    if (response != null && response.body() != null) {
-//                                                        int status = response.code();
-//                                                        Log.d(">>>response code", ">>>res " + status);
-//                                                        Log.d(">>>response message", ">>>res " + response.message());
-//                                                        Log.d(">>>response body", ">>>res " + response.body().toString());
-//                                                        int resLength = response.body().toString().trim().length();
-//                                                        String resmsg = "" + response.body().toString();
-//
-//                                                        if (status == 200 && !resmsg.equals("") && !resmsg.equals(null)) {
-////                                                        mHandler.post(new Runnable() {
-////                                                            @Override
-////                                                            public void run() {
-//                                                            c.setIsSync("1");
-//                                                            new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "SYNCED");
-//                                                            prepareListData();
-//                                                            listVanAdapter.notifyDataSetChanged();
-//
-//                                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
-//
-//                                                            //       }
-//                                                            //     });
-//                                                        } else {
-//                                                            c.setIsSync("0");
-//                                                            new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED");
-//                                                            listVanAdapter.notifyDataSetChanged();
-//                                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
-////                                                           listVanAdapter.notifyDataSetChanged();
-//                                                            requestReupload();
-//                                                        }
-//                                                    } else {
-//                                                        Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
-//                                                    }
-
+                                                    }
                                                 }
 
                                                 @Override
@@ -626,38 +453,75 @@ public class OrderFragment extends Fragment {
                                             e.printStackTrace();
                                         }
                                     }
-
-                                } else {
+                                }
+                                else
+                                {
                                     Toast.makeText(getActivity(), "No Records to upload !", Toast.LENGTH_LONG).show();
+                                    prepareListData();
                                 }
                             } catch (Exception e) {
                                 Log.e(">>>ERROR In EDIT", ">>>" + e.toString());
                                 throw e;
                             }
-                        } else if (stats.getText().toString().equals("SYNCED")) {
-                            Log.d("********^^^^^^", "onClick: " + stats.getText());
+                        } else if (status.getText().toString().equals("SYNCED")) {
+                            Log.d("********^^^^^^", "onClick: " + status.getText());
                             new OrderStatusDownload(headerTitle.getFORDHED_REFNO(), "SYNCED").execute();
                         }
-//                        else if (stats.getText().toString().equals("APPROVED")) {
-//                            new OrderStatusDownload(headerTitle.getOrderId(), "APPROVED").execute();
-//                        }
-                        else if (stats.getText().toString().equals("DISPATCHED")) {
+                        else if (status.getText().toString().equals("DISPATCHED")) {
                             new OrderStatusDownload(headerTitle.getFORDHED_REFNO(), "DISPATCHED").execute();
-                        } else if (stats.getText().toString().equals("INVOICED")) {
+                        } else if (status.getText().toString().equals("INVOICED")) {
                             new OrderStatusDownload(headerTitle.getFORDHED_REFNO(), "INVOICED").execute();
                         }
-//                    } else {
-//                        Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
-//                    }
-                    prepareListData();
-//                    listVanAdapter.notifyDataSetChanged();
-
-                    //Toast.makeText(getActivity(), "Confirmed order successfully", Toast.LENGTH_LONG).show();
-
+                    } else {
+                        Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+                        if (myDialog.isShowing())
+                        {
+                            myDialog.dismiss();
+                        }
+                    }
                 }
             });
             listVanAdapter.notifyDataSetChanged();
             return convertView;
+        }
+
+        public void requestToDelete(Order currentOrder) {
+            MaterialDialog materialDialog = new MaterialDialog.Builder(getActivity())
+                    .content("Do you want to delete this order?")
+                    .positiveColor(ContextCompat.getColor(getActivity(), R.color.material_alert_positive_button))
+                    .positiveText("Yes")
+                    .negativeColor(ContextCompat.getColor(getActivity(), R.color.material_alert_negative_button))
+                    .negativeText("No")
+                    .callback(new MaterialDialog.ButtonCallback() {
+
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            try {
+                                int result = new OrderController(getActivity()).restData("" + currentOrder.getFORDHED_REFNO());
+                                if (result > 0) {
+                                    new OrderDetailController(getActivity()).restData("" + currentOrder.getFORDHED_REFNO());
+                                    //       new SharedPref(getActivity()).setOrderId(0);
+                                    expListView.setAdapter((BaseExpandableListAdapter) null);
+                                    prepareListData();
+                                    Toast.makeText(getActivity(), "Order deleted successfully", Toast.LENGTH_LONG).show();
+                                    //       new SharedPref(getActivity()).setEditOrderId(0);
+                                }
+                            } catch (Exception e) {
+                                Log.e(">>>ERROR In EDIT", ">>>" + e.toString());
+                                throw e;
+                            }
+                        }
+
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            super.onNegative(dialog);
+                            dialog.dismiss();
+                        }
+                    })
+                    .build();
+            materialDialog.setCanceledOnTouchOutside(false);
+            materialDialog.show();
         }
 
         public void requestReupload() {
@@ -672,10 +536,13 @@ public class OrderFragment extends Fragment {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
-                            ArrayList<OrderHed> orders = new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode());
-                            try {
-                                if (new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode()).size() > 0) {
-                                    //   Log.d(">>>3", ">>>3 ");
+                            if (NetworkUtil.isNetworkAvailable(getActivity()))
+                            {
+                                ArrayList<OrderHed> orders = new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode());
+                                try {
+//                                if (new OrderController(getActivity()).getAllUnSyncOrdHedNew(new SalRepController(getActivity()).getCurrentRepCode()).size() > 0)
+//                                {
+
                                     for (final OrderHed c : orders) {
                                         try {
                                             //    Log.d(">>>4", ">>>4 ");
@@ -705,17 +572,14 @@ public class OrderFragment extends Fragment {
                                                                     @Override
                                                                     public void run() {
                                                                         c.setIsSync("1");
-                                                                        new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "SYNCED","0");
+                                                                        new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "SYNCED","0");
                                                                         prepareListData();
                                                                         listVanAdapter.notifyDataSetChanged();
-
-                                                                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                                                        ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
                                                                     }
                                                                 });
                                                             }else{
 //                                                            c.setIsSync("0");
-                                                                new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED","1");
+                                                                new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "NOT SYNCED","0");
                                                                 writeJsonToFile(c.getRefNo(),objectFromString.toString());
                                                                 requestReupload();
                                                                 listVanAdapter.notifyDataSetChanged();
@@ -725,32 +589,7 @@ public class OrderFragment extends Fragment {
                                                         }else {
                                                             Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
                                                             Log.d( ">>error response"+status,response.errorBody().toString()+">>"+c.getRefNo() );
-                                                        }// this will tell you why your api doesnt work most of time
-
-
-
-
-//                                                        if (status == 200 && !resmsg.equals("") && !resmsg.equals(null) && resmsg.substring(0, 3).equals("202")) {
-////                                                        mHandler.post(new Runnable() {
-////                                                            @Override
-////                                                            public void run() {
-//                                                            c.setIsSync("1");
-//                                                            new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "1", "SYNCED","0");
-//
-//                                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
-////                                                            listVanAdapter.notifyDataSetChanged();
-//                                                            //       }
-//                                                            //     });
-//                                                        } else {
-//                                                            c.setIsSync("0");
-//                                                            new OrderController(getActivity()).updateIsSynced(c.getRefNo(), "0", "NOT SYNCED","1");
-//                                                            writeJsonToFile(c.getRefNo(),objectFromString.toString());
-//                                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                                                            ft.detach(OrderFragment.this).attach(OrderFragment.this).commit();
-////                                                           listVanAdapter.notifyDataSetChanged();
-////                                                            requestReupload();
-//                                                        }
+                                                        }
                                                     } else {
                                                         Toast.makeText(getActivity(), " Invalid response when order upload", Toast.LENGTH_LONG).show();
                                                     }
@@ -770,22 +609,22 @@ public class OrderFragment extends Fragment {
                                         }
                                     }
 
-                                } else {
-                                    Toast.makeText(getActivity(), "No Records to upload !", android.widget.Toast.LENGTH_LONG).show();
+//                                } else {
+//                                    Toast.makeText(getActivity(), "No Records to upload !", android.widget.Toast.LENGTH_LONG).show();
+//                                }
+                                } catch (Exception e) {
+                                    Log.e(">>>ERROR In EDIT", ">>>" + e.toString());
+                                    throw e;
                                 }
-                            } catch (Exception e) {
-                                Log.e(">>>ERROR In EDIT", ">>>" + e.toString());
-                                throw e;
                             }
-
-                            // Toast.makeText(getActivity(), "Order discarded successfully..!", Toast.LENGTH_SHORT).show();
-
-//                            Intent intnt = new Intent(getActivity(), DebtorDetailsActivity.class);
-//                            intnt.putExtra("outlet", outlet);
-//                            startActivity(intnt);
-//                            getActivity().finish();
-
-
+                            else
+                            {
+                                Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+                                if (myDialog.isShowing())
+                                {
+                                    myDialog.dismiss();
+                                }
+                            }
                         }
 
                         @Override
@@ -857,16 +696,16 @@ public class OrderFragment extends Fragment {
         }
     }
 
-
-    //    modified by MMS - 2022/02/17 #$#$#$#$#$//
     public void prepareListData() {
-        showData();
+        //showData();
         listDataHeader = new OrderController(getActivity()).getAllOrders(new SalRepController(getActivity()).getCurrentRepCode());
 
         if (listDataHeader.size() == 0) {
-            Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), "No orders to display", Toast.LENGTH_LONG).show();
+            noDataLayout.setVisibility(View.VISIBLE);
 
         } else {
+            noDataLayout.setVisibility(View.GONE);
             listDataChild = new HashMap<Order, List<OrderDetail>>();
 
             for (Order free : listDataHeader) {
@@ -876,6 +715,8 @@ public class OrderFragment extends Fragment {
             listVanAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
             expListView.setAdapter(listVanAdapter);
         }
+        if (myDialog.isShowing())
+            myDialog.dismiss();
     }
 
 
@@ -884,7 +725,7 @@ public class OrderFragment extends Fragment {
         listDataHeader = new OrderController(getActivity()).getAllOrdersBySearch(key, new SalRepController(getActivity()).getCurrentRepCode());
 
         if (listDataHeader.size() == 0) {
-            Toast.makeText(getActivity(), "No data to display", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "No orders to display", Toast.LENGTH_LONG).show();
 
         } else {
             listDataChild = new HashMap<Order, List<OrderDetail>>();
@@ -898,36 +739,6 @@ public class OrderFragment extends Fragment {
         }
     }
 
-    private boolean IsConfirmed(Order order) {
-
-        boolean orderConfirmed = false;
-
-
-        if (order.getOrderId() != 0) {
-
-            orderConfirmed = new OrderController(getActivity()).isAnyConfirmOrderHed(order.getOrderId() + "");
-
-        }
-
-        return orderConfirmed;
-    }
-
-    private boolean IsSync(Order order) {
-
-        boolean orderSync = false;
-
-
-        if (order.getOrderId() != 0) {
-
-            orderSync = new OrderController(getActivity()).isAnySyncOrderHed(order.getOrderId() + "");
-
-        }
-
-        return orderSync;
-    }
-
-
-    // order status download - kaveesha - ---------------- 24/11/2021 -----------------------------------
     private class OrderStatusDownload extends AsyncTask<String, Integer, Boolean> {
         CustomProgressDialog pdialog;
         private String orderNo;
@@ -1167,8 +978,6 @@ public class OrderFragment extends Fragment {
         }
     }
 
-
-    // order status download - MMS - ---------------- 07/06/2022 -----------------------------------
     private class OrderStatusRefreshResponse extends AsyncTask<String, Integer, Boolean> {
         CustomProgressDialog pdialog;
         ArrayList<OrderHed> orderList;

@@ -319,13 +319,14 @@ public class OrderHeaderFragment extends Fragment {
         int id = item.getItemId();
         switch (id) {
             case R.id.close:
-                if (new OrderDetailController(getActivity()).isAnyActiveOrders()) {
 
-                    Order hed = new OrderController(getActivity()).getAllActiveOrdHed();
-                    outlet = new CustomerController(getActivity()).getSelectedCustomerByCode(hed.getFORDHED_DEB_CODE());
+                Order hed = new OrderController(getActivity()).getAllActiveOrdHed();
+                outlet = new CustomerController(getActivity()).getSelectedCustomerByCode(hed.getFORDHED_DEB_CODE());
 
+                if (new OrderDetailController(getActivity()).isAnyActiveOrders()) // delete data from hed and det
+                {
                     MaterialDialog materialDialog = new MaterialDialog.Builder(getActivity())
-                            .content("Do you want to discard the order?")
+                            .content("Do you want to discard the order detail?")
                             .positiveColor(ContextCompat.getColor(getActivity(), R.color.material_alert_positive_button))
                             .positiveText("Yes")
                             .negativeColor(ContextCompat.getColor(getActivity(), R.color.material_alert_negative_button))
@@ -336,11 +337,30 @@ public class OrderHeaderFragment extends Fragment {
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
 
-                                    pref.setGlobalVal("placeAnOrder", "");
-                                    Toast.makeText(getActivity(), "Order discarded successfully..!", Toast.LENGTH_SHORT).show();
-                                    Intent intnt = new Intent(context, DebtorDetailsActivity.class);
-                                    intnt.putExtra("outlet", outlet);
-                                    startActivity(intnt);
+                                    int result = new OrderController(getActivity()).restData(refNo);
+
+                                    if (result > 0)
+                                    {
+                                        new OrderDetailController(getActivity()).restData(refNo);
+                                        new PreProductController(getActivity()).mClearTables();
+                                        mSharedPref.setDiscountClicked("0");
+                                        mSharedPref.setOrdertHeaderNextClicked(false);
+                                        mSharedPref.setIsQuantityAdded(false);
+
+                                        pref.setGlobalVal("placeAnOrder", "");
+                                        Toast.makeText(getActivity(), "Order header and detail discarded successfully..!", Toast.LENGTH_SHORT).show();
+                                        Intent intnt = new Intent(context, DebtorDetailsActivity.class);
+                                        intnt.putExtra("outlet", outlet);
+                                        startActivity(intnt);
+                                    }
+
+//                                    pref.setGlobalVal("placeAnOrder", "");
+//                                    Toast.makeText(getActivity(), "Order discarded successfully..!", Toast.LENGTH_SHORT).show();
+//                                    undoEditingData();
+//                                    mSharedPref.setOrdertHeaderNextClicked(false);
+//                                    Intent intnt = new Intent(context, DebtorDetailsActivity.class);
+//                                    intnt.putExtra("outlet", outlet);
+//                                    startActivity(intnt);
 
                                 }
 
@@ -354,7 +374,60 @@ public class OrderHeaderFragment extends Fragment {
                     materialDialog.setCanceledOnTouchOutside(false);
                     materialDialog.show();
 
-                } else {
+                }
+                else if (hed.getFORDHED_REFNO() != null) // delete data from hed only
+                {
+                    MaterialDialog materialDialog = new MaterialDialog.Builder(getActivity())
+                            .content("Do you want to discard the order header?")
+                            .positiveText("Yes")
+                            .positiveColor(getResources().getColor(R.color.material_alert_positive_button))
+                            .negativeText("No")
+                            .negativeColor(getResources().getColor(R.color.material_alert_negative_button))
+
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    super.onPositive(dialog);
+                                    int result = new OrderController(getActivity()).restData(refNo);
+
+                                    if (result > 0)
+                                    {
+                                        //new OrderDetailController(getActivity()).restData(refNo);
+                                        //new PreProductController(getActivity()).mClearTables();
+                                        //mSharedPref.setDiscountClicked("0");
+                                        mSharedPref.setOrdertHeaderNextClicked(false);
+                                        //mSharedPref.setIsQuantityAdded(false);
+
+                                        pref.setGlobalVal("placeAnOrder", "");
+                                        Toast.makeText(getActivity(), "Order header discarded successfully..!", Toast.LENGTH_SHORT).show();
+                                        Intent intnt = new Intent(context, DebtorDetailsActivity.class);
+                                        intnt.putExtra("outlet", outlet);
+                                        startActivity(intnt);
+                                    }
+//                                    Intent back = new Intent(getActivity(), ActivityHome.class);
+//                                    back.putExtra("outlet", new CustomerController(getActivity()).getSelectedCustomerByCode(SharedPref.getInstance(getActivity()).getSelectedDebCode()));
+//                                    startActivity(back);
+//                                    getActivity().finish();
+//                                    dialog.dismiss();
+                                }
+
+                                @Override
+                                public void onNegative(MaterialDialog dialog) {
+                                    super.onNegative(dialog);
+                                }
+
+                                @Override
+                                public void onNeutral(MaterialDialog dialog) {
+                                    super.onNeutral(dialog);
+                                }
+                            })
+                            .build();
+                    materialDialog.setCancelable(false);
+                    materialDialog.setCanceledOnTouchOutside(false);
+                    materialDialog.show();
+                }
+                else
+                {
                     MaterialDialog materialDialog = new MaterialDialog.Builder(getActivity())
                             .content("Do you want to back?")
                             .positiveText("Yes")
@@ -366,12 +439,16 @@ public class OrderHeaderFragment extends Fragment {
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
-                                    // Toast.makeText(getActivity(),"Not apply yet",Toast.LENGTH_LONG).show();
-                                    Intent back = new Intent(getActivity(), ActivityHome.class);
-                                    back.putExtra("outlet", new CustomerController(getActivity()).getSelectedCustomerByCode(SharedPref.getInstance(getActivity()).getSelectedDebCode()));
-                                    startActivity(back);
-                                    getActivity().finish();
-                                    dialog.dismiss();
+//                                    Intent back = new Intent(getActivity(), ActivityHome.class);
+//                                    back.putExtra("outlet", new CustomerController(getActivity()).getSelectedCustomerByCode(SharedPref.getInstance(getActivity()).getSelectedDebCode()));
+//                                    startActivity(back);
+//                                    getActivity().finish();
+//                                    dialog.dismiss();
+
+                                    Toast.makeText(getActivity(), "Back navigation successfully..!", Toast.LENGTH_SHORT).show();
+                                    Intent intnt = new Intent(context, DebtorDetailsActivity.class);
+                                    intnt.putExtra("outlet", outlet);
+                                    startActivity(intnt);
                                 }
 
                                 @Override

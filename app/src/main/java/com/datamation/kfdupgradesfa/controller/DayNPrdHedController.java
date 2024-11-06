@@ -756,5 +756,30 @@ public class DayNPrdHedController {
 
     }
 
+    public String getDebCodeByActiveNPs() {
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+
+        try {
+            String selectQuery = "SELECT DebCode FROM " + ValueHolder.TABLE_NONPRDHED + " WHERE ISActive = '1'";
+            Cursor cursor = dB.rawQuery(selectQuery, null);
+
+            while (cursor.moveToNext()) {
+                return cursor.getString(cursor.getColumnIndex("DebCode"));
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            dB.close();
+        }
+        return "";
+
+    }
 
 }

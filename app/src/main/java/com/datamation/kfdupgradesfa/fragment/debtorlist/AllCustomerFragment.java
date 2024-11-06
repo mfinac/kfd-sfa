@@ -37,6 +37,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.datamation.kfdupgradesfa.R;
 import com.datamation.kfdupgradesfa.adapter.CustomerAdapter;
 import com.datamation.kfdupgradesfa.controller.CustomerController;
+import com.datamation.kfdupgradesfa.controller.DayNPrdDetController;
+import com.datamation.kfdupgradesfa.controller.DayNPrdHedController;
+import com.datamation.kfdupgradesfa.controller.OrderController;
+import com.datamation.kfdupgradesfa.controller.ReceiptController;
+import com.datamation.kfdupgradesfa.controller.ReceiptDetController;
 import com.datamation.kfdupgradesfa.controller.RepDebtorController;
 import com.datamation.kfdupgradesfa.controller.RouteDetController;
 import com.datamation.kfdupgradesfa.controller.SalRepController;
@@ -67,7 +72,15 @@ public class AllCustomerFragment extends Fragment {
     private Debtor debtor;
     String routeCode = "";
     SearchView mSearchDeb;
-
+    boolean isAnyActiveOrder = false;
+    boolean isAnyActiveReceipt = false;
+    boolean isAnyActiveNp = false;
+    String debCode1 = null;
+    String debCode2 = null;
+    String debCode3 = null;
+    String debName1;
+    String debName2;
+    String debName3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,26 +97,48 @@ public class AllCustomerFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view2, int position, long id) {
-                int i = Settings.Global.getInt(getActivity().getContentResolver(), Settings.Global.AUTO_TIME, 0);
-                if (i > 0) {
-                    debtor = customerList.get(position);
-                    String debcode = debtor.getFDEBTOR_CODE();
-                    SalRepController ds = new SalRepController(getActivity());
+            int i = Settings.Global.getInt(getActivity().getContentResolver(), Settings.Global.AUTO_TIME, 0);
+            if (i > 0)
+            {
+                debtor = customerList.get(position);
+                String debcode = debtor.getFDEBTOR_CODE();
+                SalRepController ds = new SalRepController(getActivity());
 
-                    boolean allowselect = new RepDebtorController(getActivity()).getCheckAllowDebtor(debcode, ds.getCurrentRepCode());
+                boolean allowselect = new RepDebtorController(getActivity()).getCheckAllowDebtor(debcode, ds.getCurrentRepCode());
 
-//                    if (debtor.getFDEBTOR_STATUS().equals("B")) {
-//
-//                        errorDialog("Access Denied","Black Listed Customer :" + debtor.getFDEBTOR_NAME().trim());
-//                    } else if (!allowselect) {
-//                        errorDialog("Access Denied","Access Denied for this Customer :" + debtor.getFDEBTOR_NAME().trim());
-//
-//                    } else {
+                try {
+                    debCode1 = new OrderController(getActivity()).getDebCodeByActiveOrder();
+                    debName1 = new CustomerController(getActivity()).getCusNameByCode(debCode1);
+                    debCode2 = new ReceiptController(getActivity()).getDebCodeByActiveReceipt();
+                    debName2 = new CustomerController(getActivity()).getCusNameByCode(debCode2);
+                    debCode3 = new DayNPrdHedController(getActivity()).getDebCodeByActiveNPs();
+                    debName3 = new CustomerController(getActivity()).getCusNameByCode(debCode3);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
+                if (debCode1 == null || debCode1.isEmpty()) {
+                    isAnyActiveOrder = true;
+                } else if (debCode1.equals(debcode)) {
+                    isAnyActiveOrder = true;
+                }
+
+                if (debCode2 == null || debCode2.isEmpty()) {
+                    isAnyActiveReceipt = true;
+                } else if (debCode2.equals(debcode)) {
+                    isAnyActiveReceipt = true;
+                }
+
+                if (debCode3 == null || debCode3.isEmpty()) {
+                    isAnyActiveNp = true;
+                } else if (debCode3.equals(debcode)) {
+                    isAnyActiveNp = true;
+                }
+
+                if (isAnyActiveOrder && isAnyActiveReceipt && isAnyActiveNp) {
                     try {
                         Intent intent = new Intent(getActivity(), DebtorDetailsActivity.class);
                         intent.putExtra("outlet", debtor);
-//                        mSharedPref.clearPref();
                         mSharedPref.clearPrefWithoutSyncDate();
                         mSharedPref.setSelectedDebCode(debtor.getFDEBTOR_CODE());
                         mSharedPref.setSelectedDebName(debtor.getFDEBTOR_NAME());
@@ -111,11 +146,34 @@ public class AllCustomerFragment extends Fragment {
                         mSharedPref.setSelectedDebtorPrilCode(debtor.getFDEBTOR_PRILLCODE());
                         startActivity(intent);
                         getActivity().finish();
-
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
+                } else {
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setTitle("Alert!!!");
+
+                    if (!isAnyActiveOrder && debCode1 != null && !debCode1.isEmpty()) {
+                        alertDialogBuilder.setMessage("You have already selected " + debName1 + " Customer Before!!!");
+                    } else if (!isAnyActiveReceipt && debCode2 != null && !debCode2.isEmpty()) {
+                        alertDialogBuilder.setMessage("You have already selected " + debName2 + " Customer Before!!!");
+                    } else if (!isAnyActiveNp && debCode3 != null && !debCode3.isEmpty()) {
+                        alertDialogBuilder.setMessage("You have already selected " + debName3 + " Customer Before!!!");
+                    }
+
+                    alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
                 }
+            }
+
+// Helper method to show error dialog
 
 //                } else {
 //                    Toast.makeText(getActivity(), "Please tick the 'Automatic Date and Time' option to continue..", Toast.LENGTH_LONG).show();

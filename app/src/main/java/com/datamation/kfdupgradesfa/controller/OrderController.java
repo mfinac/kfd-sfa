@@ -1874,4 +1874,62 @@ public class OrderController {
 
     }
 
+    public boolean isAnyActiveOrders() {
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+
+        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " WHERE " + ValueHolder.IS_ACTIVE + "='" + "1" + "'";
+
+        Cursor cursor = dB.rawQuery(selectQuery, null);
+
+        try {
+            if (cursor.getCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception e) {
+
+            Log.v(TAG + " Exception", e.toString());
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+
+        return false;
+    }
+
+    public String getDebCodeByActiveOrder() {
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+
+        try {
+            String selectQuery = "SELECT DebCode FROM " + ValueHolder.TABLE_ORDHED + " WHERE  " + ValueHolder.IS_ACTIVE + "='" + "1" + "'";
+            Cursor cursor = dB.rawQuery(selectQuery, null);
+
+            while (cursor.moveToNext()) {
+                return cursor.getString(cursor.getColumnIndex("DebCode"));
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            dB.close();
+        }
+        return "";
+
+    }
+
 }

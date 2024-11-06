@@ -50,6 +50,8 @@ import com.datamation.kfdupgradesfa.controller.FInvhedL3Controller;
 import com.datamation.kfdupgradesfa.controller.FItenrDetController;
 import com.datamation.kfdupgradesfa.controller.FItenrHedController;
 import com.datamation.kfdupgradesfa.controller.FinvDetL3Controller;
+import com.datamation.kfdupgradesfa.controller.OrderController;
+import com.datamation.kfdupgradesfa.controller.OrderDetailController;
 import com.datamation.kfdupgradesfa.controller.OutstandingController;
 import com.datamation.kfdupgradesfa.controller.ReceiptController;
 import com.datamation.kfdupgradesfa.controller.ReceiptDetController;
@@ -287,7 +289,7 @@ public class DebtorDetailsActivity extends AppCompatActivity {
 //            retRefNo = new SalesReturnController(context).getDirectSalesReturnRefNo();
 //        }
 
-        // isAnyActiveOrders = new OrderDetailController(getApplicationContext()).isAnyActiveOrders();
+         isAnyActiveOrders = new OrderController(getApplicationContext()).isAnyActiveOrders();
         //isAnyActiveReturns = new SalesReturnDetController(getApplicationContext()).isAnyActiveReturnHedDet(retRefNo);
         //  isAnyActiveInvoices = new InvDetController(getApplicationContext()).isAnyActiveOrders();
         isAnyActiveReceipt = new ReceiptDetController(getApplicationContext()).isAnyActiveReceipt(debCode);

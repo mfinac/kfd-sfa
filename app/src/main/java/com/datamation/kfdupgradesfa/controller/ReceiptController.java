@@ -1904,4 +1904,30 @@ public class ReceiptController {
 
     }
 
+    public String getDebCodeByActiveReceipt() {
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+
+        try {
+            String selectQuery = "SELECT DebCode FROM " + ValueHolder.TABLE_FPRECHEDS + " WHERE IsActive = '1'";
+            Cursor cursor = dB.rawQuery(selectQuery, null);
+
+            while (cursor.moveToNext()) {
+                return cursor.getString(cursor.getColumnIndex("DebCode"));
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            dB.close();
+        }
+        return "";
+
+    }
+
 }

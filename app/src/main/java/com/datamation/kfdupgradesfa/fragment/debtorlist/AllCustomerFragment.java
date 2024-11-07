@@ -106,6 +106,7 @@ public class AllCustomerFragment extends Fragment {
 
                 boolean allowselect = new RepDebtorController(getActivity()).getCheckAllowDebtor(debcode, ds.getCurrentRepCode());
 
+                //Check active transactions and prevent the user selecting another customer
                 try {
                     debCode1 = new OrderController(getActivity()).getDebCodeByActiveOrder();
                     debName1 = new CustomerController(getActivity()).getCusNameByCode(debCode1);

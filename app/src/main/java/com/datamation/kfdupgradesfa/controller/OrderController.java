@@ -129,7 +129,7 @@ public class OrderController {
                 if(count <= 0){
                     cn = 0;
                 }
-           }
+            }
 
         }
         catch (Exception e)
@@ -211,7 +211,7 @@ public class OrderController {
 
             ContentValues values = new ContentValues();
 
-           // values.put(ValueHolder.IS_ACTIVE, "1");
+            // values.put(ValueHolder.IS_ACTIVE, "1");
             values.put(ValueHolder.END_TIME_SO, UploadDate);
             values.put(ValueHolder.ADDDATE, UploadDate);
             int cn = cursor.getCount();
@@ -464,7 +464,7 @@ public class OrderController {
 
         @SuppressWarnings("static-access")
 //        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where "+ ValueHolder.IS_ACTIVE + " <> '1' ORDER BY Id DESC";
-         String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where " + ValueHolder.REPCODE + " = '" + repCode + "' and " + ValueHolder.IS_ACTIVE + " = '0' ORDER BY Id DESC";
+        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " where " + ValueHolder.REPCODE + " = '" + repCode + "' and " + ValueHolder.IS_ACTIVE + " = '0' ORDER BY Id DESC";
         //  String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + "";
         Cursor cursor = dB.rawQuery(selectQuery, null);
 
@@ -844,7 +844,7 @@ public class OrderController {
 //                + "='1' and " + ValueHolder.IS_SYNC + "='0' and "+ ValueHolder.ORDERID + "='"
 //                + RefNo + "'";
 
-                String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where "
+        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " Where "
                 + ValueHolder.IS_SYNC + "='0' and " + ValueHolder.REFNO + "='"
                 + RefNo + "'";
 
@@ -1057,7 +1057,7 @@ public class OrderController {
             order.setManuRef(cursor.getString(cursor.getColumnIndex(ValueHolder.MANU_REF)));
             order.setCurCode(cursor.getString(cursor.getColumnIndex(ValueHolder.CUR_CODE)));
             order.setCostCode(cursor.getString(cursor.getColumnIndex(ValueHolder.COSTCODE)));
-          //  order.setCurRate(Double.parseDouble(cursor.getString(cursor.getColumnIndex(ValueHolder.CUR_RATE))));
+            //  order.setCurRate(Double.parseDouble(cursor.getString(cursor.getColumnIndex(ValueHolder.CUR_RATE))));
             //order.setCurCode(String.valueOf(cursor.getDouble((int) Double.parseDouble(ValueHolder.CUR_RATE))));
             order.setDebCode(cursor.getString(cursor.getColumnIndex(ValueHolder.DEBCODE)));
             order.setRemarks(cursor.getString(cursor.getColumnIndex(ValueHolder.REMARKS)));
@@ -1871,6 +1871,64 @@ public class OrderController {
             dB.close();
         }
         return count;
+
+    }
+
+    public boolean isAnyActiveOrders() {
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+
+        String selectQuery = "select * from " + ValueHolder.TABLE_ORDHED + " WHERE " + ValueHolder.IS_ACTIVE + "='" + "1" + "'";
+
+        Cursor cursor = dB.rawQuery(selectQuery, null);
+
+        try {
+            if (cursor.getCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception e) {
+
+            Log.v(TAG + " Exception", e.toString());
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            dB.close();
+        }
+
+        return false;
+    }
+
+    public String getDebCodeByActiveOrder() {
+
+        if (dB == null) {
+            open();
+        } else if (!dB.isOpen()) {
+            open();
+        }
+
+        try {
+            String selectQuery = "SELECT DebCode FROM " + ValueHolder.TABLE_ORDHED + " WHERE  " + ValueHolder.IS_ACTIVE + "='" + "1" + "'";
+            Cursor cursor = dB.rawQuery(selectQuery, null);
+
+            while (cursor.moveToNext()) {
+                return cursor.getString(cursor.getColumnIndex("DebCode"));
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            dB.close();
+        }
+        return "";
 
     }
 

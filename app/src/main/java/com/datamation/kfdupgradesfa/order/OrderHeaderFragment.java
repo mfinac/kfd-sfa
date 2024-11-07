@@ -323,7 +323,7 @@ public class OrderHeaderFragment extends Fragment {
                 Order hed = new OrderController(getActivity()).getAllActiveOrdHed();
                 outlet = new CustomerController(getActivity()).getSelectedCustomerByCode(hed.getFORDHED_DEB_CODE());
 
-                if (new OrderDetailController(getActivity()).isAnyActiveOrders()) // delete data from hed and det
+                if (new OrderController(getActivity()).isAnyActiveOrders()) // delete data from hed and det
                 {
                     MaterialDialog materialDialog = new MaterialDialog.Builder(getActivity())
                             .content("Do you want to discard the order detail?")

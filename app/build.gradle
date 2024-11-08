@@ -7,7 +7,7 @@ android {
         applicationId "com.datamation.kfdupgradesfa"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 59
+        versionCode 60
         versionName "2.0.31"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

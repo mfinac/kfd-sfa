@@ -133,23 +133,267 @@ import retrofit2.Response;
 
 public class UtilityContainer {
 
+    public static boolean FddbnoteSynced;
+    public static boolean ControlSynced;
+    public static boolean SalRepSynced;
+    public static boolean CustomerSynced;
+    public static boolean SettingSynced;
+    public static boolean CompanyBranchSynced;
+    public static boolean ItemsSynced;
+    public static boolean ItemLocSynced;
+    public static boolean TypeSynced;
+    public static boolean BankSynced;
+    public static boolean RouteSynced;
+    public static boolean RouteDetSynced;
+    public static boolean FreemslabSynced;
+    public static boolean FreehedSynced;
+    public static boolean FreedetSynced;
+    public static boolean FreedebSynced;
+    public static boolean FreeitemSynced;
+    public static boolean ReasonSynced;
+    public static boolean ItemPriSynced;
+    public static boolean AreaSynced;
+    public static boolean LocationsSynced;
+    public static boolean TownsSynced;
+    public static boolean GroupsSynced;
+    public static boolean BrandSynced;
+    public static boolean CostSynced;
+    public static boolean SupplierSynced;
+    public static boolean RepDebtorSynced;
+    public static boolean invL3hedSynced;
+    public static boolean invL3detSynced;
 
-    //---------------------------------------------------------------------------------------------------------------------------------------------------
-
-    public static void showSnackBarError(View v, String message, Context context) {
-        Snackbar snack = Snackbar.make(v, "" + message, Snackbar.LENGTH_SHORT);
-        View view = snack.getView();
-        view.setBackgroundColor(Color.parseColor("#CB4335"));
-        TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-        tv.setTextColor(Color.WHITE);
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-        params.gravity = Gravity.CENTER;
-        view.setLayoutParams(params);
-        snack.show();
-
+    public static boolean isFddbnoteSynced() {
+        return FddbnoteSynced;
     }
 
-    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+    public static void setFddbnoteSynced(boolean fddbnoteSynced) {
+        FddbnoteSynced = fddbnoteSynced;
+    }
+
+    public static boolean isControlSynced() {
+        return ControlSynced;
+    }
+
+    public static void setControlSynced(boolean controlSynced) {
+        ControlSynced = controlSynced;
+    }
+
+    public static boolean isSalRepSynced() {
+        return SalRepSynced;
+    }
+
+    public static void setSalRepSynced(boolean salRepSynced) {
+        SalRepSynced = salRepSynced;
+    }
+
+    public static boolean isCustomerSynced() {
+        return CustomerSynced;
+    }
+
+    public static void setCustomerSynced(boolean customerSynced) {
+        CustomerSynced = customerSynced;
+    }
+
+    public static boolean isSettingSynced() {
+        return SettingSynced;
+    }
+
+    public static void setSettingSynced(boolean settingSynced) {
+        SettingSynced = settingSynced;
+    }
+
+    public static boolean isCompanyBranchSynced() {
+        return CompanyBranchSynced;
+    }
+
+    public static void setCompanyBranchSynced(boolean companyBranchSynced) {
+        CompanyBranchSynced = companyBranchSynced;
+    }
+
+    public static boolean isItemsSynced() {
+        return ItemsSynced;
+    }
+
+    public static void setItemsSynced(boolean itemsSynced) {
+        ItemsSynced = itemsSynced;
+    }
+
+    public static boolean isItemLocSynced() {
+        return ItemLocSynced;
+    }
+
+    public static void setItemLocSynced(boolean itemLocSynced) {
+        ItemLocSynced = itemLocSynced;
+    }
+
+    public static boolean isTypeSynced() {
+        return TypeSynced;
+    }
+
+    public static void setTypeSynced(boolean typeSynced) {
+        TypeSynced = typeSynced;
+    }
+
+    public static boolean isBankSynced() {
+        return BankSynced;
+    }
+
+    public static void setBankSynced(boolean bankSynced) {
+        BankSynced = bankSynced;
+    }
+
+    public static boolean isRouteSynced() {
+        return RouteSynced;
+    }
+
+    public static void setRouteSynced(boolean routeSynced) {
+        RouteSynced = routeSynced;
+    }
+
+    public static boolean isRouteDetSynced() {
+        return RouteDetSynced;
+    }
+
+    public static void setRouteDetSynced(boolean routeDetSynced) {
+        RouteDetSynced = routeDetSynced;
+    }
+
+    public static boolean isFreemslabSynced() {
+        return FreemslabSynced;
+    }
+
+    public static void setFreemslabSynced(boolean freemslabSynced) {
+        FreemslabSynced = freemslabSynced;
+    }
+
+    public static boolean isFreehedSynced() {
+        return FreehedSynced;
+    }
+
+    public static void setFreehedSynced(boolean freehedSynced) {
+        FreehedSynced = freehedSynced;
+    }
+
+    public static boolean isFreedetSynced() {
+        return FreedetSynced;
+    }
+
+    public static void setFreedetSynced(boolean freedetSynced) {
+        FreedetSynced = freedetSynced;
+    }
+
+    public static boolean isFreedebSynced() {
+        return FreedebSynced;
+    }
+
+    public static void setFreedebSynced(boolean freedebSynced) {
+        FreedebSynced = freedebSynced;
+    }
+
+    public static boolean isFreeitemSynced() {
+        return FreeitemSynced;
+    }
+
+    public static void setFreeitemSynced(boolean freeitemSynced) {
+        FreeitemSynced = freeitemSynced;
+    }
+
+    public static boolean isReasonSynced() {
+        return ReasonSynced;
+    }
+
+    public static void setReasonSynced(boolean reasonSynced) {
+        ReasonSynced = reasonSynced;
+    }
+
+    public static boolean isItemPriSynced() {
+        return ItemPriSynced;
+    }
+
+    public static void setItemPriSynced(boolean itemPriSynced) {
+        ItemPriSynced = itemPriSynced;
+    }
+
+    public static boolean isAreaSynced() {
+        return AreaSynced;
+    }
+
+    public static void setAreaSynced(boolean areaSynced) {
+        AreaSynced = areaSynced;
+    }
+
+    public static boolean isLocationsSynced() {
+        return LocationsSynced;
+    }
+
+    public static void setLocationsSynced(boolean locationsSynced) {
+        LocationsSynced = locationsSynced;
+    }
+
+    public static boolean isTownsSynced() {
+        return TownsSynced;
+    }
+
+    public static void setTownsSynced(boolean townsSynced) {
+        TownsSynced = townsSynced;
+    }
+
+    public static boolean isGroupsSynced() {
+        return GroupsSynced;
+    }
+
+    public static void setGroupsSynced(boolean groupsSynced) {
+        GroupsSynced = groupsSynced;
+    }
+
+    public static boolean isBrandSynced() {
+        return BrandSynced;
+    }
+
+    public static void setBrandSynced(boolean brandSynced) {
+        BrandSynced = brandSynced;
+    }
+
+    public static boolean isCostSynced() {
+        return CostSynced;
+    }
+
+    public static void setCostSynced(boolean costSynced) {
+        CostSynced = costSynced;
+    }
+
+    public static boolean isSupplierSynced() {
+        return SupplierSynced;
+    }
+
+    public static void setSupplierSynced(boolean supplierSynced) {
+        SupplierSynced = supplierSynced;
+    }
+
+    public static boolean isRepDebtorSynced() {
+        return RepDebtorSynced;
+    }
+
+    public static void setRepDebtorSynced(boolean repDebtorSynced) {
+        RepDebtorSynced = repDebtorSynced;
+    }
+
+    public static boolean isInvL3hedSynced() {
+        return invL3hedSynced;
+    }
+
+    public static void setInvL3hedSynced(boolean invL3hedSynced) {
+        UtilityContainer.invL3hedSynced = invL3hedSynced;
+    }
+
+    public static boolean isInvL3detSynced() {
+        return invL3detSynced;
+    }
+
+    public static void setInvL3detSynced(boolean invL3detSynced) {
+        UtilityContainer.invL3detSynced = invL3detSynced;
+    }
 
     public static void mLoadFragment(Fragment fragment, Context context) {
 
@@ -159,10 +403,6 @@ public class UtilityContainer {
         ft.replace(R.id.fragmentContainer, fragment, fragment.getClass().getSimpleName());
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
-
-    }
-
-    protected static void sacaSnackbar(Context context, View view, String s) {
 
     }
 
@@ -210,16 +450,6 @@ public class UtilityContainer {
         editor.remove("selected_pril_code");
         editor.commit();
     }
-
-    public static void ClearDBName(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove("Dist_DB");
-        editor.commit();
-    }
-
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
     public static void mPrinterDialogbox(final Context context) {
 
@@ -353,6 +583,7 @@ public class UtilityContainer {
                         downloadedList.add(Control.parseControlDetails(jsonArray.getJSONObject(i)));
                     }
                     companyController.createOrUpdateFControl(downloadedList);
+                    setControlSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + downloadedList.size(), "" + totalRecords, "Control Info");
 
 
@@ -362,6 +593,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setControlSynced(false);
                     }
                 }
             }
@@ -370,12 +602,15 @@ public class UtilityContainer {
 
              try {
                  JSONArray jsonArray = jsonObject.getJSONArray("data");
+                 totalRecords = jsonArray.length();
                  ArrayList<SalRep> downloadedList = new ArrayList<SalRep>();
                  SalRepController salRepController = new SalRepController(context);
                  for (int i = 0; i < jsonArray.length(); i++) {
                      downloadedList.add(SalRep.parseSalRep(jsonArray.getJSONObject(i)));
                  }
                  salRepController.CreateOrUpdateSalRep(downloadedList);
+                 setSalRepSynced(true);
+                 new DownloadController(context).createOrUpdateDownload("" + downloadedList.size(), "" + totalRecords, "Sales Rep");
 
              } catch (JSONException | NumberFormatException e) {
 
@@ -383,6 +618,7 @@ public class UtilityContainer {
                      throw e;
                  } catch (JSONException e1) {
                      Log.e("JSON ERROR>>>>>", e.toString());
+                     setSalRepSynced(false);
                  }
              }
          }
@@ -401,6 +637,7 @@ public class UtilityContainer {
                         downloadedList.add(Debtor.parseOutlet(jsonArray.getJSONObject(i)));
                     }
                     customerController.InsertOrReplaceDebtor(downloadedList);
+                    setCustomerSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + downloadedList.size(), "" + totalRecords, "Debtor Info");
                     Log.d("InsertOrReplaceDebtor", "succes");
 //                    SharedPref.getInstance(context).setIsFirstInstallation(true);
@@ -411,6 +648,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setCustomerSynced(false);
                     }
                 }
             }
@@ -428,6 +666,7 @@ public class UtilityContainer {
                         downloadedList.add(CompanySetting.parseSettings(jsonArray.getJSONObject(i)));
                     }
                     settingController.createOrUpdateFCompanySetting(downloadedList);
+                    setSettingSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + downloadedList.size(), "" + totalRecords, "Company Setting Info");
 
                 } catch (JSONException | NumberFormatException e) {
@@ -435,6 +674,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setSettingSynced(false);
                     }
                 }
             }
@@ -451,6 +691,7 @@ public class UtilityContainer {
                         downloadedList.add(CompanyBranch.parseSettings(jsonArray.getJSONObject(i)));
                     }
                     branchController.createOrUpdateFCompanyBranch(downloadedList);
+                    setCompanyBranchSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + downloadedList.size(), "" + totalRecords, "Company Branch Info");
 
 
@@ -459,6 +700,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setCompanyBranchSynced(false);
                     }
                 }
 
@@ -477,6 +719,7 @@ public class UtilityContainer {
                         downloadedlist.add(Type.parseType(jsonArray.getJSONObject(i)));
                     }
                     typeController.CreateOrUpdateType(downloadedlist);
+                    setTypeSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + downloadedlist.size(), "" + totalRecords, "Type Info");
 
                 } catch (JSONException | NumberFormatException e) {
@@ -484,6 +727,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setTypeSynced(false);
                     }
                 }
             }
@@ -500,6 +744,7 @@ public class UtilityContainer {
                         arrayList.add(Group.parseGroup(jsonArray.getJSONObject(i)));
                     }
                     groupController.CreateOrUpdateGroup(arrayList);
+                    setGroupsSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Group Info");
 
                 } catch (JSONException | NumberFormatException e) {
@@ -507,6 +752,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setGroupsSynced(false);
                     }
                 }
             }
@@ -524,6 +770,7 @@ public class UtilityContainer {
                         downloadedlist.add(Brand.parseBrand(jsonArray.getJSONObject(i)));
                     }
                     brandController.CreateOrUpodateBrand(downloadedlist);
+                    setBrandSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + downloadedlist.size(), "" + totalRecords, "Brand Info");
 
                 } catch (JSONException | NumberFormatException e) {
@@ -531,6 +778,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setBrandSynced(false);
                     }
                 }
             }
@@ -548,6 +796,7 @@ public class UtilityContainer {
                         downloadedList.add(Item.parseItem(jsonArray.getJSONObject(i)));
                     }
                     itemController.InsertOrReplaceItems(downloadedList);
+                    setItemsSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + downloadedList.size(), "" + totalRecords, "Item Info");
 
 
@@ -556,6 +805,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setItemsSynced(false);
                     }
                 }
             }
@@ -573,6 +823,7 @@ public class UtilityContainer {
                         downloadedList.add(ItemLoc.parseItemLocs(jsonArray.getJSONObject(i)));
                     }
                     itemLocController.InsertOrReplaceItemLoc(downloadedList);
+                    setItemLocSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + downloadedList.size(), "" + totalRecords, "Item Location Info");
 
 
@@ -581,6 +832,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setItemLocSynced(false);
                     }
                 }
             }
@@ -598,6 +850,7 @@ public class UtilityContainer {
                         downloadedList.add(ItemPri.parseItemPrices(jsonArray.getJSONObject(i)));
                     }
                     itemPriceController.InsertOrReplaceItemPri(downloadedList);
+                    setItemPriSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + downloadedList.size(), "" + totalRecords, "Item Price Info");
 
 
@@ -606,6 +859,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setItemPriSynced(false);
                     }
                 }
             }
@@ -624,6 +878,7 @@ public class UtilityContainer {
                     }
                     Log.d("befor add reason tbl>>>", arrayList.toString());
                     reasonController.createOrUpdateReason(arrayList);
+                    setReasonSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Reason Info");
 
 
@@ -632,6 +887,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setReasonSynced(false);
                     }
                 }
             }
@@ -650,6 +906,7 @@ public class UtilityContainer {
                         arrayList.add(Bank.parseBank(jsonArray.getJSONObject(i)));
                     }
                     bankController.createOrUpdateBank(arrayList);
+                    setBankSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Bank Info");
 
                 } catch (JSONException | NumberFormatException e) {
@@ -657,6 +914,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setBankSynced(false);
                     }
                 }
             }
@@ -672,6 +930,7 @@ public class UtilityContainer {
                         arrayList.add(Route.parseRoute(jsonArray.getJSONObject(i)));
                     }
                     routeController.createOrUpdateFRoute(arrayList);
+                    setRouteSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Route Info");
 
                 } catch (JSONException | NumberFormatException e) {
@@ -679,6 +938,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setRouteSynced(false);
                     }
                 }
             }
@@ -695,6 +955,7 @@ public class UtilityContainer {
                         arrayList.add(RouteDet.parseRoute(jsonArray.getJSONObject(i)));
                     }
                     routeDetController.InsertOrReplaceRouteDet(arrayList);
+                    setRouteDetSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Route Detail Info");
 
 
@@ -703,60 +964,59 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setRouteDetSynced(false);
                     }
                 }
             }
             break;
 
-//            MMS-2022/01/24
-
-            case RepTrgHed: {
-
-                try {
-                    RepTrgHedController repTrgHedController = new RepTrgHedController(context);
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                    totalRecords = jsonArray.length();
-
-                    ArrayList<RepTrgHed> arrayList = new ArrayList<RepTrgHed>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        arrayList.add(RepTrgHed.parseRepTrgHed(jsonArray.getJSONObject(i)));
-                    }
-                    repTrgHedController.InsertOrReplaceRepTrgHed(arrayList);
-                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Rep Target Info");
-
-
-                } catch (JSONException | NumberFormatException e) {
-                    try {
-                        throw e;
-                    } catch (JSONException e1) {
-                        Log.e("JSON ERROR>>>>>", e.toString());
-                    }
-                }
-            }
-            break;
-            case RepTrgDet: {
-
-                try {
-                    RepTrgDetController repTrgDetController = new RepTrgDetController(context);
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                    totalRecords = jsonArray.length();
-
-                    ArrayList<RepTrgDet> arrayList = new ArrayList<RepTrgDet>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        arrayList.add(RepTrgDet.parseRepTrgDet(jsonArray.getJSONObject(i)));
-                    }
-                    repTrgDetController.InsertOrReplaceRepTrgDet(arrayList);
-                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Rep Target Detail Info");
-
-
-                } catch (JSONException | NumberFormatException e) {
-                    try {
-                        throw e;
-                    } catch (JSONException e1) {
-                        Log.e("JSON ERROR>>>>>", e.toString());
-                    }
-                }
-            }
+//            case RepTrgHed: {
+//
+//                try {
+//                    RepTrgHedController repTrgHedController = new RepTrgHedController(context);
+//                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+//                    totalRecords = jsonArray.length();
+//
+//                    ArrayList<RepTrgHed> arrayList = new ArrayList<RepTrgHed>();
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        arrayList.add(RepTrgHed.parseRepTrgHed(jsonArray.getJSONObject(i)));
+//                    }
+//                    repTrgHedController.InsertOrReplaceRepTrgHed(arrayList);
+//                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Rep Target Info");
+//
+//
+//                } catch (JSONException | NumberFormatException e) {
+//                    try {
+//                        throw e;
+//                    } catch (JSONException e1) {
+//                        Log.e("JSON ERROR>>>>>", e.toString());
+//                    }
+//                }
+//            }
+//            break;
+//            case RepTrgDet: {
+//
+//                try {
+//                    RepTrgDetController repTrgDetController = new RepTrgDetController(context);
+//                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+//                    totalRecords = jsonArray.length();
+//
+//                    ArrayList<RepTrgDet> arrayList = new ArrayList<RepTrgDet>();
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        arrayList.add(RepTrgDet.parseRepTrgDet(jsonArray.getJSONObject(i)));
+//                    }
+//                    repTrgDetController.InsertOrReplaceRepTrgDet(arrayList);
+//                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Rep Target Detail Info");
+//
+//
+//                } catch (JSONException | NumberFormatException e) {
+//                    try {
+//                        throw e;
+//                    } catch (JSONException e1) {
+//                        Log.e("JSON ERROR>>>>>", e.toString());
+//                    }
+//                }
+//            }
 
             case Cost: {
 
@@ -771,6 +1031,7 @@ public class UtilityContainer {
                         arrayList.add(Cost.parseCost(jsonArray.getJSONObject(i)));
                     }
                     costController.CreateOrUpdateCost(arrayList);
+                    setCostSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Cost Info");
 
 
@@ -779,6 +1040,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setCostSynced(false);
                     }
                 }
             }
@@ -795,6 +1057,7 @@ public class UtilityContainer {
                         arrayList.add(Supplier.parseSupplier(jsonArray.getJSONObject(i)));
                     }
                     supplierController.CreateOrUpdateSupplier(arrayList);
+                    setSupplierSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Supplier Info");
 
 
@@ -803,6 +1066,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setSupplierSynced(false);
                     }
                 }
             }
@@ -820,6 +1084,7 @@ public class UtilityContainer {
                         arrayList.add(RepDebtor.parseRepDebtor(jsonArray.getJSONObject(i)));
                     }
                     repDebtorController.CreateOrUpdateRepDebtor(arrayList);
+                    setRepDebtorSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Rep debtors Info");
 
 
@@ -828,6 +1093,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setRepDebtorSynced(false);
                     }
                 }
             }
@@ -844,6 +1110,7 @@ public class UtilityContainer {
                         arrayList.add(Area.parseArea(jsonArray.getJSONObject(i)));
                     }
                     areaController.CreateOrUpdateArea(arrayList);
+                    setAreaSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Area Info");
 
 
@@ -852,6 +1119,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setAreaSynced(false);
                     }
                 }
             }
@@ -868,6 +1136,7 @@ public class UtilityContainer {
                         arrayList.add(Locations.parseLocs(jsonArray.getJSONObject(i)));
                     }
                     locationsController.createOrUpdateFLocations(arrayList);
+                    setLocationsSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Location Info");
 
 
@@ -876,6 +1145,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setLocationsSynced(false);
                     }
                 }
             }
@@ -892,6 +1162,7 @@ public class UtilityContainer {
                         arrayList.add(Town.parseTown(jsonArray.getJSONObject(i)));
                     }
                     townController.createOrUpdateFTown(arrayList);
+                    setTownsSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Town Info");
 
 
@@ -900,6 +1171,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setTownsSynced(false);
                     }
                 }
             }
@@ -917,6 +1189,7 @@ public class UtilityContainer {
                         arrayList.add(FreeMslab.parseFreeMslab(jsonArray.getJSONObject(i)));
                     }
                     freemSlabController.createOrUpdateFreeMslab(arrayList);
+                    setFreemslabSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Free MS Info");
 
 
@@ -925,6 +1198,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setFreemslabSynced(false);
                     }
                 }
             }
@@ -941,6 +1215,7 @@ public class UtilityContainer {
                         arrayList.add(FreeHed.parseFreeHed(jsonArray.getJSONObject(i)));
                     }
                     freeHedController.createOrUpdateFreeHed(arrayList);
+                    setFreehedSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Free Hed Info");
 
 
@@ -949,6 +1224,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setFreehedSynced(false);
                     }
                 }
             }
@@ -965,6 +1241,7 @@ public class UtilityContainer {
                         arrayList.add(FreeDet.parseFreeDet(jsonArray.getJSONObject(i)));
                     }
                     freeDetController.createOrUpdateFreeDet(arrayList);
+                    setFreedetSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Free Details Info");
 
 
@@ -973,6 +1250,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setFreedetSynced(false);
                     }
                 }
             }
@@ -989,6 +1267,7 @@ public class UtilityContainer {
                         arrayList.add(FreeDeb.parseFreeDeb(jsonArray.getJSONObject(i)));
                     }
                     freeDebController.createOrUpdateFreeDeb(arrayList);
+                    setFreedebSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Free Debtor Info");
 
 
@@ -997,6 +1276,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setFreedebSynced(false);
                     }
                 }
             }
@@ -1013,6 +1293,7 @@ public class UtilityContainer {
                         arrayList.add(FreeItem.parseFreeItem(jsonArray.getJSONObject(i)));
                     }
                     freeItemController.createOrUpdateFreeItem(arrayList);
+                    setFreeitemSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Free Item Info");
 
 
@@ -1021,6 +1302,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setFreeitemSynced(false);
                     }
                 }
             }
@@ -1037,89 +1319,91 @@ public class UtilityContainer {
                         arrayList.add(FddbNote.parseFddbnote(jsonArray.getJSONObject(i)));
                     }
                     outstandingController.createOrUpdateFDDbNote(arrayList);
+                    setFddbnoteSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "DB Note Info");
                 } catch (JSONException | NumberFormatException e) {
                     try {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setFddbnoteSynced(false);
                     }
                 }
             }
             break;
-            case PushMsgHedDet: {
-
-                try {
-                    PushMsgHedDetController pushMsgHedDetController = new PushMsgHedDetController(context);
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                    totalRecords = jsonArray.length();
-
-                    ArrayList<PushMsgHedDet> arrayList = new ArrayList<PushMsgHedDet>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        arrayList.add(PushMsgHedDet.parsePMsg(jsonArray.getJSONObject(i)));
-                    }
-                    pushMsgHedDetController.createOrUpdatePMsgHedDet(arrayList);
-                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Push Message Hed Info");
-
-                } catch (JSONException | NumberFormatException e) {
-                    try {
-                        throw e;
-                    } catch (JSONException e1) {
-                        Log.e("JSON ERROR>>>>>", e.toString());
-                    }
-                }
-            }
-            break;
-            case CusPRecHed: {
-
-                try {
-                    PaymentHeaderController cusPRecHedController = new PaymentHeaderController(context);
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                    totalRecords = jsonArray.length();
-
-                    ArrayList<PayReceiptHed> arrayList = new ArrayList<PayReceiptHed>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        arrayList.add(PayReceiptHed.parseRecHed(jsonArray.getJSONObject(i)));
-
-                    }
-                    cusPRecHedController.createOrUpdateCusPRecHed(arrayList);
-                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Customer Receipt Hed Info");
-
-
-                } catch (JSONException | NumberFormatException e) {
-                    try {
-                        throw e;
-                    } catch (JSONException e1) {
-                        Log.e("JSON ERROR>>>>>", e.toString());
-                    }
-                }
-            }
-            break;
-            case CusPRecDet: {
-
-                try {
-                    PaymentDetailController cusPRecDetController = new PaymentDetailController(context);
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                    totalRecords = jsonArray.length();
-
-                    ArrayList<PayReceiptDet> arrayList = new ArrayList<PayReceiptDet>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        arrayList.add(PayReceiptDet.parseRecDet(jsonArray.getJSONObject(i)));
-
-                    }
-                    cusPRecDetController.createOrUpdateCusPRecDet(arrayList);
-                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Customer Receipt Details Info");
-
-
-                } catch (JSONException | NumberFormatException e) {
-                    try {
-                        throw e;
-                    } catch (JSONException e1) {
-                        Log.e("JSON ERROR>>>>>", e.toString());
-                    }
-                }
-            }
-            break;
+//            case PushMsgHedDet: {
+//
+//                try {
+//                    PushMsgHedDetController pushMsgHedDetController = new PushMsgHedDetController(context);
+//                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+//                    totalRecords = jsonArray.length();
+//
+//                    ArrayList<PushMsgHedDet> arrayList = new ArrayList<PushMsgHedDet>();
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        arrayList.add(PushMsgHedDet.parsePMsg(jsonArray.getJSONObject(i)));
+//                    }
+//                    pushMsgHedDetController.createOrUpdatePMsgHedDet(arrayList);
+//                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Push Message Hed Info");
+//
+//                } catch (JSONException | NumberFormatException e) {
+//                    try {
+//                        throw e;
+//                    } catch (JSONException e1) {
+//                        Log.e("JSON ERROR>>>>>", e.toString());
+//                    }
+//                }
+//            }
+//            break;
+//            case CusPRecHed: {
+//
+//                try {
+//                    PaymentHeaderController cusPRecHedController = new PaymentHeaderController(context);
+//                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+//                    totalRecords = jsonArray.length();
+//
+//                    ArrayList<PayReceiptHed> arrayList = new ArrayList<PayReceiptHed>();
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        arrayList.add(PayReceiptHed.parseRecHed(jsonArray.getJSONObject(i)));
+//
+//                    }
+//                    cusPRecHedController.createOrUpdateCusPRecHed(arrayList);
+//                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Customer Receipt Hed Info");
+//
+//
+//                } catch (JSONException | NumberFormatException e) {
+//                    try {
+//                        throw e;
+//                    } catch (JSONException e1) {
+//                        Log.e("JSON ERROR>>>>>", e.toString());
+//                    }
+//                }
+//            }
+//            break;
+//            case CusPRecDet: {
+//
+//                try {
+//                    PaymentDetailController cusPRecDetController = new PaymentDetailController(context);
+//                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+//                    totalRecords = jsonArray.length();
+//
+//                    ArrayList<PayReceiptDet> arrayList = new ArrayList<PayReceiptDet>();
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        arrayList.add(PayReceiptDet.parseRecDet(jsonArray.getJSONObject(i)));
+//
+//                    }
+//                    cusPRecDetController.createOrUpdateCusPRecDet(arrayList);
+//                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Customer Receipt Details Info");
+//
+//
+//                } catch (JSONException | NumberFormatException e) {
+//                    try {
+//                        throw e;
+//                    } catch (JSONException e1) {
+//                        Log.e("JSON ERROR>>>>>", e.toString());
+//                    }
+//                }
+//            }
+//            break;
             case invL3hed: {
 
                 try {
@@ -1133,6 +1417,7 @@ public class UtilityContainer {
 
                     }
                     invl3hedController.createOrUpdateFinvHedL3(arrayList);
+                    setInvL3hedSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Last Three Invoice Hed");
 
 
@@ -1141,6 +1426,7 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setInvL3hedSynced(false);
                     }
                 }
             }
@@ -1158,6 +1444,7 @@ public class UtilityContainer {
 
                     }
                     invl3detController.createOrUpdateFinvDetL3(arrayList);
+                    setInvL3detSynced(true);
                     new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Last Three Invoice Det");
 
 
@@ -1166,50 +1453,50 @@ public class UtilityContainer {
                         throw e;
                     } catch (JSONException e1) {
                         Log.e("JSON ERROR>>>>>", e.toString());
+                        setInvL3detSynced(false);
                     }
                 }
             }
-            break;
-            case Payments: {
-
-                try {
-                    PaymentController paymentController = new PaymentController(context);
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                    totalRecords = jsonArray.length();
-
-                    ArrayList<Payment> arrayList = new ArrayList<Payment>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        arrayList.add(Payment.parsePayment(jsonArray.getJSONObject(i)));
-
-                    }
-                    paymentController.CreateOrUpdatePayments(arrayList);
-                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Customer Payments Info");
-
-                } catch (JSONException | NumberFormatException e) {
-                    try {
-                        throw e;
-                    } catch (JSONException e1) {
-                        Log.e("JSON ERROR>>>>>", e.toString());
-                    }
-                }
-
-
-                Thread thread = new Thread() {
-                    public void run() {
-                        Looper.prepare();//Call looper.prepare()
-
-                        Handler mHandler = new Handler() {
-                            public void handleMessage(Message msg) {
-                                Toast.makeText(context, "Download Completed", Toast.LENGTH_SHORT).show();
-
-                            }
-                        };
-
-                        Looper.loop();
-                    }
-                };
-                thread.start();
-            }
+//            case Payments: {
+//
+//                try {
+//                    PaymentController paymentController = new PaymentController(context);
+//                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+//                    totalRecords = jsonArray.length();
+//
+//                    ArrayList<Payment> arrayList = new ArrayList<Payment>();
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        arrayList.add(Payment.parsePayment(jsonArray.getJSONObject(i)));
+//
+//                    }
+//                    paymentController.CreateOrUpdatePayments(arrayList);
+//                    new DownloadController(context).createOrUpdateDownload("" + arrayList.size(), "" + totalRecords, "Customer Payments Info");
+//
+//                } catch (JSONException | NumberFormatException e) {
+//                    try {
+//                        throw e;
+//                    } catch (JSONException e1) {
+//                        Log.e("JSON ERROR>>>>>", e.toString());
+//                    }
+//                }
+//
+//
+//                Thread thread = new Thread() {
+//                    public void run() {
+//                        Looper.prepare();//Call looper.prepare()
+//
+//                        Handler mHandler = new Handler() {
+//                            public void handleMessage(Message msg) {
+//                                Toast.makeText(context, "Download Completed", Toast.LENGTH_SHORT).show();
+//
+//                            }
+//                        };
+//
+//                        Looper.loop();
+//                    }
+//                };
+//                thread.start();
+//            }
 
 
             break;

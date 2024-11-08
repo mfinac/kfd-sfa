@@ -1235,76 +1235,76 @@ public class ActivityHome extends AppCompatActivity {
                 }
 
                 /*****************Push Msg HedDet **********************************************************************/
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        pdialog.setMessage("Downloading Push Msg Hed Det....");
-                    }
-                });
-                // Processing Push Msg HedDet
-
-                try {
-                    PushMsgHedDetController pushMsgHedDetController = new PushMsgHedDetController(ActivityHome.this);
-                    pushMsgHedDetController.deleteAll();
-                    UtilityContainer.download(ActivityHome.this, TaskTypeDownload.PushMsgHedDet, networkFunctions.getPushMsgHedDet(repcode));
-                } catch (Exception e) {
-                    errors.add(e.toString());
-                    throw e;
-                }
-
-                /***************** CusPRecHed  **********************************************************************/
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        pdialog.setMessage("Downloading RecHed....");
-                    }
-                });
-                // Processing Cusp RecHed
-
-                try {
-                    PaymentHeaderController paymentHeaderController = new PaymentHeaderController(ActivityHome.this);
-                    paymentHeaderController.deleteAll();
-                    UtilityContainer.download(ActivityHome.this, TaskTypeDownload.CusPRecHed, networkFunctions.getCusPRecHed(repcode));
-                } catch (Exception e) {
-                    errors.add(e.toString());
-                    throw e;
-                }
-
-                /***************** CusPRecDet **********************************************************************/
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        pdialog.setMessage("Downloading RecDet ....");
-                    }
-                });
-                // Processing Cusp RecDet
-
-                try {
-                    PaymentDetailController paymentDetailController = new PaymentDetailController(ActivityHome.this);
-                    paymentDetailController.deleteAll();
-                    UtilityContainer.download(ActivityHome.this, TaskTypeDownload.CusPRecDet, networkFunctions.getCusPRecDet(repcode));
-                } catch (Exception e) {
-                    errors.add(e.toString());
-                    throw e;
-                }
-
-                /***************** Payments **********************************************************************/
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        pdialog.setMessage("Downloading Payments ....");
-                    }
-                });
-                // Processing Payments
-
-                try {
-                    PaymentController paymentController = new PaymentController(ActivityHome.this);
-                    paymentController.deleteAll();
-                    UtilityContainer.download(ActivityHome.this, TaskTypeDownload.Payments, networkFunctions.getPayments(repcode));
-                } catch (Exception e) {
-                    errors.add(e.toString());
-                    throw e;
-                }
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        pdialog.setMessage("Downloading Push Msg Hed Det....");
+//                    }
+//                });
+//                // Processing Push Msg HedDet
+//
+//                try {
+//                    PushMsgHedDetController pushMsgHedDetController = new PushMsgHedDetController(ActivityHome.this);
+//                    pushMsgHedDetController.deleteAll();
+//                    UtilityContainer.download(ActivityHome.this, TaskTypeDownload.PushMsgHedDet, networkFunctions.getPushMsgHedDet(repcode));
+//                } catch (Exception e) {
+//                    errors.add(e.toString());
+//                    throw e;
+//                }
+//
+//                /***************** CusPRecHed  **********************************************************************/
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        pdialog.setMessage("Downloading RecHed....");
+//                    }
+//                });
+//                // Processing Cusp RecHed
+//
+//                try {
+//                    PaymentHeaderController paymentHeaderController = new PaymentHeaderController(ActivityHome.this);
+//                    paymentHeaderController.deleteAll();
+//                    UtilityContainer.download(ActivityHome.this, TaskTypeDownload.CusPRecHed, networkFunctions.getCusPRecHed(repcode));
+//                } catch (Exception e) {
+//                    errors.add(e.toString());
+//                    throw e;
+//                }
+//
+//                /***************** CusPRecDet **********************************************************************/
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        pdialog.setMessage("Downloading RecDet ....");
+//                    }
+//                });
+//                // Processing Cusp RecDet
+//
+//                try {
+//                    PaymentDetailController paymentDetailController = new PaymentDetailController(ActivityHome.this);
+//                    paymentDetailController.deleteAll();
+//                    UtilityContainer.download(ActivityHome.this, TaskTypeDownload.CusPRecDet, networkFunctions.getCusPRecDet(repcode));
+//                } catch (Exception e) {
+//                    errors.add(e.toString());
+//                    throw e;
+//                }
+//
+//                /***************** Payments **********************************************************************/
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        pdialog.setMessage("Downloading Payments ....");
+//                    }
+//                });
+//                // Processing Payments
+//
+//                try {
+//                    PaymentController paymentController = new PaymentController(ActivityHome.this);
+//                    paymentController.deleteAll();
+//                    UtilityContainer.download(ActivityHome.this, TaskTypeDownload.Payments, networkFunctions.getPayments(repcode));
+//                } catch (Exception e) {
+//                    errors.add(e.toString());
+//                    throw e;
+//                }
 
 //                /***************** Rep Details **********************************************************************/
 //                runOnUiThread(new Runnable() {

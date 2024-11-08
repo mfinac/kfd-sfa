@@ -1348,15 +1348,6 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                         throw e;
                     }
 
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            pdialog.setMessage("Completed...");
-                        }
-                    });
-
-                    /*****************end sync**********************************************************************/
                     return true;
                 } else {
                     errors.add("SharedPref.getInstance(getActivity()).getLoginUser() = null OR !SharedPref.getInstance(getActivity()).isLoggedIn()");
@@ -1389,54 +1380,79 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                         i++;
                     }
 
-                    if (downloadList.size() > 0) {
-                        mDownloadResult(downloadList);
+                    if (UtilityContainer.isControlSynced() &&
+                            UtilityContainer.isFddbnoteSynced() &&
+                            UtilityContainer.isSalRepSynced() &&
+                            UtilityContainer.isCustomerSynced() &&
+                            UtilityContainer.isSettingSynced() &&
+                            UtilityContainer.isCompanyBranchSynced() &&
+                            UtilityContainer.isItemsSynced() &&
+                            UtilityContainer.isItemLocSynced()&&
+                            UtilityContainer.isTypeSynced() &&
+                            UtilityContainer.isBankSynced() &&
+                            UtilityContainer.isRouteSynced() &&
+                            UtilityContainer.isRouteDetSynced() &&
+                            UtilityContainer.isFreemslabSynced() &&
+                            UtilityContainer.isFreedebSynced() &&
+                            UtilityContainer.isFreedetSynced() &&
+                            UtilityContainer.isFreehedSynced() &&
+                            UtilityContainer.isFreeitemSynced() &&
+                            UtilityContainer.isReasonSynced() &&
+                            UtilityContainer.isItemPriSynced() &&
+                            UtilityContainer.isAreaSynced() &&
+                            UtilityContainer.isLocationsSynced() &&
+                            UtilityContainer.isTownsSynced() &&
+                            UtilityContainer.isGroupsSynced() &&
+                            UtilityContainer.isBrandSynced() &&
+                            UtilityContainer.isCostSynced() &&
+                            UtilityContainer.isSupplierSynced() &&
+                            UtilityContainer.isRepDebtorSynced() &&
+                            UtilityContainer.isInvL3detSynced() &&
+                            UtilityContainer.isInvL3hedSynced())
+                    {
+                        //Toast.makeText(context, "Secondary Sync Successful.....", Toast.LENGTH_LONG).show();
+                        if (downloadList.size() > 0) {
+                            mDownloadResult(downloadList);
+                        }
+                        pref.setSuccessSyncedStatus(true);
+                    }
+                    else
+                    {
+                        syncFailedMessage("Secondary Sync failed", getActivity());
+                        pref.setSuccessSyncedStatus(false);
                     }
                 }
-                pref.setSuccessSyncedStatus(true);
-                showErrorText("Successfully Synchronized");
-            } else {
-
-
+            }
+            else
+            {
                 if (pdialog.isShowing()) {
                     pdialog.dismiss();
 
-                    int i = 1;
-                    for (Control c : new DownloadController(getActivity()).getAllDownload()) {
-                        downloadList.add(c);
-                        i++;
-                    }
-
-                    if (downloadList.size() > 0) {
-                        mDownloadResult(downloadList);
-                    }
+//                    int i = 1;
+//                    for (Control c : new DownloadController(getActivity()).getAllDownload()) {
+//                        downloadList.add(c);
+//                        i++;
+//                    }
+//
+//                    if (downloadList.size() > 0) {
+//                        mDownloadResult(downloadList);
+//                    }
                 }
 
-//                StringBuilder sb = new StringBuilder();
-//                if (errors.size() == 1) {
-//                    sb.append(errors.get(0));
-//                    showErrorText(sb.toString());
-//                } else if (errors.size() == 0) {
-//                    sb.append("Following errors occurred");
-//                    for (String error : errors) {
-//                        sb.append("\n - ").append(error);
-//                        showErrorText(sb.toString());
-//                    }
-//                }
-
+                syncFailedMessage("Secondary Sync failed", getActivity());
                 pref.setSuccessSyncedStatus(false);
-                ArrayList<Control> list = new ArrayList<Control>();
-
-                Control aControl = new Control();
-
-                aControl.setFCONTROL_DOWNLOAD_TITLE("Sync failed. Please try again..!");
-                aControl.setFCONTROL_DOWNLOADCOUNT("");
-                aControl.setFCONTROL_DOWNLOADEDCOUNT("");
-
-                list.add(aControl);
-
-                Log.d("%%************", "onPostExecute: sync fail");
-                mDownloadResult(list);
+//                ArrayList<Control> list = new ArrayList<Control>();
+//
+//                Control aControl = new Control();
+//
+//                aControl.setFCONTROL_DOWNLOAD_TITLE("Sync failed. Please try again..!");
+//                aControl.setFCONTROL_DOWNLOADCOUNT("");
+//                aControl.setFCONTROL_DOWNLOADEDCOUNT("");
+//
+//                list.add(aControl);
+//
+//                Log.d("%%************", "onPostExecute: sync fail");
+//                mDownloadResult(list);
 
             }
 
@@ -1446,114 +1462,6 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
     private void showErrorText(String s) {
         Toast.makeText(getActivity(), "" + s, Toast.LENGTH_LONG).show();
 
-    }
-
-    /////////////***********************secondory sync finish***********************************/
-    /*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
-    public void mUploadResult(String message) {
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setTitle("Upload Summary");
-
-        alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog alertD = alertDialogBuilder.create();
-        alertD.show();
-        alertD.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-    }
-
-    private class Validate extends AsyncTask<String, Integer, Boolean> {
-        int totalRecords = 0;
-        CustomProgressDialog pdialog;
-        private String macId, url, db;
-
-        public Validate(String macId, String url, String db) {
-            this.macId = macId;
-            this.url = url;
-            this.db = db;
-            this.pdialog = new CustomProgressDialog(getActivity());
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            pdialog.setMessage("Validating...");
-            pdialog.show();
-        }
-
-        @Override
-        protected Boolean doInBackground(String... arg0) {
-
-            try {
-
-                try {
-                    ApiInterface apiInterface = ApiCllient.getClient(getActivity()).create(ApiInterface.class);
-                    Call<ReadJsonList> resultCall = apiInterface.getSalRepResult(pref.getDistDB(), macId);
-                    resultCall.enqueue(new Callback<ReadJsonList>() {
-                        @Override
-                        public void onResponse(Call<ReadJsonList> call, Response<ReadJsonList> response) {
-                            ArrayList<SalRep> repList = new ArrayList<SalRep>();
-                            for (int i = 0; i < response.body().getSalRepResult().size(); i++) {
-                                repList.add(response.body().getSalRepResult().get(i));
-                            }
-
-                            if (repList.size() > 0) {
-                                networkFunctions.setUser(repList.get(0));
-                                pref.storeLoginUser(repList.get(0));
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<ReadJsonList> call, Throwable t) {
-                            Log.d(">>>Error in failure", t.toString());
-                        }
-                    });
-
-                    pref = SharedPref.getInstance(getActivity());
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            pdialog.setMessage("Authenticated...");
-                        }
-                    });
-
-                    return true;
-
-                } catch (Exception e) {
-                    Log.e("networkFunctions ->", "IOException -> " + e.toString());
-                    throw e;
-                }
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-            if (pdialog.isShowing())
-                pdialog.cancel();
-            // pdialog.cancel();
-            if (result) {
-                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
-                syncMasterDataDialog(getActivity());
-            } else {
-                Toast.makeText(getActivity(), "Invalid Mac Id", Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     public void mDownloadResult(ArrayList<Control> downlodaList) {
@@ -1799,5 +1707,29 @@ public class FragmentTools extends Fragment implements View.OnClickListener, Upl
                 navigateToNext();
             }
         }
+    }
+
+    public void syncFailedMessage(String message, Context context) {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setTitle("Secondary Sync");
+
+        alertDialogBuilder.setCancelable(false).setPositiveButton("Re-Sync", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+                new secondarySync(pref.getUserId()).execute();
+                dialog.cancel();
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+        alertD.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
     }
 }
